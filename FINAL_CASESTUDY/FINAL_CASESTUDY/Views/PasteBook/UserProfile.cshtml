@@ -1,0 +1,61 @@
+﻿<div class="col-sm-4">
+    <div class="container-fluid">
+        <div id="imageProfileContainer">
+            <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+        </div>
+    </div>
+    <div id="infoContainer">
+        <div class="well">
+            <div class="container-fluid">
+                <h4>Profile Information</h4>
+                <p>Username: username.sample</p>
+                <p>Email: sample@sample.com</p>
+                <p>Birthday: February 2, 1995</p>
+                <p>Country: Philippines</p>
+                <p>Mobile: 092222222222</p>
+                <p>About me: </p>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class="col-sm-8">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="well">
+                <div class="container-fluid">
+                    <p id="profileName">Shawn Aragon</p>
+                    @Html.ActionLink("Fiends", "Friends", "PasteBook", new { id = "userFriend" })
+                    <input type="button" id="addAsFriend" class="btn btn-default pull-right" value="Add as friend" />
+                    <input type="button" id="requestAdd" class="btn btn-default pull-right" value="Friend request sent" />     
+                </div>
+                     
+            </div>
+        </div>
+        <div class="row">
+            <div class="well">
+                <div class="container-fluid">
+                    <textarea class="form-control" rows="3" placeholder="What's on your mind?"></textarea>
+                    <hr />
+                    <input type="button" id="postBtn" value="Post" class="btn btn-primary pull-right" />
+                </div>
+            </div>
+
+            <div class="well">
+                <div class="container-fluid">
+                    <p id="posterName">Shawn Aragon</p>
+                    <p id="postDate">8 October at 14:11</p>
+                    <p id="postContent">Status ... status ... status.</p>
+                    <hr />
+                    <a href="#">Like</a>
+                    <hr />
+                    <textarea class="form-control" id="addComment" rows="3" placeholder="Write a comment..."></textarea>
+                    <hr />
+                    <input type="button" id="commentBtn" value="Add comment" class="btn btn-primary pull-right" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+        
+</div>

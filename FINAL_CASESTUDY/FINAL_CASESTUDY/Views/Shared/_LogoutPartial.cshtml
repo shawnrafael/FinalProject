@@ -1,0 +1,32 @@
+﻿<div class="container">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        @Html.ActionLink("PasteBook", "Home", "PasteBook", new { area = "" }, new { @class = "navbar-brand" })
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label class="label label-login">Username</label><br />
+                        <input type="text" class="form-control input-login" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label label-login">Password</label><br />
+                        <input type="password" class="form-control input-login" />
+                    </div>
+                    <div class="form-group">
+                        <br />
+                        <input type="button" id="btnLogin" value="Login" class="btn btn-primary btn-sm" />
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+

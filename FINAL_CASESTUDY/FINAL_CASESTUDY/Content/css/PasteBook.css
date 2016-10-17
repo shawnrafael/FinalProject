@@ -1,0 +1,201 @@
+﻿#renderedPart{
+    margin-top: 30px;
+}
+.navbar{
+    padding: 5px 20px 10px 10px;
+    background-color:#04519b;
+    background-image:none;
+}
+.label-login{
+    font-size: 13px;
+    font-weight: 100;
+}
+#btnLogin{
+    font-size: 15px;
+    font-weight: 100;
+    padding: 1px 10px 10px 10px;
+    height: 26px;
+}
+.input-login{
+    height: 25px;
+    padding: 0px 0px 0px 10px;
+}
+ /*for the search bar - start*/
+#searchFriend{
+     color: #000;
+ }
+.left-addon input  { 
+    width:1000px;
+}
+#searchContainer{
+    width: 500px;
+}
+
+#searchPart{
+    margin-top: 10px;
+}
+/*for the search bar - end*/
+
+/*for the post part - start */
+
+textarea.form-control{
+    resize: none;
+    max-width: inherit;
+}
+#homeProfilePic{
+    position: absolute;
+    margin: auto;
+    left: -100%;
+    right: -100%;
+    top: -100%;
+    bottom: -100%;
+}
+#imageContainer{
+    width: 100px;
+    height: 100px;
+    border: 1px solid #dae0ea;
+    overflow: hidden;
+    margin: 10px;
+    position: relative;
+}
+#homeProfileName, #editUser, #userHomeFriend{
+    margin-left: 10px;
+    color: #000;
+}
+
+#posterName{
+    font-size: 15px;
+    font-weight: 400;
+}
+#postDate{
+    font-size: 11px;
+    color: #90949c;
+}
+#postContent{
+    font-size: 14px;
+}
+
+#settingsMenu, #notificationList, #friendRequest{
+    background-color: #04519b;
+    border:none;
+    padding-top:10px;
+}
+.caret, .glyphicon-globe, .glyphicon-user{
+    color:#000000;
+}
+.glyphicon-globe, .glyphicon-user{  
+    padding-left:20px;
+    padding-top: 3px; 
+    padding-bottom: 15px; 
+    font-size:18px;
+}
+.caret{
+    margin-top:10px;
+    padding-bottom:20px;
+    margin-left:20px;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid #000000;
+}
+/*for the post part - end*/
+
+/*for the profile part - start */
+#imageProfileContainer{
+    width: 350px;
+    height: 350px;
+    border: 1px solid #dae0ea;
+    overflow: hidden;
+    margin: 0px 10px 10px 0px;
+    position: relative;
+}
+#profileName{
+    font-size: 30px;
+    font-weight:600;
+}
+#infoContainer{
+    width:350px;
+}
+/*for the friend part - start */
+#addAsFriend{
+    display:none;
+}
+#userFriend{
+    display:none;
+}
+#requestAdd{
+
+}
+#userFriend{
+    margin-left:0px;
+    color: #000;
+}
+#imageFriendContainer{
+    width: 150px;
+    height: 150px;
+    border: 1px solid #dae0ea;
+    overflow: hidden;
+    margin: 0px 10px 10px 0px;
+    position: relative;
+}
+.container-fluid{
+    padding-left: 0px;
+}
+#friendContainer{
+    border: 1px solid #dae0ea;
+}
+#friend{
+    padding: 20px;
+}
+#friendOption{
+    padding: 3px 10px 3px 10px;
+}
+
+/*for search part - start */
+#friendName, #viewProfile{
+    margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

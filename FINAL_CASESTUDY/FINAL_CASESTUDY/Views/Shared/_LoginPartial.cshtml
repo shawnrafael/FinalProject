@@ -1,0 +1,58 @@
+﻿<div class="container">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        @Html.ActionLink("PasteBook", "Home", "PasteBook", new { area = "" }, new { @class = "navbar-brand" })
+    </div>
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li>
+                <div id="searchPart">
+                    <div class="inner-addon left-addon">
+                        <div class="form-inline" id="searchContainer">
+                            <input type="text" class="form-control input-sm" id="txtSearch" />
+                            <a href="PasteBook/Search" class="btn btn-default btn-sm" id="searchFriend"><span class="glyphicon glyphicon-search"></span> Search</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            
+            <li>@Html.ActionLink("Home", "Home", "PasteBook")</li>
+            <li>@Html.ActionLink("Profile", "UserProfile", "PasteBook")</li>
+            <li>
+                <div class="dropdown">
+                    <button class="icon-bar dropdown-toggle" type="button" id="notificationList" data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="notificationList">
+                        <li role="presentation" class="dropdown-header">Notifications</li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Notification1</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Notification2</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <button class="icon-bar dropdown-toggle" type="button" id="friendRequest" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="notificationList">
+                        <li role="presentation" class="dropdown-header">Friend Request</li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Friend1</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Friend2</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown">
+                    <button class="icon-bar dropdown-toggle" type="button" id="settingsMenu" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="settingsMenu">
+                        <li>@Html.ActionLink("Settings", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Logout", "About", "Home")</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
