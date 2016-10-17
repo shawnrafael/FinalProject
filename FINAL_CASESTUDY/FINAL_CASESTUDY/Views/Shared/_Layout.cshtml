@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        @if (false)
+        @if (Session["username"]==null)
         {
             @Html.Partial("_LogoutPartial")
         }
