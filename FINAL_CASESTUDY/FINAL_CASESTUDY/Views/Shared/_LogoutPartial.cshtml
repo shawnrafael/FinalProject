@@ -10,14 +10,18 @@
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
             <li>
+                <br />
+                <p class="text-danger" id="errorLogin">Invalid username or password</p>
+            </li>
+            <li>
                 <div class="form-inline">
                     <div class="form-group">
                         <label class="label label-login">Username</label><br />
-                        <input type="text" class="form-control input-login" />
+                        <input type="text" id="username" class="form-control input-login" />
                     </div>
                     <div class="form-group">
                         <label class="label label-login">Password</label><br />
-                        <input type="password" class="form-control input-login" />
+                        <input type="password" id="password" class="form-control input-login" />
                     </div>
                     <div class="form-group">
                         <br />
@@ -28,16 +32,5 @@
         </ul>
     </div>
 </div>
-@section scripts{
-    
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#btnLogin').on('click', function () {
-                alert('jhkhkjh');
-            });
-            
-        });
-    </script>
-}
 
 

@@ -20,6 +20,9 @@
     height: 25px;
     padding: 0px 0px 0px 10px;
 }
+#errorLogin{
+    display:none;
+}
  /*for the search bar - start*/
 #searchFriend{
      color: #000;

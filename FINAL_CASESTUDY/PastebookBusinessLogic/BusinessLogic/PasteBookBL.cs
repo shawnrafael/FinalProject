@@ -68,5 +68,40 @@ namespace PastebookBusinessLogic.BusinessLogic
             }
             return countryList;
         }
+
+        public int LoginUser( string email, string password )
+        {
+            int status = 0;
+            USER user = new USER();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    user = context.USERs.Where(x => x.EMAIL_ADDRESS == email).SingleOrDefault();
+                    if (user == null)
+                    {
+                        return status;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            var match = IsPasswordMatch(password, user.SALT, user.PASSWORD);
+            if(match == true)
+            {
+                status = 1;
+            }
+            return status;
+        }
+
+        public bool IsPasswordMatch(string password, string salt, string hash)
+        {
+            HashComputer m_hashComputer = new HashComputer();
+            string finalString = password + salt;
+            return hash == m_hashComputer.GetPasswordHashAndSalt(finalString);
+        }
     }
 }

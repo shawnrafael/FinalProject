@@ -30,5 +30,11 @@ namespace FINAL_CASESTUDY.Managers
             }
             return listCountry;
         }
+
+        public bool LoginUser(string email, string password)
+        {
+            int result = pasteBookBL.LoginUser(email, password);
+            return result != 0;
+        }
     }
 }

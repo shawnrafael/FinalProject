@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\HashComputer.cs" />
-    <Compile Include="BusinessLogic\Mapper.cs" />
     <Compile Include="BusinessLogic\PasteBookBL.cs" />
     <Compile Include="BusinessLogic\SaltGenerator.cs" />
     <Compile Include="BusinessLogic\Utility.cs" />

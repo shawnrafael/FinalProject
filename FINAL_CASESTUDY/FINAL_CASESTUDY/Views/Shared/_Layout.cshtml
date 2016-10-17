@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        @if (Session["username"]==null)
+        @if (false)
         {
             @Html.Partial("_LogoutPartial")
         }
@@ -33,3 +33,36 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
+ 
+<script>
+    var validateLoginUrl = '@Url.Action("ValidateLogin", "PasteBook")';
+    $(document).ready(function () {
+
+        $('#btnLogin').on('click', function () {
+            var data = {
+                email: $('#username').val(),
+                password: $('#password').val()
+            }
+            alert(data.email);
+            $.ajax({
+                url: validateLoginUrl,
+                data: data,
+                type: GET,
+                success: function (data) {
+                    if (data == false) {
+                        $('#errorLogin').css('display', 'vissible');
+                    }
+
+                },
+                error: function () {
+                    alert();
+                }
+            });
+        });
+
+
+           
+
+    });
+</script>

@@ -14,31 +14,43 @@ namespace FINAL_CASESTUDY.Controllers
         // GET: PasteBook
         public ActionResult Home()
         {
-            if (Session["username"]==null)
+            if (false)
             {
-                return RedirectToAction("Login");
+                return RedirectToAction("Register");
             }
             return View();
         }
 
-        public ActionResult Login()
+        public ActionResult Register()
         {
-            if (ViewBag.CountryList == null)
+            if (Session["CountryList"] == null)
             {
-                ViewBag.CountryList = new SelectList(manager.GetCountryList(), "CountryID", "CountryName");
+                Session["CountryList"] = new SelectList(manager.GetCountryList(), "CountryID", "CountryName");
             }
             return View();
         }
 
-        public ActionResult ValidateLogin(User user)
+        public ActionResult ValidateLogin(string email, string password)
+        {
+            bool loginSuccess = manager.LoginUser(email, password);
+            if (loginSuccess == true)
+            {
+                Session["user"] = email;
+                return RedirectToAction("Home");
+            }
+
+            return Json(new { login = loginSuccess }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ValidateRegister(User user)
         {
             if (ModelState.IsValid)
             {
                 manager.RegisterUser(user);
-                Session["username"] = user.Username;                
+                Session["user"] = user.Username;                
                 return RedirectToAction("Home");
             }
-            return View("Login", user);
+            return View("Register", user);
         }
 
         public ActionResult UserProfile()

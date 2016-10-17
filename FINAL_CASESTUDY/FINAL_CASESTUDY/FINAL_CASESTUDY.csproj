@@ -176,7 +176,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\PasteBook\Home.cshtml" />
     <Content Include="Views\Shared\_LogoutPartial.cshtml" />
-    <Content Include="Views\PasteBook\Login.cshtml" />
+    <Content Include="Views\PasteBook\Register.cshtml" />
     <Content Include="Views\PasteBook\UserProfile.cshtml" />
     <Content Include="Views\PasteBook\Friends.cshtml" />
     <Content Include="Views\PasteBook\Search.cshtml" />

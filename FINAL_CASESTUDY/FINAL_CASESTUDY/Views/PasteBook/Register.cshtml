@@ -4,7 +4,7 @@
 <div class="col-sm-5">
     <h2>Sign Up</h2>
     <h6>It's free and always will be.</h6>
-    @using (Html.BeginForm("ValidateLogin", "PasteBook", FormMethod.Post))
+    @using (Html.BeginForm("ValidateRegister", "PasteBook", FormMethod.Post))
     {
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -40,7 +40,7 @@
         </div>        
         <div class="form-group">
             @Html.Label("Country", new { @class = "control-label" })
-            @Html.DropDownListFor(x => x.CountryID, ViewBag.CountryList as SelectList, new { @class = "form-control" })
+            @Html.DropDownListFor(x => x.CountryID, Session["CountryList"] as SelectList, new { @class = "form-control" })
         </div>
         <div class="form-group">
             @Html.Label("Mobile number", new { @class = "control-label" })            
@@ -52,6 +52,10 @@
         </div>
         <input type="submit" value="Create Account" class="btn btn-success input-lg" />
     }
-
-
 </div>
+
+@section scripts{
+    <script>
+
+    </script>
+    }
