@@ -21,7 +21,7 @@
         </div>
     </div>
     
-    @{Html.RenderAction("GetPostOnWall", "Profile");}
+    @*@{Html.RenderAction("GetPostOnWall", "PasteBook");}*@
     
     
      
@@ -37,6 +37,7 @@
 
 
             $('#postBtn').on('click', function () {
+                
                 var data = {
                     content: $('#postContent').val()
                 }
@@ -51,7 +52,8 @@
                             if (data.post == false) {
                                 $('#errorPost').css('display', 'block');
                             } else {
-                                $("#postContainer").load('@Url.Action("GetPostOnWall", "Profile")');
+                                $('#postContent').val("");
+                                $("#postContainer").load('@Url.Action("GetPostOnWall", "PasteBook")');
                             }
 
                         },

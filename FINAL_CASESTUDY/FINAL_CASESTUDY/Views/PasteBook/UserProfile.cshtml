@@ -41,20 +41,43 @@
                     <input type="button" id="postBtn" value="Post" class="btn btn-primary pull-right" />
                 </div>
             </div>
-
-            <div class="well">
-                <div class="container-fluid">
-                    <p id="posterName">Shawn Aragon</p>
-                    <p id="postDate">8 October at 14:11</p>
-                    <p id="postContent">Status ... status ... status.</p>
-                    <hr />
-                    <a href="#">Like</a>
-                    <hr />
-                    <textarea class="form-control" id="addComment" rows="3" placeholder="Write a comment..."></textarea>
-                    <hr />
-                    <input type="button" id="commentBtn" value="Add comment" class="btn btn-primary pull-right" />
-                </div>
-            </div>
+            @{Html.RenderAction("GetPostOnProfile", "PasteBook");}            
         </div>
     </div>        
 </div>
+
+@section scripts{
+    <script>
+        var addPostUrl = '@Url.Action("AddPost", "PasteBook")';
+        $(document).ready(function () {
+            $('#postBtn').on('click', function () {
+
+                var data = {
+                    content: $('#postContent').val()
+                }
+                if (data.content == "") {
+                    $('#errorPost').css('display', 'block');
+                } else {
+                    $.ajax({
+                        url: addPostUrl,
+                        data: data,
+                        type: 'GET',
+                        success: function (data) {
+                            if (data.post == false) {
+                                $('#errorPost').css('display', 'block');
+                            } else {
+                                $('#postContent').val("");
+                                $("#postContainer").load('@Url.Action("GetPostOnWall", "PasteBook")');
+                            }
+
+                        },
+                        error: function () {
+                            alert();
+                        }
+                    });
+                }
+
+            });
+        });
+    </script>
+}

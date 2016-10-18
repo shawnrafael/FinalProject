@@ -13,17 +13,28 @@ namespace FINAL_CASESTUDY.Controllers
     {
         Manager manager = new Manager();
         PostManager postManager = new PostManager();
-        // GET: PasteBook
-        //public ActionResult Home()
-        //{
-        //    if (Session["loginUser"] == null)
-        //    {
-        //        return RedirectToAction("Register");
-        //    }
-        //    string loginUser = Session["loginUser"].ToString();
-        //    User user = manager.GetUserByUsername(loginUser);
-        //    return View(user);
-        //}       
+
+        public ActionResult Home()
+        {
+            if (Session["loginUser"] == null)
+            {
+                return RedirectToAction("Register");
+            }
+            string loginUser = Session["loginUser"].ToString();
+            User user = manager.GetUserByUsername(loginUser);
+            return View(user);
+        }
+
+        public ActionResult GetPostOnProfile()
+        {
+            if (Session["loginUser"] == null)
+            {
+                return RedirectToAction("Register");
+            }
+            var user = manager.GetUserByUsername(Session["loginUser"].ToString());
+            List<Post> listOfPost = postManager.DisplayListOfPost(user.UserID);
+            return PartialView("PartialPostOnProfile", listOfPost);
+        }
 
         public ActionResult Register()
         {
@@ -34,7 +45,7 @@ namespace FINAL_CASESTUDY.Controllers
             }
             else
             {
-                return RedirectToAction("Home","Profile");
+                return RedirectToAction("Home");
             }
         }
 
@@ -55,7 +66,7 @@ namespace FINAL_CASESTUDY.Controllers
             {
                 manager.RegisterUser(user);
                 Session["loginUser"] = user.Username;                
-                return RedirectToAction("Home","Profile");
+                return RedirectToAction("Home");
             }
             return View("Register", user);
         }

@@ -17,7 +17,7 @@ namespace FINAL_CASESTUDY
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/",
-                defaults: new { controller = "Profile", action = "Home" }
+                defaults: new { controller = "PasteBook", action = "Home" }
             );
 
         }

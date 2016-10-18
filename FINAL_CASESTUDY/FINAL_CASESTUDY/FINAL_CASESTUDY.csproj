@@ -129,7 +129,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\PasteBookController.cs" />
-    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -177,17 +176,14 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Profile\Home.cshtml" />
+    <Content Include="Views\PasteBook\Home.cshtml" />
     <Content Include="Views\Shared\_LogoutPartial.cshtml" />
     <Content Include="Views\PasteBook\Register.cshtml" />
     <Content Include="Views\PasteBook\UserProfile.cshtml" />
     <Content Include="Views\PasteBook\Friends.cshtml" />
     <Content Include="Views\PasteBook\Search.cshtml" />
     <Content Include="Views\PasteBook\UserPost.cshtml" />
-    <Content Include="Views\PasteBook\View.cshtml" />
-    <Content Include="Views\PasteBook\AdditionalRegistration.cshtml" />
-    <Content Include="Views\Profile\PartialPost.cshtml" />
-    <Content Include="Views\Profile\UserProfile.cshtml" />
+    <Content Include="Views\PasteBook\PartialPostOnProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

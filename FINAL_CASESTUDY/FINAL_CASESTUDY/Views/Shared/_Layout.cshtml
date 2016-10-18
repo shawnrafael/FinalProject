@@ -50,7 +50,7 @@
                 type: 'GET',
                 success: function (data) {
                     if (data.login == true) {
-                        location.href = '@Url.Action("Home", "Profile")'
+                        location.href = '@Url.Action("Home", "PasteBook")'
                     } else {
                         $('#errorLogin').css('display', 'block');
                     }     
