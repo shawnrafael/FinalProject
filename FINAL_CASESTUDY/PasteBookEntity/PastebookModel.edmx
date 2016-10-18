@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PASTEBOOKModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PASTEBOOKModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="COMMENT">
           <Key>
             <PropertyRef Name="ID" />
@@ -77,11 +77,34 @@
           <Property Name="BIRTHDAY" Type="date" Nullable="false" />
           <Property Name="COUNTRY_ID" Type="int" />
           <Property Name="MOBILE_NO" Type="varchar" MaxLength="50" />
-          <Property Name="GENDER" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="GENDER" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="PROFILE_PIC" Type="varbinary(max)" />
           <Property Name="DATE_CREATED" Type="datetime" Nullable="false" />
           <Property Name="ABOUT_ME" Type="varchar" MaxLength="2000" />
           <Property Name="EMAIL_ADDRESS" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PASTEBOOK.dbo.VWUserProfilePost' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VWUserProfilePost">
+          <Key>
+            <PropertyRef Name="POST_ID" />
+            <PropertyRef Name="CREATED_DATE" />
+            <PropertyRef Name="CONTENT" />
+            <PropertyRef Name="PROFILE_OWNER_ID" />
+            <PropertyRef Name="POSTER_ID" />
+            <PropertyRef Name="USER_NAME" />
+            <PropertyRef Name="FIRST_NAME" />
+            <PropertyRef Name="LAST_NAME" />
+          </Key>
+          <Property Name="POST_ID" Type="int" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="datetime" Nullable="false" />
+          <Property Name="CONTENT" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="PROFILE_OWNER_ID" Type="int" Nullable="false" />
+          <Property Name="POSTER_ID" Type="int" Nullable="false" />
+          <Property Name="USER_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LAST_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PROFILE_PIC" Type="varbinary(max)" />
         </EntityType>
         <Association Name="FK_COMMENT_POST">
           <End Role="POST" Type="Self.POST" Multiplicity="1" />
@@ -247,6 +270,19 @@
           <EntitySet Name="POST" EntityType="Self.POST" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="REF_COUNTRY" EntityType="Self.REF_COUNTRY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USER" EntityType="Self.USER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VWUserProfilePost" EntityType="Self.VWUserProfilePost" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VWUserProfilePost].[POST_ID] AS [POST_ID], 
+    [VWUserProfilePost].[CREATED_DATE] AS [CREATED_DATE], 
+    [VWUserProfilePost].[CONTENT] AS [CONTENT], 
+    [VWUserProfilePost].[PROFILE_OWNER_ID] AS [PROFILE_OWNER_ID], 
+    [VWUserProfilePost].[POSTER_ID] AS [POSTER_ID], 
+    [VWUserProfilePost].[USER_NAME] AS [USER_NAME], 
+    [VWUserProfilePost].[FIRST_NAME] AS [FIRST_NAME], 
+    [VWUserProfilePost].[LAST_NAME] AS [LAST_NAME], 
+    [VWUserProfilePost].[PROFILE_PIC] AS [PROFILE_PIC]
+    FROM [dbo].[VWUserProfilePost] AS [VWUserProfilePost]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_COMMENT_POST" Association="Self.FK_COMMENT_POST">
             <End Role="POST" EntitySet="POST" />
             <End Role="COMMENT" EntitySet="COMMENT" />
@@ -300,8 +336,7 @@
             <End Role="USER" EntitySet="USER" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PASTEBOOKModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -394,7 +429,7 @@
           <Property Name="BIRTHDAY" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="COUNTRY_ID" Type="Int32" />
           <Property Name="MOBILE_NO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="GENDER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GENDER" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="PROFILE_PIC" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="DATE_CREATED" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ABOUT_ME" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
@@ -625,7 +660,29 @@
             <End Role="REF_COUNTRY" EntitySet="REF_COUNTRY" />
             <End Role="USER" EntitySet="USERs" />
           </AssociationSet>
+          <EntitySet Name="VWUserProfilePosts" EntityType="PASTEBOOKModel.VWUserProfilePost" />
         </EntityContainer>
+        <EntityType Name="VWUserProfilePost">
+          <Key>
+            <PropertyRef Name="POST_ID" />
+            <PropertyRef Name="CREATED_DATE" />
+            <PropertyRef Name="CONTENT" />
+            <PropertyRef Name="PROFILE_OWNER_ID" />
+            <PropertyRef Name="POSTER_ID" />
+            <PropertyRef Name="USER_NAME" />
+            <PropertyRef Name="FIRST_NAME" />
+            <PropertyRef Name="LAST_NAME" />
+          </Key>
+          <Property Name="POST_ID" Type="Int32" Nullable="false" />
+          <Property Name="CREATED_DATE" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CONTENT" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="PROFILE_OWNER_ID" Type="Int32" Nullable="false" />
+          <Property Name="POSTER_ID" Type="Int32" Nullable="false" />
+          <Property Name="USER_NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FIRST_NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LAST_NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PROFILE_PIC" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -714,6 +771,21 @@
                 <ScalarProperty Name="DATE_CREATED" ColumnName="DATE_CREATED" />
                 <ScalarProperty Name="ABOUT_ME" ColumnName="ABOUT_ME" />
                 <ScalarProperty Name="EMAIL_ADDRESS" ColumnName="EMAIL_ADDRESS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VWUserProfilePosts">
+            <EntityTypeMapping TypeName="PASTEBOOKModel.VWUserProfilePost">
+              <MappingFragment StoreEntitySet="VWUserProfilePost">
+                <ScalarProperty Name="PROFILE_PIC" ColumnName="PROFILE_PIC" />
+                <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+                <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+                <ScalarProperty Name="USER_NAME" ColumnName="USER_NAME" />
+                <ScalarProperty Name="POSTER_ID" ColumnName="POSTER_ID" />
+                <ScalarProperty Name="PROFILE_OWNER_ID" ColumnName="PROFILE_OWNER_ID" />
+                <ScalarProperty Name="CONTENT" ColumnName="CONTENT" />
+                <ScalarProperty Name="CREATED_DATE" ColumnName="CREATED_DATE" />
+                <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -11,14 +11,14 @@
                 <h4>Profile Information</h4>
                 <p>Username: @Model.Username</p>
                 <p>Email: @Model.Email</p>
-                <p>Birthday: @Html.DisplayFor(x=>x.Birthday)</p>
+                <p>Birthday: @Html.DisplayFor(x => x.Birthday)</p>
                 <p>Country: @Model.CountryID</p>
                 <p>Mobile: @Model.MobileNumber</p>
                 <p>About me: @Model.AboutMe</p>
             </div>
         </div>
     </div>
-    
+
 </div>
 <div class="col-sm-8">
     <div class="container-fluid">
@@ -28,9 +28,9 @@
                     <p id="profileName">@Model.FirstName @Model.LastName</p>
                     @Html.ActionLink("Fiends", "Friends", "PasteBook", new { id = "userFriend" })
                     <input type="button" id="addAsFriend" class="btn btn-default pull-right" value="Add as friend" />
-                    <input type="button" id="requestAdd" class="btn btn-default pull-right" value="Friend request sent" />     
+                    <input type="button" id="requestAdd" class="btn btn-default pull-right" value="Friend request sent" />
                 </div>
-                     
+
             </div>
         </div>
         <div class="row">
@@ -56,5 +56,8 @@
                 </div>
             </div>
         </div>
-    </div>        
+
+    </div>
+
 </div>
+

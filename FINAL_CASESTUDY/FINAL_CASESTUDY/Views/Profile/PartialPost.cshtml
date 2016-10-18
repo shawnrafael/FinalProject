@@ -1,0 +1,20 @@
+﻿@model IEnumerable<FINAL_CASESTUDY.Models.Post>
+<div id="postContainer">
+    @foreach (var item in Model)
+    {
+        <div class="well">
+            <div class="container-fluid">
+                @Html.ActionLink(item.FirstName + " " + item.LastName, "UserProfile", "PasteBook", new { id = "homeProfileName" })<br />
+                <p id="postDate">@item.DateCreated</p>
+                <p id="postContent">@item.Content</p>
+                <hr />
+                <a href="#">Like</a>
+                <hr />
+                <textarea class="form-control" id="addComment" rows="3" placeholder="Write a comment..."></textarea>
+                <hr />
+                <input type="button" id="commentBtn" value="Add comment" class="btn btn-primary pull-right" />
+            </div>
+        </div>
+
+    }
+</div>

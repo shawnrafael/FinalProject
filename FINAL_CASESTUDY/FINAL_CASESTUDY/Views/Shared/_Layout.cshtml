@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        @if (false)
+        @if (Session["loginUser"]==null)
         {
             @Html.Partial("_LogoutPartial")
         }
@@ -44,25 +44,21 @@
                 email: $('#username').val(),
                 password: $('#password').val()
             }
-            alert(data.email);
             $.ajax({
                 url: validateLoginUrl,
                 data: data,
-                type: GET,
+                type: 'GET',
                 success: function (data) {
-                    if (data == false) {
-                        $('#errorLogin').css('display', 'vissible');
-                    }
-
+                    if (data.login == true) {
+                        location.href = '@Url.Action("Home", "Profile")'
+                    } else {
+                        $('#errorLogin').css('display', 'block');
+                    }     
                 },
                 error: function () {
                     alert();
                 }
             });
-        });
-
-
-           
-
+        });   
     });
 </script>

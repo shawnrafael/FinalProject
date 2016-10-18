@@ -11,13 +11,15 @@ namespace FINAL_CASESTUDY
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/",
-                defaults: new { controller = "PasteBook", action = "Home" }
+                defaults: new { controller = "Profile", action = "Home" }
             );
+
         }
     }
 }

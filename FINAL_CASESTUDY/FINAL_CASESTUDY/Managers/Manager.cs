@@ -9,7 +9,8 @@ namespace FINAL_CASESTUDY.Managers
 {
     public class Manager
     {
-        PasteBookBL pasteBookBL = new PasteBookBL();
+        PasteBookBL pasteBookBL = new PasteBookBL();      
+
         public bool RegisterUser(User user)
         {
             if (user.Gender == null)
@@ -17,7 +18,7 @@ namespace FINAL_CASESTUDY.Managers
                 user.Gender = "U";
             }
 
-            int result = pasteBookBL.Register(Mapper.ToUSER(user));
+            int result = pasteBookBL.Register(Mapper.ToUSERFromDB(user));
             return result != 0;
         }
 
@@ -35,6 +36,18 @@ namespace FINAL_CASESTUDY.Managers
         {
             int result = pasteBookBL.LoginUser(email, password);
             return result != 0;
+        }
+
+        public User GetUserByEmail(string email)
+        {
+            var user = Mapper.ToUser(pasteBookBL.GetLoginUser(email));
+            return user;
+        }
+
+        public User GetUserByUsername(string loginUser)
+        {
+            var user = Mapper.ToUser(pasteBookBL.GetUser(loginUser));
+            return user;
         }
     }
 }

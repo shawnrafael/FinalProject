@@ -103,5 +103,41 @@ namespace PastebookBusinessLogic.BusinessLogic
             string finalString = password + salt;
             return hash == m_hashComputer.GetPasswordHashAndSalt(finalString);
         }
+
+        public USER GetLoginUser(string email)
+        {
+            USER user = new USER();
+            try
+            {
+                using (var contex = new PASTEBOOKEntities())
+                {
+                    user = contex.USERs.Where(x => x.EMAIL_ADDRESS == email).SingleOrDefault();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return user;
+        }
+
+        public USER GetUser(string loginUser)
+        {
+            USER user = new USER();
+            try
+            {
+                using (var contex = new PASTEBOOKEntities())
+                {
+                    user = contex.USERs.Where(x => x.USER_NAME == loginUser).SingleOrDefault();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return user;
+        }
     }
 }

@@ -1,0 +1,67 @@
+﻿@model FINAL_CASESTUDY.Models.User
+<div class="col-sm-2">
+    <div class="container">
+        <div id="imageContainer">
+            <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+        </div>
+
+        <div>
+            @Html.ActionLink(Model.FirstName + " " + Model.LastName, "UserProfile", "PasteBook", new { id = "homeProfileName" })<br />            
+            @Html.ActionLink("Fiends", "Friends", "PasteBook", new { id = "userHomeFriend" })
+        </div>
+    </div>
+</div>
+<div class="col-sm-8">   
+    <div class="well">
+        <div class="container-fluid">
+            <p class="text-danger" id="errorPost">Please add something to your post.</p>
+            <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>                
+            <hr />
+            <input type="button" id="postBtn" value="Post" class="btn btn-primary pull-right" />
+        </div>
+    </div>
+    
+    @{Html.RenderAction("GetPostOnWall", "Profile");}
+    
+    
+     
+</div>
+<div class="col-sm-2">
+</div>
+
+@section scripts{
+    <script>
+        var addPostUrl = '@Url.Action("AddPost", "PasteBook")';
+        $(document).ready(function () {
+
+
+
+            $('#postBtn').on('click', function () {
+                var data = {
+                    content: $('#postContent').val()
+                }
+                if (data.content == "") {
+                    $('#errorPost').css('display', 'block');
+                } else {
+                    $.ajax({
+                        url: addPostUrl,
+                        data: data,
+                        type: 'GET',
+                        success: function (data) {
+                            if (data.post == false) {
+                                $('#errorPost').css('display', 'block');
+                            } else {
+                                $("#postContainer").load('@Url.Action("GetPostOnWall", "Profile")');
+                            }
+
+                        },
+                        error: function () {
+                            alert();
+                        }
+                    });
+                }
+
+            });
+        });
+    </script>
+    }

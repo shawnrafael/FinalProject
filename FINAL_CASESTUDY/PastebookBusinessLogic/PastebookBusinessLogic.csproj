@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\HashComputer.cs" />
     <Compile Include="BusinessLogic\PasteBookBL.cs" />
+    <Compile Include="BusinessLogic\PostBL.cs" />
     <Compile Include="BusinessLogic\SaltGenerator.cs" />
     <Compile Include="BusinessLogic\Utility.cs" />
     <Compile Include="Entities\CountryEntity.cs" />

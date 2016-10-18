@@ -32,5 +32,6 @@ namespace PasteBookEntity
         public virtual DbSet<POST> POSTs { get; set; }
         public virtual DbSet<REF_COUNTRY> REF_COUNTRY { get; set; }
         public virtual DbSet<USER> USERs { get; set; }
+        public virtual DbSet<VWUserProfilePost> VWUserProfilePosts { get; set; }
     }
 }

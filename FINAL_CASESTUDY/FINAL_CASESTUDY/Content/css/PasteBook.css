@@ -40,6 +40,9 @@
 /*for the search bar - end*/
 
 /*for the post part - start */
+#errorPost{
+    display:none;
+}
 
 textarea.form-control{
     resize: none;
