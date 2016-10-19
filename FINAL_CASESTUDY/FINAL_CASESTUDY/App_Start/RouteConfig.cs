@@ -14,6 +14,12 @@ namespace FINAL_CASESTUDY
             
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //routes.MapRoute(
+            //    name: "ViewProfile",
+            //    url: "PasteBook/UserProfile/{username}",
+            //    defaults: new { controller = "PasteBook", action = "UserProfile" }
+            //);
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/",

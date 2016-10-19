@@ -11,36 +11,15 @@ namespace FINAL_CASESTUDY.Controllers
 {
     public class PasteBookController : Controller
     {
-        Manager manager = new Manager();
+        AccountManager accountManager = new AccountManager();
         PostManager postManager = new PostManager();
-
-        public ActionResult Home()
-        {
-            if (Session["loginUser"] == null)
-            {
-                return RedirectToAction("Register");
-            }
-            string loginUser = Session["loginUser"].ToString();
-            User user = manager.GetUserByUsername(loginUser);
-            return View(user);
-        }
-
-        public ActionResult GetPostOnProfile()
-        {
-            if (Session["loginUser"] == null)
-            {
-                return RedirectToAction("Register");
-            }
-            var user = manager.GetUserByUsername(Session["loginUser"].ToString());
-            List<Post> listOfPost = postManager.DisplayListOfPost(user.UserID);
-            return PartialView("PartialPostOnProfile", listOfPost);
-        }
+        FriendManager friendManager = new FriendManager();
 
         public ActionResult Register()
         {
-            if (Session["loginUser"] ==null)
+            if (Session["currentUser"] == null)
             {
-                Session["CountryList"] = new SelectList(manager.GetCountryList(), "CountryID", "CountryName");
+                Session["CountryList"] = new SelectList(accountManager.GetCountryList(), "CountryID", "CountryName");
                 return View();
             }
             else
@@ -49,36 +28,81 @@ namespace FINAL_CASESTUDY.Controllers
             }
         }
 
-        public ActionResult ValidateLogin(string email, string password)
-        {
-            bool loginSuccess = manager.LoginUser(email, password);
-            if (loginSuccess == true)
-            {
-                Session["loginUser"] = manager.GetUserByEmail(email).Username;
-            }
-
-            return Json(new { login = loginSuccess }, JsonRequestBehavior.AllowGet);       
-        }
-
         public ActionResult ValidateRegister(User user)
         {
             if (ModelState.IsValid)
             {
-                manager.RegisterUser(user);
-                Session["loginUser"] = user.Username;                
+                accountManager.RegisterUser(user);
+                Session["currentUser"] = user.UserID;
+                Session["currentUserName"] = user.Username;
                 return RedirectToAction("Home");
             }
             return View("Register", user);
         }
 
-        public ActionResult AddPost(string content)
+        public ActionResult ValidateLogin(string email, string password)
         {
-            if (Session["loginUser"]==null)
+            User user = accountManager.LoginUser(email, password);
+            bool loginSuccess = user.UserID != 0;
+            if (loginSuccess == true)
+            {                
+                Session["currentUser"] = user.UserID;
+                Session["currentUserName"] = user.Username;
+            }
+            return Json(new { login = loginSuccess }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Home()
+        {
+            if (Session["currentUser"] == null)
             {
                 return RedirectToAction("Register");
             }
-            string loginUser = Session["loginUser"].ToString();
-            USER poster = postManager.PostOnOwnProfile(loginUser);
+            int userID = (int)Session["currentUser"];
+            User user = accountManager.GetUserByID(userID);
+            return View(user);
+        }
+
+        public ActionResult GetPostOnHome()
+        {
+            if (Session["currentUser"] == null)
+            {
+                return RedirectToAction("Register");
+            }
+
+            int userID = (int)Session["currentUser"];
+            List<User> listOfUsers = friendManager.GetFriends(userID);
+
+            List<Post> listOfPost = postManager.DisplayListOfPostOnHome( listOfUsers , userID);
+
+            return PartialView("PartialPostOnHome", listOfPost);
+        }
+
+        public ActionResult GetPostOnProfile(string username)
+        {
+            if (Session["currentUser"] == null)
+            {
+                return RedirectToAction("Register");
+            }
+            List<Post> listOfPost = postManager.DisplayListOfPostOnWall(username);
+
+            return PartialView("PartialPostOnProfile", listOfPost);
+        }
+
+        public ActionResult Logout()
+        {
+            Session["currentUser"] = null;
+            return RedirectToAction("Register");
+        }
+
+        public ActionResult AddPost(string content)
+        {
+            if (Session["currentUser"] ==null)
+            {
+                return RedirectToAction("Register");
+            }
+            int userID = (int)Session["currentUser"];
+            USER poster = postManager.PostOnOwnProfile(userID);
             Post post = new Post()
             {
                 Content = content,
@@ -89,21 +113,35 @@ namespace FINAL_CASESTUDY.Controllers
             return Json(new { post = postSuccess }, JsonRequestBehavior.AllowGet);
         }
 
-
         public ActionResult UserProfile(string username)
         {
-            if (Session["loginUser"] == null)
+            if (Session["currentUser"] == null)
             {
                 return RedirectToAction("Register");
             }
-            string loginUser = Session["loginUser"].ToString();
-            User user = manager.GetUserByUsername(loginUser);
+            Session["currentUserName"] = username;
+            User user = accountManager.GetUserByUsername(username);
+
+                    
             return View(user);
         }
 
         public ActionResult Friends()
         {
-            return View();
+            if (Session["currentUser"] == null)
+            {
+                return RedirectToAction("Register");
+            }
+            int userID = (int)Session["currentUser"];
+            List<User> listOfFriends = friendManager.GetFriends(userID);
+            return View(listOfFriends);
+        }
+
+        public ActionResult LikePost(int currentPost)
+        {
+            int userID = (int)Session["currentUser"];
+            bool liked = postManager.LikePost(userID, currentPost);
+            return Json(new { likePost = liked }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Search()

@@ -84,6 +84,23 @@
           <Property Name="EMAIL_ADDRESS" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'PASTEBOOK.dbo.VWListOfFriends' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VWListOfFriends">
+          <Key>
+            <PropertyRef Name="USER_ID" />
+            <PropertyRef Name="USER_NAME" />
+            <PropertyRef Name="FIRST_NAME" />
+            <PropertyRef Name="LAST_NAME" />
+            <PropertyRef Name="EMAIL_ADDRESS" />
+          </Key>
+          <Property Name="USER_ID" Type="int" Nullable="false" />
+          <Property Name="USER_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FIRST_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LAST_NAME" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PROFILE_PIC" Type="varbinary(max)" />
+          <Property Name="EMAIL_ADDRESS" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'PASTEBOOK.dbo.VWUserProfilePost' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VWUserProfilePost">
           <Key>
@@ -270,6 +287,16 @@ warning 6002: The table/view 'PASTEBOOK.dbo.VWUserProfilePost' does not have a p
           <EntitySet Name="POST" EntityType="Self.POST" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="REF_COUNTRY" EntityType="Self.REF_COUNTRY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USER" EntityType="Self.USER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VWListOfFriends" EntityType="Self.VWListOfFriends" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VWListOfFriends].[USER_ID] AS [USER_ID], 
+    [VWListOfFriends].[USER_NAME] AS [USER_NAME], 
+    [VWListOfFriends].[FIRST_NAME] AS [FIRST_NAME], 
+    [VWListOfFriends].[LAST_NAME] AS [LAST_NAME], 
+    [VWListOfFriends].[PROFILE_PIC] AS [PROFILE_PIC], 
+    [VWListOfFriends].[EMAIL_ADDRESS] AS [EMAIL_ADDRESS]
+    FROM [dbo].[VWListOfFriends] AS [VWListOfFriends]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VWUserProfilePost" EntityType="Self.VWUserProfilePost" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VWUserProfilePost].[POST_ID] AS [POST_ID], 
@@ -661,6 +688,7 @@ warning 6002: The table/view 'PASTEBOOK.dbo.VWUserProfilePost' does not have a p
             <End Role="USER" EntitySet="USERs" />
           </AssociationSet>
           <EntitySet Name="VWUserProfilePosts" EntityType="PASTEBOOKModel.VWUserProfilePost" />
+          <EntitySet Name="VWListOfFriends" EntityType="PASTEBOOKModel.VWListOfFriend" />
         </EntityContainer>
         <EntityType Name="VWUserProfilePost">
           <Key>
@@ -682,6 +710,21 @@ warning 6002: The table/view 'PASTEBOOK.dbo.VWUserProfilePost' does not have a p
           <Property Name="FIRST_NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LAST_NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="PROFILE_PIC" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="VWListOfFriend">
+          <Key>
+            <PropertyRef Name="USER_ID" />
+            <PropertyRef Name="USER_NAME" />
+            <PropertyRef Name="FIRST_NAME" />
+            <PropertyRef Name="LAST_NAME" />
+            <PropertyRef Name="EMAIL_ADDRESS" />
+          </Key>
+          <Property Name="USER_ID" Type="Int32" Nullable="false" />
+          <Property Name="USER_NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FIRST_NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LAST_NAME" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PROFILE_PIC" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="EMAIL_ADDRESS" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -786,6 +829,18 @@ warning 6002: The table/view 'PASTEBOOK.dbo.VWUserProfilePost' does not have a p
                 <ScalarProperty Name="CONTENT" ColumnName="CONTENT" />
                 <ScalarProperty Name="CREATED_DATE" ColumnName="CREATED_DATE" />
                 <ScalarProperty Name="POST_ID" ColumnName="POST_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VWListOfFriends">
+            <EntityTypeMapping TypeName="PASTEBOOKModel.VWListOfFriend">
+              <MappingFragment StoreEntitySet="VWListOfFriends">
+                <ScalarProperty Name="EMAIL_ADDRESS" ColumnName="EMAIL_ADDRESS" />
+                <ScalarProperty Name="PROFILE_PIC" ColumnName="PROFILE_PIC" />
+                <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+                <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+                <ScalarProperty Name="USER_NAME" ColumnName="USER_NAME" />
+                <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

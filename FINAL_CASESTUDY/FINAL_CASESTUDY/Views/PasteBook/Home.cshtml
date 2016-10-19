@@ -21,7 +21,7 @@
         </div>
     </div>
     
-    @*@{Html.RenderAction("GetPostOnWall", "PasteBook");}*@
+    @{Html.RenderAction("GetPostOnHome", "PasteBook");}
     
     
      
@@ -53,7 +53,7 @@
                                 $('#errorPost').css('display', 'block');
                             } else {
                                 $('#postContent').val("");
-                                $("#postContainer").load('@Url.Action("GetPostOnWall", "PasteBook")');
+                                $('#postContainer').load('@Url.Action("GetPostOnHome", "PasteBook")');
                             }
 
                         },

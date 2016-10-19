@@ -1,4 +1,6 @@
-﻿<div class="row">
+﻿@model IEnumerable<FINAL_CASESTUDY.Models.User>
+
+<div class="row">
     <div class="col-sm-2">
         <div class="container-fluid">
             <div id="imageFriendContainer">
@@ -20,20 +22,25 @@
             <div class="container-fluid">
                 <h4>Friends</h4>
                 <hr />
+                
                 <div id="friendContainer">
-                    <div class="container-fluid" id="friend">
-                        <div class="col-sm-8">
-                            <p id="friendName">Sample_Friend_Name</p>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="dropdown">
-                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="friendOption" data-toggle="dropdown"><span class="glyphicon glyphicon-ok"></span>&nbsp; Friends&nbsp;<span class="caret"></span></button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="notificationList">
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">block</a></li>
-                                </ul>
+                    @foreach (var item in Model)
+                    {
+                        <div class="container-fluid" id="friend">
+                            <div class="col-sm-8">
+                                @Html.ActionLink(item.FirstName+" "+item.LastName,"UserProfile",new { username = item.Username })
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="dropdown">
+                                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="friendOption" data-toggle="dropdown"><span class="glyphicon glyphicon-ok"></span>&nbsp; Friends&nbsp;<span class="caret"></span></button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="notificationList">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">block</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+                    
                     
                 </div>
                 

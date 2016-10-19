@@ -26,6 +26,7 @@
         <AssociationConnector Association="PASTEBOOKModel.FK_POST_USER1" ManuallyRouted="false" />
         <AssociationConnector Association="PASTEBOOKModel.FK_USER_REF_COUNTRY" ManuallyRouted="false" />
         <EntityTypeShape EntityType="PASTEBOOKModel.VWUserProfilePost" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PASTEBOOKModel.VWListOfFriend" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
-        @if (Session["loginUser"]==null)
+        @if (Session["currentUser"]==null)
         {
             @Html.Partial("_LogoutPartial")
         }
@@ -38,6 +38,7 @@
 <script>
     var validateLoginUrl = '@Url.Action("ValidateLogin", "PasteBook")';
     $(document).ready(function () {
+
 
         $('#btnLogin').on('click', function () {
             var data = {

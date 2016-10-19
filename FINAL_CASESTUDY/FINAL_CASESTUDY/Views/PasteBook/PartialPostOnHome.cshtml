@@ -3,22 +3,12 @@
     @foreach (var item in Model)
     {
         <div class="well">
-            @{
-                var userID = item.ID;
-                int likes = 0;
-                if (item.ListOfLikes != null)
-                {
-                    likes = item.ListOfLikes.Count;
-                }
-            }
-
             <div class="container-fluid">
                 @Html.ActionLink(item.FirstName + " " + item.LastName, "UserProfile", "PasteBook", new { id = "homeProfileName" })<br />
                 <p id="postDate">@item.DateCreated</p>
                 <p id="postContent">@item.Content</p>
                 <hr />
-                <p id="likePostID">Likes @likes</p>
-                <p class="linkLike" id="@userID">Like</p><p id="likeSuccess" style="display:none">You have already liked this post</p>
+                <a href="#">Like</a>
                 <hr />
                 <textarea class="form-control" id="addComment" rows="3" placeholder="Write a comment..."></textarea>
                 <hr />

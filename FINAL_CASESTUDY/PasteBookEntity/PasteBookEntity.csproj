@@ -88,6 +88,9 @@
     <Compile Include="USER.cs">
       <DependentUpon>PastebookModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="VWListOfFriend.cs">
+      <DependentUpon>PastebookModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="VWUserProfilePost.cs">
       <DependentUpon>PastebookModel.tt</DependentUpon>
     </Compile>

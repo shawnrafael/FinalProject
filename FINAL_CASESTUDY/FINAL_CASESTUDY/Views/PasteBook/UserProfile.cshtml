@@ -36,48 +36,20 @@
         <div class="row">
             <div class="well">
                 <div class="container-fluid">
-                    <textarea class="form-control" rows="3" placeholder="What's on your mind?"></textarea>
+                    <p class="text-danger" id="errorPost">Please add something to your post.</p>
+                    <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
                     <hr />
                     <input type="button" id="postBtn" value="Post" class="btn btn-primary pull-right" />
                 </div>
             </div>
-            @{Html.RenderAction("GetPostOnProfile", "PasteBook");}            
+            
+                @{Html.RenderAction("GetPostOnProfile", "PasteBook", new { username = Session["currentUserName"] });}
+
         </div>
     </div>        
 </div>
 
 @section scripts{
-    <script>
-        var addPostUrl = '@Url.Action("AddPost", "PasteBook")';
-        $(document).ready(function () {
-            $('#postBtn').on('click', function () {
-
-                var data = {
-                    content: $('#postContent').val()
-                }
-                if (data.content == "") {
-                    $('#errorPost').css('display', 'block');
-                } else {
-                    $.ajax({
-                        url: addPostUrl,
-                        data: data,
-                        type: 'GET',
-                        success: function (data) {
-                            if (data.post == false) {
-                                $('#errorPost').css('display', 'block');
-                            } else {
-                                $('#postContent').val("");
-                                $("#postContainer").load('@Url.Action("GetPostOnWall", "PasteBook")');
-                            }
-
-                        },
-                        error: function () {
-                            alert();
-                        }
-                    });
-                }
-
-            });
-        });
-    </script>
+    <script>var getPostUrl = '@Url.Action("GetPostOnProfile", "PasteBook")'</script>
+    <script src="~/Scripts/PasteBookJS/Profile.js"></script>
 }

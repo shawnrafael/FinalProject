@@ -49,11 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogic\HashComputer.cs" />
-    <Compile Include="BusinessLogic\PasteBookBL.cs" />
+    <Compile Include="BusinessLogic\AccountBL.cs" />
+    <Compile Include="BusinessLogic\FriendsBL.cs" />
+    <Compile Include="BusinessLogic\PasswordBL.cs" />
     <Compile Include="BusinessLogic\PostBL.cs" />
-    <Compile Include="BusinessLogic\SaltGenerator.cs" />
-    <Compile Include="BusinessLogic\Utility.cs" />
     <Compile Include="Entities\CountryEntity.cs" />
     <Compile Include="Entities\UserEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

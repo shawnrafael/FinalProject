@@ -23,7 +23,7 @@
         <ul class="nav navbar-nav navbar-right">
             
             <li>@Html.ActionLink("Home", "Home", "PasteBook")</li>
-            <li>@Html.ActionLink("Profile", "UserProfile", "PasteBook", new { username = Session["user"] },null)</li>
+            <li>@Html.ActionLink("Profile", "UserProfile", "PasteBook", new { username = (string)Session["currentUserName"] },null)</li>
             <li>
                 <div class="dropdown">
                     <button class="icon-bar dropdown-toggle" type="button" id="notificationList" data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span></button>
@@ -49,7 +49,7 @@
                     <button class="icon-bar dropdown-toggle" type="button" id="settingsMenu" data-toggle="dropdown"><span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="settingsMenu">
                         <li>@Html.ActionLink("Settings", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Logout", "About", "Home")</li>
+                        <li>@Html.ActionLink("Logout", "Logout", "PasteBook")</li>
                     </ul>
                 </div>
             </li>

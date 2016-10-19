@@ -14,6 +14,7 @@ namespace FINAL_CASESTUDY.Managers
         {
             return new USER()
             {
+                ID = user.UserID,
                 USER_NAME = user.Username,
                 PASSWORD = user.Password,
                 EMAIL_ADDRESS = user.Email,
@@ -59,26 +60,64 @@ namespace FINAL_CASESTUDY.Managers
         {
             return new POST()
             {
+                ID = post.ID,
                 CONTENT = post.Content,
                 PROFILE_OWNER_ID = post.ProfileOwnerID,
                 POSTER_ID = post.PosterID
             };
         }
 
-        public static Post ToListOfPost(VWUserProfilePost post)
+        public static Post ToListOfPost(POST post, List<Like> listOfLikes)
         {
             return new Post()
             {
+                ID = post.ID,
                 Content = post.CONTENT,
                 DateCreated = post.CREATED_DATE,
                 ProfileOwnerID = post.PROFILE_OWNER_ID,
                 PosterID = post.POSTER_ID,
-                Username = post.USER_NAME,
-                FirstName = post.FIRST_NAME,
-                LastName = post.LAST_NAME,
-                ProfilePic = post.PROFILE_PIC
+                Username = post.USER.USER_NAME,
+                FirstName = post.USER.FIRST_NAME,
+                LastName = post.USER.LAST_NAME,
+                ProfilePic = post.USER.PROFILE_PIC,
+                ListOfLikes = listOfLikes
 
             };   
         }
+
+        public static Friend ToFriend(FRIEND friend)
+        {
+            return new Friend()
+            {
+                ID = friend.ID,
+                USER_ID = friend.USER_ID,
+                FRIEND_ID = friend.FRIEND_ID,
+                REQUEST = friend.REQUEST,
+                BLOCKED = friend.BLOCKED,
+                CREATED_DATE = friend.CREATED_DATE
+            };
+        }
+
+        public static Like ToLike(LIKE like)
+        {
+            return new Like()
+            {
+                ID = like.ID,
+                PostID = like.POST_ID,
+                LikedBy = like.LIKED_BY
+            };
+        }
+        //public static FRIEND ToFRIENDFromDB(Friend friend)
+        //{
+        //    return new FRIEND()
+        //    {
+        //        ID = friend.ID,
+        //        USER_ID = friend.USER_ID,
+        //        FRIEND_ID = friend.FRIEND_ID,
+        //        REQUEST = friend.REQUEST,
+        //        BLOCKED = friend.BLOCKED,
+        //        CREATED_DATE = friend.CREATED_DATE
+        //    };
+        //}
     }
 }
