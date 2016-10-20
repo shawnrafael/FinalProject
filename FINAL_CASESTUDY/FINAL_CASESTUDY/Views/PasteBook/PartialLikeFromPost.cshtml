@@ -1,0 +1,9 @@
+﻿@model IEnumerable<FINAL_CASESTUDY.Models.User>
+
+@foreach (var item in Model)
+{
+    <ul>
+        <li>@Html.ActionLink(item.FirstName + " " + item.LastName, "UserProfile", new { username = item.Username })</li>
+    </ul>
+    
+}

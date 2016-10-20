@@ -17,22 +17,18 @@ namespace FINAL_CASESTUDY.Managers
             return user;
         }
 
-        public bool CreatePost(Post post)
+        public bool CreatePost(string post, int userID, int profileOwnerID)
         {
-            if (post.Content == "")
-            {
-                return false;
-            }
-            int result = postBL.AddPost(Mapper.ToPOSTFromDB(post));
+            var userPost = Mapper.ToPOSTFromDB(post, userID, profileOwnerID);
+            int result = postBL.AddPost(userPost);
             return result != 0;
         }
 
         public List<Post> DisplayListOfPostOnHome(List<User> listOfUsers, int userID)
         {
             List<Post> listOfPost = new List<Post>();
-            List<Like> listOfLikes = new List<Like>();
+            var users = new List<USER>();
 
-              var users = new List<USER>();
             foreach (var user in listOfUsers)
             {
                 users.Add(Mapper.ToUSERFromDB(user));
@@ -41,37 +37,45 @@ namespace FINAL_CASESTUDY.Managers
             var posts = postBL.RetrieveListOfPost(users, userID);
             foreach (var item in posts)
             {
-
-                listOfPost.Add(Mapper.ToListOfPost(item, listOfLikes));
+                listOfPost.Add(Mapper.ToPost(item));
             }
             return listOfPost;
         }
 
-        public List<Post> DisplayListOfPostOnWall(string username)
+        public List<Post> DisplayListOfPostOnWall(int userID)
         {
             List<Post> listOfPost = new List<Post>();
-            List<Like> listOfLikes;
-            var posts = postBL.RetrieveListOfPostOnProfile(username);
+            var posts = postBL.RetrieveListOfPostOnProfile(userID);
             
             foreach (var post in posts)
-            {
-                listOfLikes = new List<Like>();
-                if (post.LIKEs != null)
-                {
-                    foreach (var like in post.LIKEs)
-                    {                        
-                        listOfLikes.Add(Mapper.ToLike(like));
-                    }
-                }
-                listOfPost.Add(Mapper.ToListOfPost(post, listOfLikes));
+            {             
+                listOfPost.Add(Mapper.ToPost(post));
                 
             }
             return listOfPost;
         }
 
+        public List<User> DisplayListOfLikers(int postID)
+        {
+            List<User> listOfLikers = new List<User>();
+            var likers = postBL.DisplayLikers(postID);
+
+            foreach (var user in likers)
+            {
+                listOfLikers.Add(Mapper.ToUser(user));
+            }
+            return listOfLikers;
+        }
+
         public bool LikePost(int userID, int postID)
         {
-            int like = postBL.LikeSpecificPost(userID, postID);
+            int like = postBL.UserLikePost(userID, postID);
+            return like != 0;
+        }
+
+        public bool CommentPost(int userID, int postID, string comment)
+        {
+            int like = postBL.UserCommentPost(userID, postID, comment);
             return like != 0;
         }
     }

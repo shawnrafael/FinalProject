@@ -20,27 +20,44 @@ $(document).ready(function () {
         });
     });
 
+    $(document).on('click', '.btnComment', function () {
+        var data = {
+            currentPost: this.id,
+            commentContent: $('#addComment').val()
+        }
+        alert(data.currentPost+data.commentContent)
+        $.ajax({
+            url: addCommentUrl,
+            data: data,
+            type: 'GET',
+            success: function (data) {
+                $("#postContainer").load(getPostUrl);
+            },
+            error: function () {
+                alert("Something went wrong");
+            }
+        });
+    });
+
     $('#postBtn').on('click', function () {
-        
+
         var data = {
             content: $('#postContent').val(),
-            currentProfile: $('#userName').val()
+            currentProfile: 0
         }
-        alert(data.currentProfile + data.content);
         if (data.content == "") {
             $('#errorPost').css('display', 'block');
-        }
-        else {
+        } else {
             $.ajax({
                 url: addPostUrl,
                 data: data,
-                type: 'POST',
+                type: 'GET',
                 success: function (data) {
                     if (data.post == false) {
                         $('#errorPost').css('display', 'block');
                     } else {
                         $('#postContent').val("");
-                        $("#postContainer").load(getPostUrl);
+                        $('#postContainer').load(getPostUrl);
                     }
 
                 },
@@ -51,4 +68,5 @@ $(document).ready(function () {
         }
 
     });
+
 });

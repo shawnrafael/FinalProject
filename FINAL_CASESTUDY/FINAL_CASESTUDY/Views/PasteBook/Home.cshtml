@@ -1,4 +1,5 @@
 ﻿@model FINAL_CASESTUDY.Models.User
+
 <div class="col-sm-2">
     <div class="container">
         <div id="imageContainer">
@@ -20,50 +21,17 @@
             <input type="button" id="postBtn" value="Post" class="btn btn-primary pull-right" />
         </div>
     </div>
-    
-    @{Html.RenderAction("GetPostOnHome", "PasteBook");}
-    
-    
-     
+    <div id="postContainer">
+        @{Html.RenderAction("GetPostOnHome", "PasteBook");}
+    </div>   
 </div>
 <div class="col-sm-2">
 </div>
-
 @section scripts{
     <script>
         var addPostUrl = '@Url.Action("AddPost", "PasteBook")';
-        $(document).ready(function () {
-
-
-
-            $('#postBtn').on('click', function () {
-                
-                var data = {
-                    content: $('#postContent').val()
-                }
-                if (data.content == "") {
-                    $('#errorPost').css('display', 'block');
-                } else {
-                    $.ajax({
-                        url: addPostUrl,
-                        data: data,
-                        type: 'GET',
-                        success: function (data) {
-                            if (data.post == false) {
-                                $('#errorPost').css('display', 'block');
-                            } else {
-                                $('#postContent').val("");
-                                $('#postContainer').load('@Url.Action("GetPostOnHome", "PasteBook")');
-                            }
-
-                        },
-                        error: function () {
-                            alert();
-                        }
-                    });
-                }
-
-            });
-        });
+        var getPostUrl = '@Url.Action("GetPostOnHome", "PasteBook")';
+        var addCommentUrl = '@Url.Action("CommentPost", "PasteBook")';
     </script>
+    <script src="~/Scripts/PasteBookJS/Home.js"></script>
     }

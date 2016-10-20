@@ -106,6 +106,10 @@ textarea.form-control{
 /*for the post part - end*/
 
 /*for the profile part - start */
+.btnLike{
+    background-color: #f5f5f5 !important;
+}
+
 #imageProfileContainer{
     width: 350px;
     height: 350px;

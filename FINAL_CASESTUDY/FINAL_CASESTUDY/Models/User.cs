@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PasteBookEntity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,5 +31,6 @@ namespace FINAL_CASESTUDY.Models
         public string Gender { get; set; }
         public byte[] ProfilePicture { get; set; }
         public string AboutMe { get; set; }
+        public ICollection<POST> Posts { get; set; }
     }
 }

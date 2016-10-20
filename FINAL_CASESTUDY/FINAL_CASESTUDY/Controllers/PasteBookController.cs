@@ -28,7 +28,7 @@ namespace FINAL_CASESTUDY.Controllers
             }
         }
 
-        public ActionResult ValidateRegister(User user)
+        public ActionResult ValidateRegister(USER user)
         {
             if (ModelState.IsValid)
             {
@@ -65,28 +65,26 @@ namespace FINAL_CASESTUDY.Controllers
 
         public ActionResult GetPostOnHome()
         {
-            if (Session["currentUser"] == null)
-            {
-                return RedirectToAction("Register");
-            }
-
             int userID = (int)Session["currentUser"];
-            List<User> listOfUsers = friendManager.GetFriends(userID);
-
+            var listOfUsers = friendManager.GetFriends(userID);
             List<Post> listOfPost = postManager.DisplayListOfPostOnHome( listOfUsers , userID);
 
-            return PartialView("PartialPostOnHome", listOfPost);
+            return PartialView("PartialPostOnProfile", listOfPost);
         }
 
         public ActionResult GetPostOnProfile(string username)
         {
-            if (Session["currentUser"] == null)
-            {
-                return RedirectToAction("Register");
-            }
-            List<Post> listOfPost = postManager.DisplayListOfPostOnWall(username);
+            var user = accountManager.GetUserByUsername(username);
+            List<Post> listOfPost = postManager.DisplayListOfPostOnWall(user.UserID);
 
             return PartialView("PartialPostOnProfile", listOfPost);
+        }
+
+        public ActionResult GetLikers(int currentPost)
+        {
+            List<User> listOfLikers = postManager.DisplayListOfLikers(currentPost);
+
+            return PartialView("PartialLikeFromPost", listOfLikers);
         }
 
         public ActionResult Logout()
@@ -95,21 +93,16 @@ namespace FINAL_CASESTUDY.Controllers
             return RedirectToAction("Register");
         }
 
-        public ActionResult AddPost(string content)
+        public ActionResult AddPost(string content, int currentProfile)
         {
             if (Session["currentUser"] ==null)
             {
                 return RedirectToAction("Register");
-            }
+            }            
             int userID = (int)Session["currentUser"];
-            USER poster = postManager.PostOnOwnProfile(userID);
-            Post post = new Post()
-            {
-                Content = content,
-                PosterID = poster.ID,
-                ProfileOwnerID = poster.ID
-            };
-            bool postSuccess = postManager.CreatePost(post);
+            currentProfile = (currentProfile == 0) ? userID : currentProfile;
+
+            bool postSuccess = postManager.CreatePost(content, userID, currentProfile);
             return Json(new { post = postSuccess }, JsonRequestBehavior.AllowGet);
         }
 
@@ -119,7 +112,7 @@ namespace FINAL_CASESTUDY.Controllers
             {
                 return RedirectToAction("Register");
             }
-            Session["currentUserName"] = username;
+           
             User user = accountManager.GetUserByUsername(username);
 
                     
@@ -141,6 +134,13 @@ namespace FINAL_CASESTUDY.Controllers
         {
             int userID = (int)Session["currentUser"];
             bool liked = postManager.LikePost(userID, currentPost);
+            return Json(new { likePost = liked }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CommentPost(int currentPost, string commentContent)
+        {
+            int userID = (int)Session["currentUser"];
+            bool liked = postManager.CommentPost(userID, currentPost, commentContent);
             return Json(new { likePost = liked }, JsonRequestBehavior.AllowGet);
         }
 

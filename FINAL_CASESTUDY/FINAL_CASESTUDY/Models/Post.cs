@@ -17,6 +17,7 @@ namespace FINAL_CASESTUDY.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public byte[] ProfilePic { get; set; }
-        public List<Like> ListOfLikes { get; set; }
+        public int LikeCount { get; set; }
+        public int CommentCount { get; set; }
     }
 }

@@ -56,20 +56,19 @@ namespace FINAL_CASESTUDY.Managers
             };
         }
 
-        public static POST ToPOSTFromDB(Post post)
+        public static POST ToPOSTFromDB(string post, int userID, int profileOwnerID)
         {
             return new POST()
             {
-                ID = post.ID,
-                CONTENT = post.Content,
-                PROFILE_OWNER_ID = post.ProfileOwnerID,
-                POSTER_ID = post.PosterID
+                CONTENT = post,
+                PROFILE_OWNER_ID = profileOwnerID,
+                POSTER_ID = userID
             };
         }
 
-        public static Post ToListOfPost(POST post, List<Like> listOfLikes)
+        public static Post ToPost(POST post)
         {
-            return new Post()
+            var samplePost = new Post()
             {
                 ID = post.ID,
                 Content = post.CONTENT,
@@ -80,9 +79,12 @@ namespace FINAL_CASESTUDY.Managers
                 FirstName = post.USER.FIRST_NAME,
                 LastName = post.USER.LAST_NAME,
                 ProfilePic = post.USER.PROFILE_PIC,
-                ListOfLikes = listOfLikes
+                LikeCount = post.LIKEs.Count,
+                CommentCount = post.COMMENTs.Count
 
-            };   
+            };
+
+            return samplePost;
         }
 
         public static Friend ToFriend(FRIEND friend)

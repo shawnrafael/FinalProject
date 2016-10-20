@@ -141,6 +141,7 @@
     <Compile Include="Models\Like.cs" />
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UsersViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PasteBookJS\Home.js" />
     <Content Include="Scripts\PasteBookJS\Profile.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -189,6 +191,8 @@
     <Content Include="Views\PasteBook\UserPost.cshtml" />
     <Content Include="Views\PasteBook\PartialPostOnProfile.cshtml" />
     <Content Include="Views\PasteBook\PartialPostOnHome.cshtml" />
+    <Content Include="Views\PasteBook\PartialLikeFromPost.cshtml" />
+    <Content Include="Views\PasteBook\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

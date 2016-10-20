@@ -1,29 +1,77 @@
 ﻿@model IEnumerable<FINAL_CASESTUDY.Models.Post>
-<div id="postContainer">
+
     @foreach (var item in Model)
     {
         <div class="well">
             @{
                 var userID = item.ID;
-                int likes = 0;
-                if (item.ListOfLikes != null)
-                {
-                    likes = item.ListOfLikes.Count;
-                }
+                var likeModalID = item.ID+"LikeModal";
+                var commentModalID = item.ID + "CommentModal";
+                var postOwner = item.Username;
             }
 
             <div class="container-fluid">
-                @Html.ActionLink(item.FirstName + " " + item.LastName, "UserProfile", "PasteBook", new { id = "homeProfileName" })<br />
+                @Html.ActionLink(item.FirstName+" "+item.LastName, "UserProfile","PasteBook",new { username = item.Username })  
+
                 <p id="postDate">@item.DateCreated</p>
                 <p id="postContent">@item.Content</p>
                 <hr />
-                <p id="likePostID">Likes @likes</p>
-                <p class="linkLike" id="@userID">Like</p><p id="likeSuccess" style="display:none">You have already liked this post</p>
+                <button class="btn btnLike" id="@userID">Like</button>
+                <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@item.LikeCount <span class="glyphicon glyphicon-thumbs-up"></span></button>     
+                <button class="btn btnCommentCount" id="@userID" data-toggle="modal" data-target="#@commentModalID">@item.CommentCount <span class="glyphicon glyphicon-comment"></span></button>          
                 <hr />
                 <textarea class="form-control" id="addComment" rows="3" placeholder="Write a comment..."></textarea>
                 <hr />
-                <input type="button" id="commentBtn" value="Add comment" class="btn btn-primary pull-right" />
+
+                <button id="@userID" class="btn btn-primary pull-right btnComment" >Add comment</button>
+                @*Like Modal*@
+                <div class="modal fade" id="@likeModalID" role="dialog">
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+                            
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">People who liked this post.</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="modalLikeContainer">
+                                    @{Html.RenderAction("GetLikers", "PasteBook",new { currentPost = userID });}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                </div>
+                @*Comment Modal*@
+                <div class="modal fade" id="@commentModalID" role="dialog">
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Comments</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="modalLikeContainer">
+                                    @{Html.RenderAction("GetLikers", "PasteBook", new { currentPost = userID });}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
+            @*source w3schools*@
+            
         </div>
     }
-</div>
