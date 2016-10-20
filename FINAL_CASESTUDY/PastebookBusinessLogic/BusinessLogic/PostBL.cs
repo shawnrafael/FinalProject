@@ -1,4 +1,5 @@
-﻿using PasteBookEntity;
+﻿using DataAccess.PasteBookAccessLayer;
+using PasteBookEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,212 +9,66 @@ using System.Threading.Tasks;
 namespace PastebookBusinessLogic.BusinessLogic
 {
     public class PostBL
-    {      
+    {
+        DataAccess<POST> accessPost = new DataAccess<POST>();
+        DataAccess<USER> accessUser = new DataAccess<USER>();
+        DataAccess<LIKE> accessLike = new DataAccess<LIKE>();
+
+        DataAccess<COMMENT> accessComment = new DataAccess<COMMENT>();
+
         public List<POST> RetrieveListOfPost(List<USER> listOFUsers, int userID)
         {
-            var listOfPost = new List<POST>();
+            var listOfPost = accessPost.EntityList();
+            var newsFeed = new List<POST>();
 
-            try
+            foreach (var item in listOfPost)
             {
-                using (var context = new PASTEBOOKEntities())
+                if (listOFUsers.Any(x => (x.ID == item.POSTER_ID || userID == item.POSTER_ID)))
                 {
-                    var result = context.POSTs
-                                    .Include("COMMENTs")
-                                    .Include("LIKEs")
-                                    .Include("USER")
-                                    .OrderByDescending(x=>x.CREATED_DATE)
-                                    .ToList();
-                    foreach (var post in result)
-                    {
-                        if (listOFUsers.Any(x=> (x.ID == post.POSTER_ID) || userID == post.POSTER_ID))
-                        {
-                            listOfPost.Add(post);
-                        }
-                    }
-
+                    newsFeed.Add(item);
                 }
             }
-            catch (Exception)
-            {
 
-                throw;
-            }
-
-            return listOfPost;
-
+            return newsFeed;
         }
+
+        //public List<POST> RetrieveListOfPost(List<USER> listOFUsers, int userID)
+        //{
+        //    var listOfPost = accessPost.EntityList();
+        //    var newsFeed = new List<POST>();
+
+        //    foreach (var item in listOfPost)
+        //    {
+        //        if (listOFUsers.Any(x => (x.ID == item.POSTER_ID || userID == item.POSTER_ID )))
+        //        {
+        //            newsFeed.Add(item);
+        //        }                
+        //    }
+                        
+        //    return newsFeed;
+        //}
 
         public List<POST> RetrieveListOfPostOnProfile(int userID)
         {
-            var listOfPost = new List<POST>();
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    listOfPost = context.POSTs
-                                .Include("USER")
-                                .Include("LIKEs")
-                                .Include("COMMENTs")
-                                .Where(x => x.PROFILE_OWNER_ID == userID)
-                                .OrderByDescending(x => x.CREATED_DATE)
-                                .Select(x => x).ToList();
-                }
-            }
-            catch (Exception)
-            {
+            var listOfPost = accessPost.EntityList();
+            var timeLine = listOfPost.Where(x => x.PROFILE_OWNER_ID == userID).ToList();
 
-                throw;
-            }
-            return listOfPost;
+            return timeLine;
         }
 
-        public USER PostOnOwnProfile(int userID)
+        public bool AddPost(string content, int userID, int postID)
         {
-            var user = new USER();
-            try
+            POST newPost = new POST()
             {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    user = context.USERs.Where(x => x.ID == userID).SingleOrDefault();
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return user;
-        }
-
-        public int AddPost(POST post)
-        {
-            int status = 0;
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    post.CREATED_DATE = DateTime.Now;
-                    context.POSTs.Add(post);
-                    status = context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+                CONTENT = content,
+                POSTER_ID = userID,
+                PROFILE_OWNER_ID = postID,
+                CREATED_DATE = DateTime.Now
+            }; 
+            
+            bool status = accessPost.Create(newPost);
             return status;
         }
-
-        public int UserLikePost(int userID, int postID)
-        {
-            int status = 0;
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    var like = new LIKE()
-                    {
-                        POST_ID = postID,
-                        LIKED_BY = userID
-                    };
-
-                    if (context.LIKEs.Any(x=> (x.LIKED_BY == like.LIKED_BY && x.POST_ID == like.POST_ID)))
-                    {
-                        return status;
-                    }
-                    else
-                    {
-                        context.LIKEs.Add(like);
-                        status = context.SaveChanges();
-                    }
-                    
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return status;
-        }
-
-        public int UserCommentPost(int userID, int postID, string commentContent)
-        {
-            int status = 0;
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    var comment = new COMMENT()
-                    {
-                        POST_ID = postID,
-                        POSTER_ID = userID,
-                        CONTENT = commentContent,
-                        DATE_CREATED = DateTime.Now
-                    };
-
-                    context.COMMENTs.Add(comment);
-                    status = context.SaveChanges();
-
-
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return status;
-        }
-        //public List<USER> DisplayLikers(int postID)
-        //{
-        //    var listOfLikers = new List<USER>();
-        //    var listOfUserID = ListOfLikes(postID);
-
-        //    try
-        //    {
-        //        using (var context = new PASTEBOOKEntities())
-        //        {
-
-        //            var results = context.USERs.Include("POSTs").Include("LIKEs").ToList();
-        //            foreach (var liker in results)
-        //            {
-        //                if (results.Any(x => (x.ID == postID) && (x.USER.ID == )))
-        //                {
-        //                    listOfLikers.Add(liker.);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //    return listOfLikers;
-        //}
-
-        public List<USER> DisplayLikers(int postID)
-        {
-            var listOfLikers = new List<USER>();
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    var results = context.LIKEs.Include("USER").Where(x=>x.POST_ID==postID);
-                    foreach (var item in results)
-                    {
-                        listOfLikers.Add(item.USER);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return listOfLikers;
-        }
+        
     }
 }

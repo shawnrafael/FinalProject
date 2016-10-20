@@ -10,6 +10,7 @@ namespace PastebookBusinessLogic.BusinessLogic
     public class PasswordBL
     {
         private RNGCryptoServiceProvider m_cryptoServiceProvider = new RNGCryptoServiceProvider();
+
         private const int SALT_SIZE = 24;
 
         public string GeneratePasswordHash(string password, out string salt)

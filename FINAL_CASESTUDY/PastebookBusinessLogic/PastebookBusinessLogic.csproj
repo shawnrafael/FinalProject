@@ -50,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogic\AccountBL.cs" />
+    <Compile Include="BusinessLogic\CommentBL.cs" />
     <Compile Include="BusinessLogic\FriendsBL.cs" />
+    <Compile Include="BusinessLogic\LikeBL.cs" />
     <Compile Include="BusinessLogic\PasswordBL.cs" />
     <Compile Include="BusinessLogic\PostBL.cs" />
     <Compile Include="Entities\CountryEntity.cs" />
@@ -62,6 +64,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{6AA19229-4978-4AAC-9F2F-90EC9880846B}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PasteBookEntity\PasteBookEntity.csproj">
       <Project>{33aa7395-a963-4705-8cb3-54623c366583}</Project>
       <Name>PasteBookEntity</Name>

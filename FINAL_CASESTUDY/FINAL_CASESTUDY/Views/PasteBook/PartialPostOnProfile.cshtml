@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FINAL_CASESTUDY.Models.Post>
+﻿@model IEnumerable<PasteBookEntity.POST>
 
     @foreach (var item in Model)
     {
@@ -7,18 +7,18 @@
                 var userID = item.ID;
                 var likeModalID = item.ID+"LikeModal";
                 var commentModalID = item.ID + "CommentModal";
-                var postOwner = item.Username;
+                var postOwner = item.PROFILE_OWNER_ID;
             }
 
             <div class="container-fluid">
-                @Html.ActionLink(item.FirstName+" "+item.LastName, "UserProfile","PasteBook",new { username = item.Username })  
+                @Html.ActionLink(item.USER.FIRST_NAME+" "+item.USER.LAST_NAME, "UserProfile","PasteBook",new { username = item.USER.USER_NAME })  
 
-                <p id="postDate">@item.DateCreated</p>
-                <p id="postContent">@item.Content</p>
+                <p id="postDate">@item.CREATED_DATE</p>
+                <p id="postContent">@item.CONTENT</p>
                 <hr />
                 <button class="btn btnLike" id="@userID">Like</button>
-                <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@item.LikeCount <span class="glyphicon glyphicon-thumbs-up"></span></button>     
-                <button class="btn btnCommentCount" id="@userID" data-toggle="modal" data-target="#@commentModalID">@item.CommentCount <span class="glyphicon glyphicon-comment"></span></button>          
+                <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@item.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>     
+                <button class="btn btnCommentCount" id="@userID" data-toggle="modal" data-target="#@commentModalID">@item.COMMENTs.Count <span class="glyphicon glyphicon-comment"></span></button>          
                 <hr />
                 <textarea class="form-control" id="addComment" rows="3" placeholder="Write a comment..."></textarea>
                 <hr />

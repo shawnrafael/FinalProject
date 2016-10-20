@@ -1,4 +1,4 @@
-﻿@model FINAL_CASESTUDY.Models.User
+﻿@model PasteBookEntity.USER
 
 <div class="col-sm-2">
     <div class="container">
@@ -7,7 +7,7 @@
         </div>
 
         <div>
-            @Html.ActionLink(Model.FirstName + " " + Model.LastName, "UserProfile", "PasteBook", new { id = "homeProfileName" })<br />            
+            @Html.ActionLink(Model.FIRST_NAME + " " + Model.LAST_NAME, "UserProfile", "PasteBook", new { username = Model.USER_NAME})<br />            
             @Html.ActionLink("Fiends", "Friends", "PasteBook", new { id = "userHomeFriend" })
         </div>
     </div>

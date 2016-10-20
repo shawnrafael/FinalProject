@@ -132,16 +132,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Managers\AccountManager.cs" />
-    <Compile Include="Managers\FriendManager.cs" />
-    <Compile Include="Managers\Mapper.cs" />
-    <Compile Include="Managers\PostManager.cs" />
-    <Compile Include="Models\Country.cs" />
-    <Compile Include="Models\Friend.cs" />
-    <Compile Include="Models\Like.cs" />
-    <Compile Include="Models\Post.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UsersViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

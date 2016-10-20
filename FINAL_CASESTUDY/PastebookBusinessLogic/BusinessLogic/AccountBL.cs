@@ -7,119 +7,84 @@ using System.Threading.Tasks;
 using PasteBookEntity;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using DataAccess.PasteBookAccessLayer;
 
 namespace PastebookBusinessLogic.BusinessLogic
-{
+{    
     public class AccountBL
     {
+        DataAccess<USER> accessUser = new DataAccess<USER>();
+        DataAccess<REF_COUNTRY> accessCountry = new DataAccess<REF_COUNTRY>();
         PasswordBL passwordBL = new PasswordBL();
 
-        public int Register(USER newUser)
+        public bool CheckUser(USER newUser)
         {
-            int status = 0;
-            try
+            var listOfUsers = accessUser.EntityList();
+            if (listOfUsers.Any(x => x.USER_NAME == newUser.USER_NAME))
             {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    string salt = null;
-                    string hash = passwordBL.GeneratePasswordHash(newUser.PASSWORD, out salt);
-                    newUser.SALT = salt;
-                    newUser.PASSWORD = hash;
-                    newUser.DATE_CREATED = DateTime.Now;
+                return false;
+            }
+            return true;
+        }
 
-                    context.USERs.Add(newUser);
-                    status = context.SaveChanges();
-                }
-            }
-            catch (Exception)
+        public bool Register(USER newUser)
+        {            
+            if (newUser.GENDER == null)
             {
-                throw;
+                newUser.GENDER = "U";
             }
-            return status;
+
+            string salt = null;
+            string hash = passwordBL.GeneratePasswordHash(newUser.PASSWORD, out salt);
+            
+            newUser.SALT = salt;
+            newUser.PASSWORD = hash;
+            newUser.DATE_CREATED = DateTime.Now;
+
+            
+
+            bool successRegister = accessUser.Create(newUser);
+            return successRegister;
         }
 
         public USER LoginUser(string email, string password)
         {
+            List<USER> listOfUser = accessUser.EntityList();
             USER user = new USER();
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    user = context.USERs.Where(x => x.EMAIL_ADDRESS == email).SingleOrDefault();
-                    if (user == null)
-                    {
-                        return user;
-                    }
-                }
-            }
-            catch (Exception)
-            {
 
-                throw;
+            if (listOfUser.Any(x => x.EMAIL_ADDRESS == email))
+            {
+                user = listOfUser.Where(x => x.EMAIL_ADDRESS == email).Single();                
             }
-            var match = passwordBL.IsPasswordMatch(password, user.SALT, user.PASSWORD);
+
+            bool match = passwordBL.IsPasswordMatch(password, user.SALT, user.PASSWORD);
             if (match == true)
             {
                 return user;
             }
             return user = null;
+            
         }        
 
         public USER GetUserByID(int userID)
         {
-            USER user = new USER();
-            try
-            {
-                using (var contex = new PASTEBOOKEntities())
-                {
-                    user = contex.USERs.Where(x => x.ID == userID).SingleOrDefault();
-                }
-            }
-            catch (Exception)
-            {
+            var users = accessUser.EntityList();
+            var user = users.Where(x => x.ID == userID).Single(); 
 
-                throw;
-            }
             return user;
         }
 
         public USER GetUserByUsername(string username)
         {
-            USER user = new USER();
-            try
-            {
-                using (var contex = new PASTEBOOKEntities())
-                {
-                    user = contex.USERs.Where(x => x.USER_NAME == username).SingleOrDefault();
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            var users = accessUser.EntityList();
+            var user = users.Where(x => x.USER_NAME == username).Single();
             return user;
         }
-        public List<CountryEntity> GetCountryList()
+
+        public List<REF_COUNTRY> GetCountryList()
         {
-            var countryList = new List<CountryEntity>();
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    foreach (var item in context.REF_COUNTRY)
-                    {
-                        countryList.Add(new CountryEntity() { CountryID = item.ID, Country = item.COUNTRY });
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return countryList;
+            List<REF_COUNTRY> listOfCOuntry = accessCountry.EntityList().ToList();
+            return listOfCOuntry;
         }
-
     }
 }

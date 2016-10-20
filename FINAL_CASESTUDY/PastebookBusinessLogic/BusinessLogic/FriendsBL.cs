@@ -1,4 +1,5 @@
-﻿using PasteBookEntity;
+﻿using DataAccess.PasteBookAccessLayer;
+using PasteBookEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,35 +10,29 @@ namespace PastebookBusinessLogic.BusinessLogic
 {
     public class FriendsBL
     {
+        DataAccess<FRIEND> accessFriend = new DataAccess<FRIEND>();
+        DataAccess<USER> accessUser = new DataAccess<USER>();
+
         public List<USER> RetrieveFriends(int userID)
         {
-            var listOfFriends = new List<USER>();
-            try
+            var listOfFriends = accessFriend.EntityList();
+            var listOfUsers = accessUser.EntityList();
+
+            var friendList = new List<USER>();
+
+            foreach (var item in listOfFriends)
             {
-                using (var context = new PASTEBOOKEntities())
+                if (item.USER_ID == userID)
                 {
-                    var friends = context.FRIENDs
-                                  .Where(x => x.USER_ID == userID || x.FRIEND_ID == userID).ToList();
-
-                    foreach (var item in friends)
-                    {
-                        if (item.USER_ID == userID)
-                        {
-                            listOfFriends.Add(context.USERs.Where(x => x.ID == item.FRIEND_ID).First());
-                        }
-                        else
-                        {
-                            listOfFriends.Add(context.USERs.Where(x => x.ID == item.USER_ID).First());
-                        }
-
-                    }
+                    friendList.Add(listOfUsers.Where(x => x.ID == item.FRIEND_ID).Single());
+                }
+                else
+                {
+                    friendList.Add(listOfUsers.Where(x => x.ID == item.USER_ID).Single());
                 }
             }
-            catch (Exception)
-            {
-                throw;
-            }
-            return listOfFriends;
+            
+            return friendList;
         }
     }
 }

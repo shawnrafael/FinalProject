@@ -1,5 +1,4 @@
-﻿using FINAL_CASESTUDY.Managers;
-using FINAL_CASESTUDY.Models;
+﻿using PastebookBusinessLogic.BusinessLogic;
 using PasteBookEntity;
 using System;
 using System.Collections.Generic;
@@ -11,15 +10,17 @@ namespace FINAL_CASESTUDY.Controllers
 {
     public class PasteBookController : Controller
     {
-        AccountManager accountManager = new AccountManager();
-        PostManager postManager = new PostManager();
-        FriendManager friendManager = new FriendManager();
+        AccountBL accountBL = new AccountBL();
+        CommentBL commentBL = new CommentBL();
+        FriendsBL friendBL = new FriendsBL();
+        LikeBL likeBL = new LikeBL();
+        PostBL postBL = new PostBL();
 
         public ActionResult Register()
         {
             if (Session["currentUser"] == null)
             {
-                Session["CountryList"] = new SelectList(accountManager.GetCountryList(), "CountryID", "CountryName");
+                ViewData["countryList"] = new SelectList(accountBL.GetCountryList(), "ID", "COUNTRY");
                 return View();
             }
             else
@@ -30,24 +31,28 @@ namespace FINAL_CASESTUDY.Controllers
 
         public ActionResult ValidateRegister(USER user)
         {
+            if (accountBL.CheckUser(user) == false)
+            {
+                ModelState.AddModelError("validateUser", "Username already exist");
+            }
             if (ModelState.IsValid)
             {
-                accountManager.RegisterUser(user);
-                Session["currentUser"] = user.UserID;
-                Session["currentUserName"] = user.Username;
+                accountBL.Register(user);
+                Session["currentUser"] = user.ID;
+                Session["currentUserName"] = user.USER_NAME;
                 return RedirectToAction("Home");
             }
-            return View("Register", user);
+            return RedirectToAction("Register", user);
         }
 
         public ActionResult ValidateLogin(string email, string password)
         {
-            User user = accountManager.LoginUser(email, password);
-            bool loginSuccess = user.UserID != 0;
+            USER user = accountBL.LoginUser(email, password);
+            bool loginSuccess = user.ID != 0;
             if (loginSuccess == true)
             {                
-                Session["currentUser"] = user.UserID;
-                Session["currentUserName"] = user.Username;
+                Session["currentUser"] = user.ID;
+                Session["currentUserName"] = user.USER_NAME;
             }
             return Json(new { login = loginSuccess }, JsonRequestBehavior.AllowGet);
         }
@@ -59,30 +64,31 @@ namespace FINAL_CASESTUDY.Controllers
                 return RedirectToAction("Register");
             }
             int userID = (int)Session["currentUser"];
-            User user = accountManager.GetUserByID(userID);
+            USER user = accountBL.GetUserByID(userID);
             return View(user);
         }
 
         public ActionResult GetPostOnHome()
         {
             int userID = (int)Session["currentUser"];
-            var listOfUsers = friendManager.GetFriends(userID);
-            List<Post> listOfPost = postManager.DisplayListOfPostOnHome( listOfUsers , userID);
+
+            List<USER> listOfUsers = friendBL.RetrieveFriends(userID);
+            List<POST> listOfPost = postBL.RetrieveListOfPost(listOfUsers, userID);
 
             return PartialView("PartialPostOnProfile", listOfPost);
         }
 
         public ActionResult GetPostOnProfile(string username)
         {
-            var user = accountManager.GetUserByUsername(username);
-            List<Post> listOfPost = postManager.DisplayListOfPostOnWall(user.UserID);
+            var user = accountBL.GetUserByUsername(username);
+            List<POST> listOfPost = postBL.RetrieveListOfPostOnProfile(user.ID);
 
             return PartialView("PartialPostOnProfile", listOfPost);
         }
 
         public ActionResult GetLikers(int currentPost)
         {
-            List<User> listOfLikers = postManager.DisplayListOfLikers(currentPost);
+            List<USER> listOfLikers = likeBL.DisplayLikers(currentPost);
 
             return PartialView("PartialLikeFromPost", listOfLikers);
         }
@@ -102,7 +108,7 @@ namespace FINAL_CASESTUDY.Controllers
             int userID = (int)Session["currentUser"];
             currentProfile = (currentProfile == 0) ? userID : currentProfile;
 
-            bool postSuccess = postManager.CreatePost(content, userID, currentProfile);
+            bool postSuccess = postBL.AddPost(content, userID, currentProfile);
             return Json(new { post = postSuccess }, JsonRequestBehavior.AllowGet);
         }
 
@@ -113,9 +119,7 @@ namespace FINAL_CASESTUDY.Controllers
                 return RedirectToAction("Register");
             }
            
-            User user = accountManager.GetUserByUsername(username);
-
-                    
+            USER user = accountBL.GetUserByUsername(username);                    
             return View(user);
         }
 
@@ -126,22 +130,22 @@ namespace FINAL_CASESTUDY.Controllers
                 return RedirectToAction("Register");
             }
             int userID = (int)Session["currentUser"];
-            List<User> listOfFriends = friendManager.GetFriends(userID);
+            List<USER> listOfFriends = friendBL.RetrieveFriends(userID);
             return View(listOfFriends);
         }
 
         public ActionResult LikePost(int currentPost)
         {
             int userID = (int)Session["currentUser"];
-            bool liked = postManager.LikePost(userID, currentPost);
+            bool liked = likeBL.LikePost(userID, currentPost);
             return Json(new { likePost = liked }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CommentPost(int currentPost, string commentContent)
         {
             int userID = (int)Session["currentUser"];
-            bool liked = postManager.CommentPost(userID, currentPost, commentContent);
-            return Json(new { likePost = liked }, JsonRequestBehavior.AllowGet);
+            bool posted = postBL.AddPost(commentContent, userID, currentPost);
+            return Json(new { postAdded = posted }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Search()
