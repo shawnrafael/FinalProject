@@ -1,0 +1,12 @@
+﻿@model IEnumerable<PasteBookEntity.COMMENT>
+
+
+<ul class="list-group">
+    @foreach (var item in Model)
+    {
+        <li class="list-group-item">
+            @Html.ActionLink(item.USER.FIRST_NAME + " " + item.USER.LAST_NAME, "UserProfile", new { username = item.USER.USER_NAME })<br />
+            <p>@item.CONTENT</p>
+        </li>
+    }
+</ul>

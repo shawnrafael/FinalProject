@@ -2,25 +2,39 @@
 
     @foreach (var item in Model)
     {
+        
         <div class="well">
             @{
                 var userID = item.ID;
                 var likeModalID = item.ID+"LikeModal";
                 var commentModalID = item.ID + "CommentModal";
-                var postOwner = item.PROFILE_OWNER_ID;
+                var poster = item.USER.ID;
+                var postProfileOwner = item.USER1.ID;
+                string userProfile = "none";
+
+                if (poster != postProfileOwner)               
+                {
+                    userProfile = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
+                }
+
             }
 
             <div class="container-fluid">
-                @Html.ActionLink(item.USER.FIRST_NAME+" "+item.USER.LAST_NAME, "UserProfile","PasteBook",new { username = item.USER.USER_NAME })  
-
+                @Html.ActionLink(item.USER.FIRST_NAME+" "+item.USER.LAST_NAME, "UserProfile", "Profile",new { username = item.USER.USER_NAME },"") <span class="glyphicon glyphicon-play" id="userDivider"></span>
+                @Html.ActionLink(userProfile, "UserProfile", "Profile", new { username = item.USER1.USER_NAME },new { id = "profileOwner" })
                 <p id="postDate">@item.CREATED_DATE</p>
                 <p id="postContent">@item.CONTENT</p>
                 <hr />
                 <button class="btn btnLike" id="@userID">Like</button>
                 <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@item.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>     
-                <button class="btn btnCommentCount" id="@userID" data-toggle="modal" data-target="#@commentModalID">@item.COMMENTs.Count <span class="glyphicon glyphicon-comment"></span></button>          
+                       
                 <hr />
-                <textarea class="form-control" id="addComment" rows="3" placeholder="Write a comment..."></textarea>
+                @*CommentList*@
+                <div id="commentContainer">
+                    @{ Html.RenderAction("CommentList", "Post", new { postID = item.ID });}
+                </div>
+
+                <textarea class="form-control" id="addComment" rows="2" placeholder="Write a comment..."></textarea>
                 <hr />
 
                 <button id="@userID" class="btn btn-primary pull-right btnComment" >Add comment</button>
@@ -36,7 +50,7 @@
                             </div>
                             <div class="modal-body">
                                 <div id="modalLikeContainer">
-                                    @{Html.RenderAction("GetLikers", "PasteBook",new { currentPost = userID });}
+                                    @{Html.RenderAction("GetLikers", "Post",new { currentPost = userID });}
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -47,29 +61,7 @@
 
                     </div>
                 </div>
-                @*Comment Modal*@
-                <div class="modal fade" id="@commentModalID" role="dialog">
-                    <div class="modal-dialog">
-
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title">Comments</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div id="modalLikeContainer">
-                                    @{Html.RenderAction("GetLikers", "PasteBook", new { currentPost = userID });}
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
+               
             </div>
             @*source w3schools*@
             

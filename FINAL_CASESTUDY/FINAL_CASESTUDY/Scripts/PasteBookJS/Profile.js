@@ -1,54 +1,90 @@
-﻿var likePostUrl = '/PasteBook/LikePost';
-var likeModalUrl = '/PasteBook/LikeModal';
+﻿$(document).ready(function () {
+    //#addAsFriend,#requestAdd,#confirmRequest
+    var currentProfile = $('#currentProfile').val();
+    var user = $('#userID').val();
 
-$(document).ready(function () {
+    ConfirmRequest
+    $(document).on('click', '#ConfirmRequest', function () {
+        AddAsFriend();
+    });
 
-    $(document).on('click', '.btnLike', function () {
-        var data = {
-            currentPost: this.id
-        }
+    $(document).on('click', '#addAsFriend', function () {
+        AddAsFriend();
+    });
+
+    if (user != currentProfile) {
+        CheckRequest();
+    } else {
+        
+    }
+    
+
+    function CheckRequest() {
         $.ajax({
-            url: likePostUrl,
-            data: data,
+            url: checkIfRequestExist,
             type: 'GET',
             success: function (data) {
-                $("#postContainer").load(getPostUrl);
+                if (data.request) {                    
+                    CheckFriendUserRequest();
+                } else {
+                    $('#addAsFriend').css('display', 'inline');
+                }
             },
             error: function () {
-                alert("Something went wrong");
+                alert("Oops");
             }
-        });
-    });
 
-    $('#postBtn').on('click', function () {
-        
-        var data = {
-            content: $('#postContent').val(),
-            currentProfile: $('#userName').val()
-        }
-        alert(data.currentProfile + data.content);
-        if (data.content == "") {
-            $('#errorPost').css('display', 'block');
-        }
-        else {
-            $.ajax({
-                url: addPostUrl,
-                data: data,
-                type: 'POST',
-                success: function (data) {
-                    if (data.post == false) {
-                        $('#errorPost').css('display', 'block');
-                    } else {
-                        $('#postContent').val("");
-                        $("#postContainer").load(getPostUrl);
-                    }
+        })
+    }
 
-                },
-                error: function () {
-                    alert();
+    function CheckFriendUserRequest() {
+        $.ajax({
+            url: checkFriendUser,
+            type: 'GET',
+            success: function (data) {
+                if (data.checkUser) {
+                    CheckIfFriends();                    
+                } else {
+                    $('#confirmRequest').css('display', 'inline');                    
                 }
-            });
-        }
+            },
+            error: function () {
+                alert("Oops");
+            }
 
-    });
+        })
+    }
+
+    function CheckIfFriends() {
+        $.ajax({
+            url: checkIfFriends,
+            type: 'GET',
+            success: function (data) {
+                if (data.users) {
+                    $('#friendsTrue').css('display', 'inline');
+                } else {
+                    $('#requestAdd').css('display', 'inline');
+                }
+            },
+            error: function () {
+                alert("Oops");
+            }
+
+        })
+    }
+
+    function AddAsFriend() {
+        $.ajax({
+            url: addAsFriend,
+            type: 'POST',
+            success: function (data) {
+                $("#headerContainer").load(profileHeaderContainer);
+            },
+            error: function () {
+                alert("Oops");
+            }
+
+        })
+    }
+
 });

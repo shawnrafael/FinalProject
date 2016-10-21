@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 using PasteBookEntity;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
-using DataAccess.PasteBookAccessLayer;
+using DataAccess.AccessLayer;
 
 namespace PastebookBusinessLogic.BusinessLogic
 {    
     public class AccountBL
     {
-        DataAccess<USER> accessUser = new DataAccess<USER>();
-        DataAccess<REF_COUNTRY> accessCountry = new DataAccess<REF_COUNTRY>();
+        PasteBookAccessLayer pasteBookAL = new PasteBookAccessLayer();
+        GenericDataAccess<USER> accessUser = new GenericDataAccess<USER>();
+        GenericDataAccess<REF_COUNTRY> accessCountry = new GenericDataAccess<REF_COUNTRY>();
         PasswordBL passwordBL = new PasswordBL();
 
         public bool CheckUser(USER newUser)
@@ -68,16 +69,15 @@ namespace PastebookBusinessLogic.BusinessLogic
 
         public USER GetUserByID(int userID)
         {
-            var users = accessUser.EntityList();
-            var user = users.Where(x => x.ID == userID).Single(); 
+            var user = pasteBookAL.RetrieveUser(userID);
 
             return user;
         }
 
         public USER GetUserByUsername(string username)
         {
-            var users = accessUser.EntityList();
-            var user = users.Where(x => x.USER_NAME == username).Single();
+            var user = pasteBookAL.RetrieveUser(username);
+
             return user;
         }
 

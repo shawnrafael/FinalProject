@@ -1,0 +1,21 @@
+﻿@model IEnumerable<PasteBookEntity.USER>
+
+<div id="friendContainer">
+    @foreach (var item in Model)
+    {
+        <div class="container-fluid" id="friend">
+            <div class="col-sm-8">
+                @Html.ActionLink(item.FIRST_NAME + " " + item.LAST_NAME, "UserProfile", "Profile", new { username = item.USER_NAME }, "")
+            </div>
+            <div class="col-sm-4">
+                <div class="dropdown">
+                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="friendOption" data-toggle="dropdown"><span class="glyphicon glyphicon-ok"></span>&nbsp; Friends&nbsp;<span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="notificationList">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">block</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

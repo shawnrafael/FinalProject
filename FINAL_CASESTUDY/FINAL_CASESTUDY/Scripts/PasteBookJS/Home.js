@@ -1,9 +1,14 @@
-﻿var likePostUrl = '/PasteBook/LikePost';
-var likeModalUrl = '/PasteBook/LikeModal';
+﻿var likePostUrl = '/Post/LikePost';
 
-$(document).ready(function () {
+$(document).ready(function () {    
 
-    $(document).on('click', '.btnLike', function () {
+    var profileOwner = $('#profileOwner').text();
+    if (profileOwner != "none") {
+        $('#userDivider').css('display', 'inline');
+        $('#profileOwner').css('display', 'inline');
+    }
+
+    $(document).on('click', '.btnLike', function () {        
         var data = {
             currentPost: this.id
         }
@@ -29,7 +34,7 @@ $(document).ready(function () {
         $.ajax({
             url: addCommentUrl,
             data: data,
-            type: 'GET',
+            type: 'POST',
             success: function (data) {
                 $("#postContainer").load(getPostUrl);
             },

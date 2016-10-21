@@ -1,0 +1,72 @@
+﻿@model PasteBookEntity.USER
+
+@{
+    var user = Model.USER_NAME;
+}
+@Html.Hidden("currentProfile", Model.ID, new { id = "currentProfile" })
+@Html.Hidden("user", (int)Session["currentUser"], new { id="userID" })
+
+<div class="col-sm-4">
+    <div class="container-fluid">
+        <div id="imageProfileContainer">
+            <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+        </div>
+    </div>
+    <div id="infoContainer">
+        <div class="well">
+            <div class="container-fluid">
+                <h4>Profile Information</h4>
+                <input type="hidden" name="username" id="userName" value="@Model.ID" />
+                <p>Email: @Model.EMAIL_ADDRESS</p>
+                <p>Birthday: @Html.DisplayFor(x => x.BIRTHDAY)</p>
+                <p>Country: @Model.COUNTRY_ID</p>
+                <p>Mobile: @Model.MOBILE_NO</p>
+                <p>About me: @Model.ABOUT_ME</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="col-sm-8">
+    
+   
+
+    <div class="container-fluid">
+        <div class="row">
+            
+            @{Html.RenderAction("ReloadProfileHeader", "Profile", new { username = user });}
+        </div>
+        <div class="row"> 
+            <div class="container-fluid">
+                <div class="well">
+                    <div class="container-fluid">
+                        <p class="text-danger" id="errorPost">Please add something to your post.</p>
+                        <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
+                        <hr />
+                        <input type="button" id="postBtn" value="Post" class="btn btn-primary pull-right" />
+                    </div>
+                </div>
+            </div>
+                
+            <div id="postContainer">
+                @{Html.RenderAction("GetPostOnProfile", "Profile", new { username = user });}
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var addPostUrl = '@Url.Action("AddPost", "Post")';
+        var getPostUrl = '@Url.Action("GetPostOnProfile", "Profile", new { username = user })';
+        var addCommentUrl = '@Url.Action("CommentPost", "Post")';
+
+        var checkIfRequestExist = '@Url.Action("CheckIfRequestExist", "Friend", new { currentProfileID = Model.ID })';
+        var checkFriendUser = '@Url.Action("CheckFriendUser", "Friend", new { currentProfileID = Model.ID })';
+        var checkIfFriends = '@Url.Action("CheckIfFriends", "Friend", new { currentProfileID = Model.ID })';
+        var addAsFriend = '@Url.Action("AddAsFriend", "Friend", new { currentProfileID = Model.ID })';
+        var profileHeaderContainer = '@Url.Action("ReloadProfileHeader", "Profile", new { username = user })'
+    </script>
+    <script src="~/Scripts/PasteBookJS/Home.js"></script>
+    <script src="~/Scripts/PasteBookJS/Profile.js"></script>
+}

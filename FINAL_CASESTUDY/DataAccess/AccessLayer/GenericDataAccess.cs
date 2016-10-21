@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.PasteBookAccessLayer
+namespace DataAccess.AccessLayer
 {
-    public class DataAccess<T> where T : class
+    public class GenericDataAccess<T> where T : class
     {
         public bool Create(T newEntity)
         {
@@ -78,39 +78,7 @@ namespace DataAccess.PasteBookAccessLayer
                 throw;
             }
             return status != 0;
-        }       
+        }             
+          
     }
-
-    //JOIN PARENT CHILD
-    public interface IChildOf<T>
-    {
-        T Parent { get; set; }
-    }
-
-    public interface IParent<T>
-    {
-        List<T> Children { get; set; }
-    }
-
-    public abstract class BaseItem<T1, T2> : IParent<T1>, IChildOf<T2>
-    {
-        public List<T1> Children { get; set; }
-        public T2 Parent { get; set; }
-    }
-    //This class handles the top level parent
-    public class ItemA : IParent<ItemB>
-    {
-        public List<ItemB> Children { get; set; }
-    }
-    public class ItemB : BaseItem<ItemC, ItemA>
-    {
-    }
-    public class ItemC : BaseItem<ItemD, ItemB>
-    {
-    }
-    public class ItemD : IChildOf<ItemC>
-    {
-        public ItemC Parent { get; set; }
-    }
-
 }

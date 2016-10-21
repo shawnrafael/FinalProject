@@ -40,6 +40,13 @@
 /*for the search bar - end*/
 
 /*for the post part - start */
+#userDivider, #profileOwner{
+    display: none;
+    
+}
+#userDivider{
+    margin: 0px 10px 0px 10px;
+}
 #errorPost{
     display:none;
 }
@@ -126,14 +133,11 @@ textarea.form-control{
     width:350px;
 }
 /*for the friend part - start */
-#addAsFriend{
+#addAsFriend,#requestAdd,#confirmRequest,#friendsTrue{
     display:none;
 }
 #userFriend{
     display:none;
-}
-#requestAdd{
-
 }
 #userFriend{
     margin-left:0px;

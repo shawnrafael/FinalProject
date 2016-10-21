@@ -1,4 +1,4 @@
-﻿using DataAccess.PasteBookAccessLayer;
+﻿using DataAccess.AccessLayer;
 using PasteBookEntity;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,9 @@ namespace PastebookBusinessLogic.BusinessLogic
 {
     public class LikeBL
     {
-        DataAccess<LIKE> accessLike = new DataAccess<LIKE>();
-        DataAccess<POST> accessPost = new DataAccess<POST>();
-        DataAccess<USER> accessUser = new DataAccess<USER>();
+        GenericDataAccess<LIKE> accessLike = new GenericDataAccess<LIKE>();
+        GenericDataAccess<POST> accessPost = new GenericDataAccess<POST>();
+        GenericDataAccess<USER> accessUser = new GenericDataAccess<USER>();
 
         public bool LikePost(int userID, int currentPost)
         {
@@ -42,7 +42,8 @@ namespace PastebookBusinessLogic.BusinessLogic
 
             foreach (var item in listOfUser)
             {
-                if (listOFLikes.Any(x=>x.LIKED_BY == postID)==true)
+
+                if (listOFLikes.Any(x=>(x.LIKED_BY == item.ID && x.POST_ID==postID))==true)
                 {
                     listOfLikers.Add(item);
                 }

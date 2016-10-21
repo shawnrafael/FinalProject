@@ -128,7 +128,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FriendController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PasteBookController.cs" />
+    <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -172,21 +177,22 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\PasteBook\Home.cshtml" />
     <Content Include="Views\Shared\_LogoutPartial.cshtml" />
-    <Content Include="Views\PasteBook\Register.cshtml" />
-    <Content Include="Views\PasteBook\UserProfile.cshtml" />
-    <Content Include="Views\PasteBook\Friends.cshtml" />
-    <Content Include="Views\PasteBook\Search.cshtml" />
-    <Content Include="Views\PasteBook\UserPost.cshtml" />
-    <Content Include="Views\PasteBook\PartialPostOnProfile.cshtml" />
-    <Content Include="Views\PasteBook\PartialPostOnHome.cshtml" />
-    <Content Include="Views\PasteBook\PartialLikeFromPost.cshtml" />
-    <Content Include="Views\PasteBook\Create.cshtml" />
+    <Content Include="Views\Shared\PartialPost.cshtml" />
+    <Content Include="Views\Shared\PartialLikeFromPost.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Friend\Friends.cshtml" />
+    <Content Include="Views\Home\Home.cshtml" />
+    <Content Include="Views\Profile\UserProfile.cshtml" />
+    <Content Include="Views\Friend\PartialFriendList.cshtml" />
+    <Content Include="Views\Shared\PartialCommentList.cshtml" />
+    <Content Include="Views\Profile\PartialProfileHeader.cshtml" />
+    <Content Include="Views\Profile\PartialNothingToPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Post\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -197,6 +203,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.csproj">
+      <Project>{6AA19229-4978-4AAC-9F2F-90EC9880846B}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PastebookBusinessLogic\PastebookBusinessLogic.csproj">
       <Project>{725c3f3a-46cb-4a51-8bb0-aa6dcb0af6f6}</Project>
       <Name>PastebookBusinessLogic</Name>

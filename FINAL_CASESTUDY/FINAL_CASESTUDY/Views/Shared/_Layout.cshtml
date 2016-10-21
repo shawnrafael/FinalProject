@@ -36,7 +36,7 @@
 
  
 <script>
-    var validateLoginUrl = '@Url.Action("ValidateLogin", "PasteBook")';
+    var validateLoginUrl = '@Url.Action("ValidateLogin", "Account")';
     $(document).ready(function () {
 
 
@@ -51,7 +51,7 @@
                 type: 'GET',
                 success: function (data) {
                     if (data.login == true) {
-                        location.href = '@Url.Action("Home", "PasteBook")'
+                        location.href = '@Url.Action("Home", "Home")'
                     } else {
                         $('#errorLogin').css('display', 'block');
                     }     
