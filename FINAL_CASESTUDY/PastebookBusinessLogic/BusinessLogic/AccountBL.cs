@@ -1,5 +1,4 @@
-﻿using PastebookBusinessLogic.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,10 +17,10 @@ namespace PastebookBusinessLogic.BusinessLogic
         GenericDataAccess<REF_COUNTRY> accessCountry = new GenericDataAccess<REF_COUNTRY>();
         PasswordBL passwordBL = new PasswordBL();
 
-        public bool CheckUser(USER newUser)
+        public bool CheckUserName(USER newUser)
         {
-            var listOfUsers = accessUser.EntityList();
-            if (listOfUsers.Any(x => x.USER_NAME == newUser.USER_NAME))
+            var user = pasteBookAL.RetrieveUser(newUser.USER_NAME);
+            if (user != null)
             {
                 return false;
             }
@@ -50,13 +49,7 @@ namespace PastebookBusinessLogic.BusinessLogic
 
         public USER LoginUser(string email, string password)
         {
-            List<USER> listOfUser = accessUser.EntityList();
-            USER user = new USER();
-
-            if (listOfUser.Any(x => x.EMAIL_ADDRESS == email))
-            {
-                user = listOfUser.Where(x => x.EMAIL_ADDRESS == email).Single();                
-            }
+            var user = pasteBookAL.RetrieveLoginUser(email);
 
             bool match = passwordBL.IsPasswordMatch(password, user.SALT, user.PASSWORD);
             if (match == true)

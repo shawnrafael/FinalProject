@@ -31,27 +31,17 @@ namespace FINAL_CASESTUDY.Controllers
             var profileOwner = accountBL.GetUserByUsername(username);
             var listOfPost = new List<POST>();
 
-            var friends = friendBL.CheckIfFriends(userID, profileOwner.ID);
-            if (friends || userID == profileOwner.ID)
+            var status = friendBL.CheckFriendRequest(userID, profileOwner.ID);
+
+            if (status == "friends" || status == "profile owner")
             {
                 listOfPost = postBL.RetrieveListOfPostOnProfile(profileOwner.ID);
                 return PartialView("PartialPost", listOfPost);
-            }
-            else
-            {
-                ViewData["currentProfile"] = profileOwner.FIRST_NAME;
-                return PartialView("PartialNothingToPost");
             }            
-
-            
+            ViewData["currentProfile"] = profileOwner.FIRST_NAME;
+            return PartialView("PartialNothingToPost");
+ 
         }     
-        
-        public ActionResult ReloadProfileHeader(string username)
-        {
-            USER user = accountBL.GetUserByUsername(username);
-            return PartialView("PartialProfileHeader",user);
-        }
-
 
     }
 }

@@ -13,6 +13,7 @@ namespace FINAL_CASESTUDY.Controllers
         PostBL postBL = new PostBL();
         LikeBL likeBL = new LikeBL();
         CommentBL commentBL = new CommentBL();
+        NotificationBL notifyBL = new NotificationBL();
         // GET: Post
         public ActionResult AddPost(string content, int currentProfile)
         {
@@ -37,21 +38,41 @@ namespace FINAL_CASESTUDY.Controllers
         public ActionResult LikePost(int currentPost)
         {
             int userID = (int)Session["currentUser"];
-            bool liked = likeBL.LikePost(userID, currentPost);
-            return Json(new { likePost = liked }, JsonRequestBehavior.AllowGet);
+            var like = likeBL.LikePost(userID, currentPost);
+            bool notify = false;
+            if (like.ID != 0)
+            {
+                notify = notifyBL.AddNotification(like);
+            }
+
+            return Json(new { likePost = like!=null }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CommentPost(int currentPost, string commentContent)
         {
             int userID = (int)Session["currentUser"];
-            bool posted = commentBL.AddComment(commentContent, userID, currentPost);
-            return Json(new { postAdded = posted }, JsonRequestBehavior.AllowGet);
+            var comment = commentBL.AddComment(commentContent, userID, currentPost);
+
+            bool addNotification = false;
+            if (comment.ID != 0)
+            {
+                addNotification = notifyBL.AddNotification(comment);
+            }
+            return Json(new { postAdded = comment!=null, notify = addNotification }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CommentList(int postID)
         {
             List<COMMENT> listOfComment = commentBL.RetrieveComments(postID);
             return PartialView("PartialCommentList", listOfComment);
+        }
+
+        public ActionResult GetNotification()
+        {
+            var user = (int)Session["currentUser"];
+            var notifications = notifyBL.RetrieveNotifications(user);
+
+            return PartialView("PartialNotification", notifications);
         }
     }
 }

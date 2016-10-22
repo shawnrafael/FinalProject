@@ -131,7 +131,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FriendController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PasteBookController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
@@ -186,13 +185,12 @@
     <Content Include="Views\Profile\UserProfile.cshtml" />
     <Content Include="Views\Friend\PartialFriendList.cshtml" />
     <Content Include="Views\Shared\PartialCommentList.cshtml" />
-    <Content Include="Views\Profile\PartialProfileHeader.cshtml" />
     <Content Include="Views\Profile\PartialNothingToPost.cshtml" />
+    <Content Include="Views\Post\PartialNotification.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Post\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -27,7 +27,7 @@ namespace FINAL_CASESTUDY.Controllers
 
         public ActionResult ValidateRegister(USER user)
         {
-            if (accountBL.CheckUser(user) == false)
+            if (accountBL.CheckUserName(user) == false)
             {
                 ModelState.AddModelError("validateUser", "Username already exist");
             }
@@ -44,7 +44,7 @@ namespace FINAL_CASESTUDY.Controllers
         public ActionResult ValidateLogin(string email, string password)
         {
             USER user = accountBL.LoginUser(email, password);
-            bool loginSuccess = user.ID != 0;
+            bool loginSuccess = user != null;
             if (loginSuccess == true)
             {
                 Session["currentUser"] = user.ID;

@@ -33,8 +33,25 @@
 
     <div class="container-fluid">
         <div class="row">
-            
-            @{Html.RenderAction("ReloadProfileHeader", "Profile", new { username = user });}
+            <div id="headerContainer">
+                <div class="well">
+
+                    <div class="container-fluid">
+                        <p id="profileName">@Model.FIRST_NAME @Model.LAST_NAME</p>
+                        @Html.ActionLink("Fiends", "Friends", "Friend", new { id = "userFriend" })
+                        <button type="button" id="addAsFriend" class="btn btn-default pull-right friendbutton">Add as friend</button>
+                        <button type="button" id="requestAdd" class="btn btn-default pull-right friendbutton" disabled>Friend request sent</button>
+                        <span class="btn pull-right" id="friendsTrue">Friends <span class="glyphicon glyphicon-ok"></span></span>
+                        <div class="dropdown pull-right">
+                            <button class="btn dropdown-toggle" type="button" id="dropdownRequest" data-toggle="dropdown">Confirm friend request</button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="confirmRequest">
+                                <li role="presentation"><a id="confirmRequest">Confirm</a></li>
+                                <li role="presentation"><a id="deleteRequest">Delete Request</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row"> 
             <div class="container-fluid">
@@ -43,7 +60,8 @@
                         <p class="text-danger" id="errorPost">Please add something to your post.</p>
                         <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
                         <hr />
-                        <input type="button" id="postBtn" value="Post" class="btn btn-primary pull-right" />
+                        <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
+                        <input type="button" id="postBtnProfile" value="Post" class="btn btn-primary pull-right" />
                     </div>
                 </div>
             </div>
@@ -61,12 +79,10 @@
         var getPostUrl = '@Url.Action("GetPostOnProfile", "Profile", new { username = user })';
         var addCommentUrl = '@Url.Action("CommentPost", "Post")';
 
-        var checkIfRequestExist = '@Url.Action("CheckIfRequestExist", "Friend", new { currentProfileID = Model.ID })';
-        var checkFriendUser = '@Url.Action("CheckFriendUser", "Friend", new { currentProfileID = Model.ID })';
-        var checkIfFriends = '@Url.Action("CheckIfFriends", "Friend", new { currentProfileID = Model.ID })';
-        var addAsFriend = '@Url.Action("AddAsFriend", "Friend", new { currentProfileID = Model.ID })';
-        var profileHeaderContainer = '@Url.Action("ReloadProfileHeader", "Profile", new { username = user })'
+        var checkFriendRequestUrl = '@Url.Action("CheckFriendRequest", "Friend", new { currentProfileID = Model.ID })';
+        var addAsFriendUrl = '@Url.Action("AddAsFriend", "Friend", new { currentProfileID = Model.ID })';
+        var confirmRequestUrl = '@Url.Action("ConfirmRequest", "Friend", new { currentProfileID = Model.ID })';
+        var profileHeaderContainerUrl = '@Url.Action("ReloadProfileHeader", "Profile", new { username = user })'
     </script>
-    <script src="~/Scripts/PasteBookJS/Home.js"></script>
     <script src="~/Scripts/PasteBookJS/Profile.js"></script>
 }

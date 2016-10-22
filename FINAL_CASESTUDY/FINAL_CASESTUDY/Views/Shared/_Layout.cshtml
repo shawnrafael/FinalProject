@@ -37,8 +37,9 @@
  
 <script>
     var validateLoginUrl = '@Url.Action("ValidateLogin", "Account")';
-    $(document).ready(function () {
+    @*var addCommentUrl = '@Url.Action("CommentPost", "Post")';*@
 
+    $(document).ready(function () {
 
         $('#btnLogin').on('click', function () {
             var data = {
@@ -54,12 +55,12 @@
                         location.href = '@Url.Action("Home", "Home")'
                     } else {
                         $('#errorLogin').css('display', 'block');
-                    }     
+                    }
                 },
                 error: function () {
                     alert();
                 }
             });
-        });   
+        });
     });
 </script>

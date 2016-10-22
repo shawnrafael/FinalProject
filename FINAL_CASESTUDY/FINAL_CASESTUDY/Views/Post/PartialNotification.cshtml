@@ -1,0 +1,34 @@
+﻿@model IEnumerable<PasteBookEntity.NOTIFICATION>
+
+
+
+
+<div class="dropdown">
+    <button class="icon-bar dropdown-toggle" type="button" id="notificationList" data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span></button>
+    <ul class="dropdown-menu notification-dropdown" role="menu" aria-labelledby="notificationList">
+        <li role="presentation" class="dropdown-header">Notifications</li>
+
+            @{
+                foreach (var item in Model)
+                {
+                    string message = "";
+                    if (item.NOTIF_TYPE == "C")
+                    {
+                        message = "has commented on your post.";
+                    }
+                    else if (item.NOTIF_TYPE == "L")
+                    {
+                        message = "has liked your post.";
+                    }
+
+                    <li>
+                        <button class="btn">@item.USER.</button>
+                        @*@Html.ActionLink(item.USER.FIRST_NAME+" "+item.USER.LAST_NAME+" "+message, "GoToPost", "Post", new { postID = item.POST_ID },new { id = "checkNotif"})*@                        
+                    </li>
+                    
+                }
+            }
+        <li class="divider"></li>
+        <li>@Html.ActionLink("Clear all notifications.","ClearNotification","Post")</li>
+    </ul>
+</div>

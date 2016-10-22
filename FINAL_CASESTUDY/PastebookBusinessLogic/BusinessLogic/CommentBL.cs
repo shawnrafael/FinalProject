@@ -11,9 +11,9 @@ namespace PastebookBusinessLogic.BusinessLogic
     public class CommentBL
     {
         GenericDataAccess<COMMENT> accessComment = new GenericDataAccess<COMMENT>();
-        PasteBookAccessLayer pasteBoolAL = new PasteBookAccessLayer();
+        PasteBookAccessLayer pasteBookAL = new PasteBookAccessLayer();
 
-        public bool AddComment(string commentContent,int userID,int currentPost)
+        public COMMENT AddComment(string commentContent,int userID,int currentPost)
         {
             var newComment = new COMMENT()
             {
@@ -22,15 +22,15 @@ namespace PastebookBusinessLogic.BusinessLogic
                 POST_ID = currentPost,
                 DATE_CREATED = DateTime.Now
             };
+
             bool status = accessComment.Create(newComment);
-            return status;
+
+            return newComment;
         }
 
         public List<COMMENT> RetrieveComments(int postID)
         {
-            var listOfComments = pasteBoolAL.RetrieveListOfComment();
-            var comments = listOfComments.OrderBy(x=>x.DATE_CREATED).Where(x => x.POST_ID == postID).ToList();
-
+            var comments = pasteBookAL.RetrieveListOfComment(postID);
             return comments;
         }
     }

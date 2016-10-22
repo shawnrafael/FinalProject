@@ -11,12 +11,11 @@ namespace PastebookBusinessLogic.BusinessLogic
     public class LikeBL
     {
         GenericDataAccess<LIKE> accessLike = new GenericDataAccess<LIKE>();
-        GenericDataAccess<POST> accessPost = new GenericDataAccess<POST>();
-        GenericDataAccess<USER> accessUser = new GenericDataAccess<USER>();
+        PasteBookAccessLayer pasteBookAL = new PasteBookAccessLayer();
 
-        public bool LikePost(int userID, int currentPost)
+        public LIKE LikePost(int userID, int currentPost)
         {
-            var listOfLike = accessLike.EntityList();
+            var listOfLike = pasteBookAL.RetrieveListOfLike(currentPost);
 
             LIKE like = new LIKE()
             {
@@ -26,30 +25,19 @@ namespace PastebookBusinessLogic.BusinessLogic
 
             bool status = false;
 
-            if (listOfLike.Any(x=>(x.LIKED_BY==like.LIKED_BY && x.POST_ID == like.POST_ID)) == false)
+            if (listOfLike.Any(x=>(x.LIKED_BY == like.LIKED_BY)) == false)
             {
                 status = accessLike.Create(like);
             }
-                        
-            return status;
+
+            return like;
         }
 
         public List<USER> DisplayLikers(int postID)
         {
-            var listOfUser = accessUser.EntityList();
-            var listOFLikes = accessLike.EntityList();
-            var listOfLikers = new List<USER>();
-
-            foreach (var item in listOfUser)
-            {
-
-                if (listOFLikes.Any(x=>(x.LIKED_BY == item.ID && x.POST_ID==postID))==true)
-                {
-                    listOfLikers.Add(item);
-                }
-            }
-
+            var listOfLikers = pasteBookAL.RetrieveListOfLikers(postID);
             return listOfLikers;
         }
+
     }
 }

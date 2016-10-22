@@ -34,7 +34,7 @@ namespace DataAccess.AccessLayer
             return listOfPost;
         }
 
-        public List<COMMENT> RetrieveListOfComment()
+        public List<COMMENT> RetrieveListOfComment(int postID)
         {
             var listOfComments = new List<COMMENT>();
 
@@ -44,7 +44,8 @@ namespace DataAccess.AccessLayer
                 {
                     listOfComments = context.COMMENTs
                                         .Include("USER")
-                                        .OrderByDescending(x => x.DATE_CREATED)
+                                        .Where(x=>x.POST_ID == postID)
+                                        .OrderBy(x => x.DATE_CREATED)
                                         .ToList();
                 }
             }
@@ -54,6 +55,67 @@ namespace DataAccess.AccessLayer
             }
 
             return listOfComments;
+        }        
+
+        public List<LIKE> RetrieveListOfLike(int currentPost)
+        {
+            var listOfLikes = new List<LIKE>();
+
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    listOfLikes = context.LIKEs
+                                        .Include("USER")
+                                        .Where(x => x.POST_ID == currentPost)
+                                        .ToList();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return listOfLikes;
+        }
+
+        public List<FRIEND> RetrieveFriends(int userID)
+        {
+            var friends = new List<FRIEND>();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    friends = context.FRIENDs.Where(x => x.USER_ID == userID || x.FRIEND_ID == userID).ToList();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return friends;
+        }
+
+        public List<NOTIFICATION> RetrieveNotifications(int userID)
+        {
+            var notifications = new List<NOTIFICATION>();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    notifications = context.NOTIFICATIONs
+                                                .Include("USER")
+                                                .Where(x => x.RECEIVER_ID == userID && x.SEEN == "N")
+                                                .ToList();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return notifications;
         }
 
         public List<USER> RetrieveListOfFriends(int userID)
@@ -75,7 +137,7 @@ namespace DataAccess.AccessLayer
                         {
                             friends.Add(context.USERs.Where(x => x.ID == item.USER_ID).Single());
                         }
-                        
+
                     }
                 }
             }
@@ -85,7 +147,86 @@ namespace DataAccess.AccessLayer
             }
 
             return friends;
-            
+
+        }
+
+        public List<USER> RetrieveListOfLikers(int currentPost)
+        {
+            var likers = new List<USER>();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    var results = context.LIKEs.Where(x => x.POST_ID == currentPost).ToList();
+
+                    foreach (var item in results)
+                    {
+                        likers.Add(context.USERs.Where(x => x.ID == item.LIKED_BY).Single());
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return likers;
+        }
+
+        public POST RetrienvePost(int postID)
+        {
+            var post = new POST();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    post = context.POSTs
+                                  .Include("COMMENTs")
+                                  .Where(x => x.ID == postID).Single();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return post;
+        }
+
+        public COMMENT RetrieveComment(COMMENT comment)
+        {
+            var result = new COMMENT();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    result = context.COMMENTs.Where(x => x.POSTER_ID == comment.POSTER_ID && x.POST_ID == comment.POST_ID && x.DATE_CREATED == comment.DATE_CREATED).Single();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return result;
+        }
+
+        public LIKE RetrieveLike(LIKE like)
+        {
+            var result = new LIKE();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    result = context.LIKEs.Where(x => x.LIKED_BY == like.LIKED_BY && x.POST_ID == like.POST_ID).Single();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return result;
         }
 
         public USER RetrieveUser(string username)
@@ -130,41 +271,16 @@ namespace DataAccess.AccessLayer
             return user;
         }
 
-        public bool CheckRequest(int userID, int currentUserID)
+        public USER RetrieveLoginUser(string email)
         {
-            bool exist = false;
-
+            var user = new USER();
             try
             {
                 using (var context = new PASTEBOOKEntities())
                 {
-                    exist = context.FRIENDs
-                                    .Where(x => x.USER_ID == userID || x.FRIEND_ID == userID)
-                                    .Any(x => x.FRIEND_ID == currentUserID || x.USER_ID == currentUserID);
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return exist;
-        }
-
-        public bool CheckFriendUser(int userID, int currentUserID)
-        {
-            bool checkUser = false;
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    if (context.FRIENDs.Any(x => x.USER_ID == userID && x.FRIEND_ID == currentUserID))
+                    if (context.USERs.Any(x => x.EMAIL_ADDRESS == email))
                     {
-                        checkUser = true;
-                    }
-                    else
-                    {
-                        checkUser = false;
+                        user = context.USERs.Where(x => x.EMAIL_ADDRESS == email).Single();
                     }
                 }
             }
@@ -173,7 +289,8 @@ namespace DataAccess.AccessLayer
 
                 throw;
             }
-            return checkUser;
-        }
+            return user;
+        }       
+
     }
 }

@@ -7,17 +7,18 @@
             @{
                 var userID = item.ID;
                 var likeModalID = item.ID+"LikeModal";
-                var commentModalID = item.ID + "CommentModal";
                 var poster = item.USER.ID;
                 var postProfileOwner = item.USER1.ID;
                 string userProfile = "none";
 
-                if (poster != postProfileOwner)               
+                if (poster != postProfileOwner)
                 {
                     userProfile = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
                 }
-
+                
             }
+
+            @Html.Hidden("itemID", userID, new { id = "itemID" })
 
             <div class="container-fluid">
                 @Html.ActionLink(item.USER.FIRST_NAME+" "+item.USER.LAST_NAME, "UserProfile", "Profile",new { username = item.USER.USER_NAME },"") <span class="glyphicon glyphicon-play" id="userDivider"></span>
@@ -34,10 +35,11 @@
                     @{ Html.RenderAction("CommentList", "Post", new { postID = item.ID });}
                 </div>
 
-                <textarea class="form-control" id="addComment" rows="2" placeholder="Write a comment..."></textarea>
+                <textarea class="form-control" id="addComment_@item.ID" rows="2" placeholder="Write a comment..."></textarea>
                 <hr />
 
                 <button id="@userID" class="btn btn-primary pull-right btnComment" >Add comment</button>
+
                 @*Like Modal*@
                 <div class="modal fade" id="@likeModalID" role="dialog">
                     <div class="modal-dialog">

@@ -2,35 +2,20 @@
 
 $(document).ready(function () {    
 
+    $('#postBtnHome').css('display', 'inline');
+
     var profileOwner = $('#profileOwner').text();
     if (profileOwner != "none") {
         $('#userDivider').css('display', 'inline');
         $('#profileOwner').css('display', 'inline');
     }
 
-    $(document).on('click', '.btnLike', function () {        
-        var data = {
-            currentPost: this.id
-        }
-        $.ajax({
-            url: likePostUrl,
-            data: data,
-            type: 'GET',
-            success: function (data) {
-                $("#postContainer").load(getPostUrl);
-            },
-            error: function () {
-                alert("Something went wrong");
-            }
-        });
-    });
-
     $(document).on('click', '.btnComment', function () {
+
         var data = {
             currentPost: this.id,
-            commentContent: $('#addComment').val()
+            commentContent: $('#addComment_'.concat(this.id)).val()
         }
-        alert(data.currentPost+data.commentContent)
         $.ajax({
             url: addCommentUrl,
             data: data,
@@ -44,7 +29,25 @@ $(document).ready(function () {
         });
     });
 
-    $('#postBtn').on('click', function () {
+    $(document).on('click', '.btnLike', function () {
+        var data = {
+            currentPost: this.id
+        }
+        alert(data.currentPost);
+        $.ajax({
+            url: likePostUrl,
+            data: data,
+            type: 'GET',
+            success: function (data) {
+                $("#postContainer").load(getPostUrl);
+            },
+            error: function () {
+                alert("Something went wrong");
+            }
+        });
+    });
+
+    $('#postBtnHome').on('click', function () {
 
         var data = {
             content: $('#postContent').val(),
@@ -71,7 +74,7 @@ $(document).ready(function () {
                 }
             });
         }
-
     });
 
 });
+

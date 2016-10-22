@@ -19,7 +19,8 @@
                 <p class="text-danger" id="errorPost">Please add something to your post.</p>
                 <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
                 <hr />
-                <input type="button" id="postBtn" value="Post" class="btn btn-primary pull-right" />
+                <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
+                <input type="button" id="postBtnProfile" value="Post" class="btn btn-primary pull-right" />
             </div>
         </div>
         @{Html.RenderAction("GetPostOnHome", "Home");}

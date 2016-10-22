@@ -11,7 +11,6 @@ namespace PastebookBusinessLogic.BusinessLogic
     public class FriendsBL
     {
         GenericDataAccess<FRIEND> accessFriend = new GenericDataAccess<FRIEND>();
-        GenericDataAccess<USER> accessUser = new GenericDataAccess<USER>();
         PasteBookAccessLayer pasteBookAL = new PasteBookAccessLayer();
 
         public List<USER> RetrieveFriends(int userID)
@@ -20,42 +19,73 @@ namespace PastebookBusinessLogic.BusinessLogic
             return friendList;
         }
 
-        public bool CheckIfRequestSent(int userID, int currentUserProfile)
+        public string CheckFriendRequest(int userID, int currentUserProfile)
         {
-            bool exist = pasteBookAL.CheckRequest(userID, currentUserProfile);
-            return exist;
-        }
+            var friends = pasteBookAL.RetrieveFriends(userID);
+            string status = "no request";
 
-        public bool CheckFriendUser(int userID, int currentUser)
-        {
-            bool checkUser = pasteBookAL.CheckFriendUser(userID, currentUser);
-            return checkUser;
-        }
-
-        public bool CheckIfFriends(int userID, int currentUserProfile)
-        {
-            var listOfFriends = accessFriend.EntityList();
-
-            bool friends = listOfFriends.Where(x => x.REQUEST == "N").Any(x => (x.USER_ID == currentUserProfile && x.FRIEND_ID == userID) || (x.USER_ID == userID && x.FRIEND_ID == currentUserProfile));
-
-            return friends;
-        }
-       
-
-        public bool AddFriendRequest(int userID, int currentUserProfile)
-        {
-            
-            var newFriend = new FRIEND()
+            if (friends.Any(x=>x.USER_ID == userID && x.FRIEND_ID == currentUserProfile && x.REQUEST == "Y"))
             {
-                FRIEND_ID = currentUserProfile,
+                status = "user request";
+            }
+            else if (friends.Any(x=>x.USER_ID == currentUserProfile && x.FRIEND_ID == userID && x.REQUEST == "Y"))
+            {
+                status = "friend confirm";
+            }
+            else if (friends.Any(x=>((x.USER_ID == currentUserProfile && x.FRIEND_ID == userID) || (x.USER_ID == userID && x.FRIEND_ID == currentUserProfile)) && x.REQUEST == "N"))
+            {
+                status = "friends";
+            }
+            else if (userID == currentUserProfile)
+            {
+                status = "profile owner";
+            }
+
+            return status;
+        }
+
+        public bool AddFriend(int userID, int currentUserProfile)
+        {
+            bool added = false;
+            var friends = pasteBookAL.RetrieveFriends(userID);
+            var newRequest = new FRIEND()
+            {
                 USER_ID = userID,
+                FRIEND_ID = currentUserProfile,
+                CREATED_DATE = DateTime.Now,
                 REQUEST = "Y",
-                BLOCKED = "N",
-                CREATED_DATE = DateTime.Now
+                BLOCKED = "N"
             };
 
-            bool request = accessFriend.Create(newFriend);
-            return request;
+            if (friends.Count == 0)
+            {
+                added = accessFriend.Create(newRequest);
+            }
+            else if (friends.Any(x=>x.USER_ID == userID && x.FRIEND_ID == currentUserProfile)==false)
+            {
+                added = accessFriend.Create(newRequest);
+            }            
+            return added;
         }
+
+        public bool ConfirmFriend(int userID, int currentUserProfile)
+        {
+            bool confirm = false;
+            var requests = pasteBookAL.RetrieveFriends(userID);
+            var id = requests.Where(x => x.USER_ID == currentUserProfile && x.FRIEND_ID == userID).Select(x=>x.ID).Single();
+
+            var updateRequest = new FRIEND()
+            {
+                ID = id,
+                USER_ID = currentUserProfile,
+                FRIEND_ID = userID,
+                CREATED_DATE = DateTime.Now,
+                REQUEST = "N",
+                BLOCKED = "N"
+            };
+            confirm = accessFriend.Edit(updateRequest);
+            return confirm;
+        }
+
     }
 }

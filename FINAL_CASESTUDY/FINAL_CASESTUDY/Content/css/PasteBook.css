@@ -1,4 +1,7 @@
-﻿#renderedPart{
+﻿.dropdown-menu {
+    width: 350px !important;
+}
+#renderedPart{
     margin-top: 30px;
 }
 .navbar{
@@ -40,6 +43,9 @@
 /*for the search bar - end*/
 
 /*for the post part - start */
+#postBtnHome, #postBtnProfile{
+    display:none;
+}
 #userDivider, #profileOwner{
     display: none;
     
@@ -133,7 +139,7 @@ textarea.form-control{
     width:350px;
 }
 /*for the friend part - start */
-#addAsFriend,#requestAdd,#confirmRequest,#friendsTrue{
+#addAsFriend,#requestAdd,#dropdownRequest,#friendsTrue{
     display:none;
 }
 #userFriend{
