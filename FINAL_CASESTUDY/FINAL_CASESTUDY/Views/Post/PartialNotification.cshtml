@@ -5,30 +5,50 @@
 
 <div class="dropdown">
     <button class="icon-bar dropdown-toggle" type="button" id="notificationList" data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span></button>
-    <ul class="dropdown-menu notification-dropdown" role="menu" aria-labelledby="notificationList">
+    @{
+        if (Model.Where(x=>x.SEEN == "N").Count() != 0)
+        {
+            <span class="badge">@Model.Count()</span>
+        }
+    }
+    
+    <ul class="dropdown-menu scrollable-menu notification-dropdown" id="notificationDropdown" role="menu" aria-labelledby="notificationList">
         <li role="presentation" class="dropdown-header">Notifications</li>
 
             @{
                 foreach (var item in Model)
                 {
                     string message = "";
+                    string glyph = "glyphicon glyphicon-unchecked";
+                    int? comment = 0;
+
+                    if (item.SEEN == "Y")
+                    {
+                        glyph = "glyphicon glyphicon-check";
+                    }
+
                     if (item.NOTIF_TYPE == "C")
                     {
-                        message = "has commented on your post.";
+                        message = item.USER.FIRST_NAME+" has commented on your post.";
+                        comment = item.COMMENT_ID;
                     }
                     else if (item.NOTIF_TYPE == "L")
                     {
-                        message = "has liked your post.";
+                        message = item.USER.FIRST_NAME+" has liked your post.";
                     }
 
-                    <li>
-                        <button class="btn">@item.USER.</button>
-                        @*@Html.ActionLink(item.USER.FIRST_NAME+" "+item.USER.LAST_NAME+" "+message, "GoToPost", "Post", new { postID = item.POST_ID },new { id = "checkNotif"})*@                        
+                    <li>                        
+                        <div class="container-fluid">
+                            <div class="col-sm-10 post-link-container" style="height:40px">
+                                @Html.ActionLink(message, "CheckNotification", "Post", new { notifID = item.ID, notifMessage = message }, "")
+                            </div>
+                            <div class="col-sm-2">
+                                <span class="@glyph"></span>
+                            </div>
+                        </div>                        
                     </li>
-                    
+                    <li class="divider"></li>
                 }
             }
-        <li class="divider"></li>
-        <li>@Html.ActionLink("Clear all notifications.","ClearNotification","Post")</li>
     </ul>
 </div>

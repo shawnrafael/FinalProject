@@ -1,5 +1,31 @@
-﻿.dropdown-menu {
-    width: 350px !important;
+﻿#userName{
+    font-size:20px;
+    font-weight:700;
+}
+
+.badge{
+    background-color: #dc1426 !important;
+    color: #fff !important;
+}
+.scrollable-menu {
+    height: auto;
+    max-height: 450px;
+    overflow-x: hidden;
+}
+#notificationDropdown{
+    width: 400px !important;
+}
+
+#menuRequest {
+    width: 400px !important;
+}
+.post-link-container{
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 40px;
+}
+.dropdown-menu {
+    width: 150px !important;
 }
 #renderedPart{
     margin-top: 30px;
@@ -64,6 +90,7 @@ textarea.form-control{
 #homeProfilePic{
     position: absolute;
     margin: auto;
+    width: 100px;
     left: -100%;
     right: -100%;
     top: -100%;
@@ -122,7 +149,15 @@ textarea.form-control{
 .btnLike{
     background-color: #f5f5f5 !important;
 }
-
+#profilePic{
+    position: absolute;
+    margin: auto;
+    width: 340px;
+    left: -100%;
+    right: -100%;
+    top: -100%;
+    bottom: -100%;
+}
 #imageProfileContainer{
     width: 350px;
     height: 350px;

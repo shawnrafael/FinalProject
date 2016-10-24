@@ -1,17 +1,17 @@
 ﻿var likePostUrl = '/Post/LikePost';
 
 $(document).ready(function () {
-    //#addAsFriend,#requestAdd,#confirmRequest
+
     $('#postBtnProfile').css('display', 'inline');
     CheckRequest();
 
     var currentProfile = $('#currentProfile').val();
     var user = $('#userID').val();
-
     
     $(document).on('click', '#confirmRequest', function () {
-        ConfirmRequest();
+        ConfirmRequest();        
     });
+
     $(document).on('click', '#addAsFriend', function () {
         AddAsFriend();
     });    
@@ -66,9 +66,13 @@ $(document).ready(function () {
         })
     }
 
-    function ConfirmRequest() {
+    function ConfirmRequest() {        
+        var data = {
+            currentProfileID: $('#currentProfile').val()
+        }
         $.ajax({
             url: confirmRequestUrl,
+            data: data,
             type: 'POST',
             success: function (data) {
                 location.reload();
@@ -142,6 +146,17 @@ $(document).ready(function () {
                     alert();
                 }
             });
+        }
+    });
+
+    $('#submitAboutMe').on('click', function () {
+        var data = {
+            txtAboutMe: $('#txtAboutMe').val()
+        }
+        if (data.txtAboutMe == "") {
+            $('#errorAboutMe').css('display', 'block');
+        } else {
+            $('#aboutMeForm').submit();
         }
     });
 

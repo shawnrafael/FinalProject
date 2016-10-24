@@ -58,8 +58,18 @@ namespace PastebookBusinessLogic.BusinessLogic
             return notify;           
         }
 
-        public void AddNotification(FRIEND like)
+        public bool AddNotification(int userID, int friendID)
         {
+            var newNotification = new NOTIFICATION()
+            {
+                RECEIVER_ID = friendID,
+                NOTIF_TYPE = "F",
+                SENDER_ID = userID,
+                CREATED_DATE = DateTime.Now,
+                SEEN = "N"
+            };
+            bool notify = accessNotify.Create(newNotification);
+            return notify;
 
         }
 
@@ -67,6 +77,28 @@ namespace PastebookBusinessLogic.BusinessLogic
         {
             var notifications = pasteBookAL.RetrieveNotifications(userID);
             return notifications;
+        }
+
+        public List<NOTIFICATION> RetrieveRequests(int userID)
+        {
+            var notifications = pasteBookAL.RetrieveRequests(userID);
+            return notifications;
+        }
+
+        public NOTIFICATION RetrieveFriendRequest(int userID, int senderID)
+        {
+            var notifications = pasteBookAL.RetrieveNotificationRequest(userID, senderID);
+            return notifications;
+        }
+
+        public bool UpdateSeen(NOTIFICATION notif)
+        {
+            bool seen = false;
+            notif.SEEN = "Y";
+
+            seen = accessNotify.Edit(notif);
+            return seen;
+
         }
     }
 }

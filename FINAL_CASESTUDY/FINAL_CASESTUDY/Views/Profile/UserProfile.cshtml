@@ -8,9 +8,30 @@
 
 <div class="col-sm-4">
     <div class="container-fluid">
-        <div id="imageProfileContainer">
-            <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
-        </div>
+        @*<div id="imageProfileContainer">*@
+            @{if (Model.PROFILE_PIC == null)
+                {
+                    <div id="imageProfileContainer">
+                        <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="profilePic" />
+                    </div>
+                }
+                else
+                {
+                    //source: http://stackoverflow.com/questions/17952514/mvc-how-to-display-a-byte-array-image-from-model
+                    var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <div id="imageProfileContainer">
+                        <img src="@imgSrc" class="img-responsive" id="profilePic" />
+                    </div>
+
+
+                }
+            }
+        @*</div>*@
+        <div>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addProfilepic">Edit profile pic<span class="glyphicon glyphicon-pencil"></span></button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addAboutMe">Update about me<span class="glyphicon glyphicon-pencil"></span></button>
+        </div><br />
     </div>
     <div id="infoContainer">
         <div class="well">
@@ -19,12 +40,65 @@
                 <input type="hidden" name="username" id="userName" value="@Model.ID" />
                 <p>Email: @Model.EMAIL_ADDRESS</p>
                 <p>Birthday: @Html.DisplayFor(x => x.BIRTHDAY)</p>
-                <p>Country: @Model.COUNTRY_ID</p>
+                <p>Country: @Model.REF_COUNTRY.COUNTRY</p>
                 <p>Mobile: @Model.MOBILE_NO</p>
                 <p>About me: @Model.ABOUT_ME</p>
             </div>
         </div>
     </div>
+
+    @*modal for profile pic*@
+    <div class="modal fade" id="addProfilepic" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Upload your profile picture.</h4>
+                </div>
+                <div class="modal-body">
+                    @*source http://stackoverflow.com/questions/16255882/uploading-displaying-images-in-mvc-4*@
+                    @using (Html.BeginForm("UploadProfilePic", "Account", FormMethod.Post,
+                    new { enctype = "multipart/form-data" }))
+                    {
+                        <label>Upload Image:</label>
+                        <input type="file" name="file" id="file" />
+                        <input type="submit" value="Upload" class="submit" />
+                    }
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addAboutMe" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">About me <span class="glyphicon glyphicon-pencil"></span></h4>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("UpdateAboutMe", "Account", FormMethod.Post,new { id="aboutMeForm"}))
+                    {
+                        <textarea class="form-control" id="txtAboutMe" name="aboutMe"></textarea>
+                        <input type="button" id="submitAboutMe"/>
+                    }
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 </div>
 <div class="col-sm-8">
@@ -73,6 +147,7 @@
     </div>
 </div>
 
+
 @section scripts{
     <script>
         var addPostUrl = '@Url.Action("AddPost", "Post")';
@@ -81,7 +156,7 @@
 
         var checkFriendRequestUrl = '@Url.Action("CheckFriendRequest", "Friend", new { currentProfileID = Model.ID })';
         var addAsFriendUrl = '@Url.Action("AddAsFriend", "Friend", new { currentProfileID = Model.ID })';
-        var confirmRequestUrl = '@Url.Action("ConfirmRequest", "Friend", new { currentProfileID = Model.ID })';
+        var confirmRequestUrl = '@Url.Action("ConfirmRequest", "Friend")';
         var profileHeaderContainerUrl = '@Url.Action("ReloadProfileHeader", "Profile", new { username = user })'
     </script>
     <script src="~/Scripts/PasteBookJS/Profile.js"></script>

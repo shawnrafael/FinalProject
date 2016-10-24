@@ -1,0 +1,85 @@
+﻿@model PasteBookEntity.POST
+
+<div class="col-sm-2">
+    <div class="container">
+        <div id="imageContainer">
+            <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+        </div>
+
+        <div>
+            @Html.ActionLink(Model.USER.FIRST_NAME + " " + Model.USER.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER.USER_NAME })<br />
+            @Html.ActionLink("Friend List", "Friends", "Friend")
+        </div>
+    </div>
+</div>
+<div class="col-sm-10">
+
+    <div class="well">
+        @{
+            var userID = Model.ID;
+            var likeModalID = Model.ID + "LikeModal";
+            var poster = Model.USER.ID;
+            var postProfileOwner = Model.USER1.ID;
+            string userProfile = "none";
+
+            if (poster != postProfileOwner)
+            {
+                userProfile = Model.USER1.FIRST_NAME + " " + Model.USER1.LAST_NAME;
+            }
+
+        }
+
+        @Html.Hidden("itemID", userID, new { id = "itemID" })
+        <div class="container-fluid">
+            <h4>@ViewData["postMessage"]</h4>
+            <hr />
+            @Html.ActionLink(Model.USER.FIRST_NAME + " " + Model.USER.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER.USER_NAME }, "") <span class="glyphicon glyphicon-play" id="userDivider"></span>
+            @Html.ActionLink(userProfile, "UserProfile", "Profile", new { username = Model.USER1.USER_NAME }, new { id = "profileOwner" })
+            <p id="postDate">@Model.CREATED_DATE</p>
+            <p id="postContent">@Model.CONTENT</p>
+            <hr />
+            <button class="btn btnLike" id="@userID">Like</button>
+            <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@Model.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>
+
+            <hr />
+            @*CommentList*@
+            <div id="commentContainer">
+                @{ Html.RenderAction("CommentList", "Post", new { postID = Model.ID });}
+            </div>
+
+            <textarea class="form-control" id="addComment_@Model.ID" rows="2" placeholder="Write a comment..."></textarea>
+            <hr />
+
+            <input type="hidden" value="submit" id="sampleHide" />
+            <button id="@userID" class="btn btn-primary pull-right btnComment">Add comment</button>
+
+            @*Like Modal*@
+            <div class="modal fade" id="@likeModalID" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">People who liked this post.</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="modalLikeContainer">
+                                @{Html.RenderAction("GetLikers", "Post", new { currentPost = userID });}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

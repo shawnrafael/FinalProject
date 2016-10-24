@@ -187,6 +187,9 @@
     <Content Include="Views\Shared\PartialCommentList.cshtml" />
     <Content Include="Views\Profile\PartialNothingToPost.cshtml" />
     <Content Include="Views\Post\PartialNotification.cshtml" />
+    <Content Include="Views\Post\Post.cshtml" />
+    <Content Include="Views\Friend\PartialFriendRequest.cshtml" />
+    <Content Include="Views\Friend\SearchResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

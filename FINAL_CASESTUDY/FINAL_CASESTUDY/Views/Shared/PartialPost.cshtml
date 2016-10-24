@@ -21,10 +21,13 @@
             @Html.Hidden("itemID", userID, new { id = "itemID" })
 
             <div class="container-fluid">
-                @Html.ActionLink(item.USER.FIRST_NAME+" "+item.USER.LAST_NAME, "UserProfile", "Profile",new { username = item.USER.USER_NAME },"") <span class="glyphicon glyphicon-play" id="userDivider"></span>
-                @Html.ActionLink(userProfile, "UserProfile", "Profile", new { username = item.USER1.USER_NAME },new { id = "profileOwner" })
+                
+                @Html.ActionLink(item.USER.FIRST_NAME + " " + item.USER.LAST_NAME, "UserProfile", "Profile", new { username = item.USER.USER_NAME }, "") <span class="glyphicon glyphicon-play" id="userDivider"></span>
+                @Html.ActionLink(userProfile, "UserProfile", "Profile", new { username = item.USER1.USER_NAME }, new { id = "profileOwner" })
                 <p id="postDate">@item.CREATED_DATE</p>
                 <p id="postContent">@item.CONTENT</p>
+
+                
                 <hr />
                 <button class="btn btnLike" id="@userID">Like</button>
                 <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@item.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>     
@@ -38,6 +41,7 @@
                 <textarea class="form-control" id="addComment_@item.ID" rows="2" placeholder="Write a comment..."></textarea>
                 <hr />
 
+                <input type="hidden" value="submit" id="sampleHide" />
                 <button id="@userID" class="btn btn-primary pull-right btnComment" >Add comment</button>
 
                 @*Like Modal*@

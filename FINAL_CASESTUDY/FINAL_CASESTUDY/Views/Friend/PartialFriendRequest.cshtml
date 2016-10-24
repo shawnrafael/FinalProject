@@ -1,0 +1,40 @@
+﻿@model IEnumerable<PasteBookEntity.NOTIFICATION>
+
+<div class="dropdown">
+    <button class="icon-bar dropdown-toggle" type="button" id="friendRequest" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span></button>
+    @{
+        if (Model.Where(x => x.SEEN == "N").Count() != 0)
+        {
+            <span class="badge">@Model.Count()</span>
+        }
+    }
+    <ul class="dropdown-menu scrollable-menu" id="menuRequest" role="menu" aria-labelledby="friendRequest">
+        <li role="presentation" class="dropdown-header">Requests</li>
+        @{
+            foreach (var item in Model)
+            {
+
+                string message = item.USER.FIRST_NAME+" wants to be friends with you.";
+                if (item.SEEN == "Y")
+                {
+                    message = item.USER.FIRST_NAME + " is added to your friendlist.";
+                }
+
+                <li>
+                    <div class="container-fluid">
+                        <div class="col-sm-6 post-link-container" style="height:40px">
+                            <p>@Html.ActionLink(message,"UserProfile","Profile",new { username = item.USER.USER_NAME },"")</p>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-success btn-confirm" id="@item.USER.ID" onclick="location.href='@Url.Action("UserProfile","Profile",new { username = item.USER.USER_NAME })'">Confirm</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-danger btn-delete" id="@item.USER.ID">Delete</button>
+                        </div>
+                    </div>
+                </li>
+                    <li class="divider"></li>
+            }
+        }
+    </ul>
+</div>

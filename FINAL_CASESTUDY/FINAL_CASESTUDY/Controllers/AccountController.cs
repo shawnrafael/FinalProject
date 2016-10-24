@@ -36,7 +36,7 @@ namespace FINAL_CASESTUDY.Controllers
                 accountBL.Register(user);
                 Session["currentUser"] = user.ID;
                 Session["currentUserName"] = user.USER_NAME;
-                return RedirectToAction("Home");
+                return RedirectToAction("Home","Home");
             }
             return RedirectToAction("Register", user);
         }
@@ -49,8 +49,31 @@ namespace FINAL_CASESTUDY.Controllers
             {
                 Session["currentUser"] = user.ID;
                 Session["currentUserName"] = user.USER_NAME;
+                
             }
+
             return Json(new { login = loginSuccess }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public ActionResult UploadProfilePic(HttpPostedFileBase file)
+        {
+            var user = accountBL.GetUserByID((int)Session["currentUser"]);
+            if (file != null)
+            {                               
+                bool success = accountBL.UploadProfilePic(file, user);
+            }
+            return RedirectToAction("UserProfile", "Profile", new { username = user.USER_NAME });
+        }
+
+        public ActionResult UpdateAboutMe(string aboutMe)
+        {
+            var user = accountBL.GetUserByID((int)Session["currentUser"]);
+            if (aboutMe != null)
+            {
+                bool success = accountBL.UpdateAboutMe(aboutMe, user);
+            }
+            return RedirectToAction("UserProfile", "Profile", new { username = user.USER_NAME });
         }
 
         public ActionResult Logout()
@@ -58,6 +81,8 @@ namespace FINAL_CASESTUDY.Controllers
             Session["currentUser"] = null;
             return RedirectToAction("Register", "Account");
         }
+
+        
 
     }
 }

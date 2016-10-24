@@ -1,6 +1,6 @@
 ﻿var likePostUrl = '/Post/LikePost';
 
-$(document).ready(function () {    
+$(document).ready(function () {
 
     $('#postBtnHome').css('display', 'inline');
 

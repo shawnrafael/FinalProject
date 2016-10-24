@@ -46,7 +46,6 @@ namespace PastebookBusinessLogic.BusinessLogic
 
         public bool AddFriend(int userID, int currentUserProfile)
         {
-            bool added = false;
             var friends = pasteBookAL.RetrieveFriends(userID);
             var newRequest = new FRIEND()
             {
@@ -57,6 +56,7 @@ namespace PastebookBusinessLogic.BusinessLogic
                 BLOCKED = "N"
             };
 
+            bool added = false;
             if (friends.Count == 0)
             {
                 added = accessFriend.Create(newRequest);
@@ -84,7 +84,14 @@ namespace PastebookBusinessLogic.BusinessLogic
                 BLOCKED = "N"
             };
             confirm = accessFriend.Edit(updateRequest);
+
             return confirm;
+        }
+
+        public List<USER> SearchFriend(string keyWord)
+        {
+            var result = pasteBookAL.RetrieveSearch(keyWord);
+            return result;
         }
 
     }

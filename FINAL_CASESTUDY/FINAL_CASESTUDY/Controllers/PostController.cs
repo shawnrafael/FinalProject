@@ -1,4 +1,5 @@
-﻿using PastebookBusinessLogic.BusinessLogic;
+﻿using DataAccess.AccessLayer;
+using PastebookBusinessLogic.BusinessLogic;
 using PasteBookEntity;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace FINAL_CASESTUDY.Controllers
         LikeBL likeBL = new LikeBL();
         CommentBL commentBL = new CommentBL();
         NotificationBL notifyBL = new NotificationBL();
+        PasteBookAccessLayer pasteBookAL = new PasteBookAccessLayer();
         // GET: Post
         public ActionResult AddPost(string content, int currentProfile)
         {
@@ -73,6 +75,22 @@ namespace FINAL_CASESTUDY.Controllers
             var notifications = notifyBL.RetrieveNotifications(user);
 
             return PartialView("PartialNotification", notifications);
+        }
+
+        public ActionResult CheckNotification(int notifID, string notifMessage)
+        {
+            var notif = pasteBookAL.RetrieveNotification(notifID);
+            bool updateNotif = notifyBL.UpdateSeen(notif);
+            int postID = (int)notif.POST_ID;
+            return RedirectToAction("Post", new { postID = postID, message = notifMessage });
+
+        }
+
+        public ActionResult Post(int postID, string message)
+        {
+            var post = pasteBookAL.RetrienvePost(postID);
+            ViewData["postMessage"] = message;
+            return View(post);
         }
     }
 }

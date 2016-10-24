@@ -37,5 +37,6 @@ namespace FINAL_CASESTUDY.Controllers
             return PartialView("PartialPost", listOfPost);
         }
 
+        
     }
 }

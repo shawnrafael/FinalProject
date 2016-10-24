@@ -37,9 +37,38 @@
  
 <script>
     var validateLoginUrl = '@Url.Action("ValidateLogin", "Account")';
-    @*var addCommentUrl = '@Url.Action("CommentPost", "Post")';*@
+    var confirmRequestUrl = '@Url.Action("ConfirmRequest", "Friend")';
+    var reloadRequestUrl = '@Url.Action("GetRequestList", "Friend")';
+    var searchResultUrl = '@Url.Action("SearchResult", "Friend")'
+    var searchUrl = '@Url.Action("Search", "Friend")'
 
     $(document).ready(function () {
+        //var id = $('#requestID').val();
+        //$('#searchFriend').on('click', function () {
+        //    SearchFor();
+        //});
+
+        //function SearchFor() {
+        //    var data = {
+        //        search: $('#txtSearch').val()
+        //    }
+        //    alert(data.search);
+        //    $.ajax({
+        //        url: searchResultUrl,
+        //        data: data,
+        //        type: 'GET',
+        //        success: function (data) {
+        //            SearchResult(data);
+        //        },
+        //        error: function () {
+        //            alert("Oops");
+        //        }
+        //    });
+        //}
+
+        //function SearchResult(data) {
+        //    $('#renderedPart').load(searchUrl, { result: data.result });
+        //}
 
         $('#btnLogin').on('click', function () {
             var data = {
@@ -51,10 +80,10 @@
                 data: data,
                 type: 'GET',
                 success: function (data) {
-                    if (data.login == true) {
-                        location.href = '@Url.Action("Home", "Home")'
-                    } else {
+                    if (data.login == false) {
                         $('#errorLogin').css('display', 'block');
+                    } else {
+                        location.reload();
                     }
                 },
                 error: function () {
@@ -62,5 +91,31 @@
                 }
             });
         });
+
+        $(document).on('click', '.btn-confirm', function () {
+            var data = {
+                currentProfileID: this.id
+            }
+            ConfirmRequest(data);
+
+
+        });
+
+        function ConfirmRequest(data) {
+            $.ajax({
+                url: confirmRequestUrl,
+                data: data,
+                type: 'POST',
+                success: function (data) {
+                    $('#requestContainer').load(reloadRequestUrl);
+                },
+                error: function () {
+                    alert("Oops");
+                }
+
+            })
+        }
+
+
     });
 </script>

@@ -2,9 +2,25 @@
 
 <div class="col-sm-2">
     <div class="container">
-        <div id="imageContainer">
-            <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
-        </div>
+        
+        @{if (Model.PROFILE_PIC == null)
+            {
+                <div id="imageContainer">
+                    <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+                </div>
+            }
+            else
+            {
+                //source: http://stackoverflow.com/questions/17952514/mvc-how-to-display-a-byte-array-image-from-model
+                var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                <div id="imageContainer">
+                    <img src="@imgSrc" class="img-responsive" id="homeProfilePic" />
+                </div>
+            }
+        }
+
+        
 
         <div>
             @Html.ActionLink(Model.FIRST_NAME + " " + Model.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER_NAME })<br />
@@ -13,16 +29,17 @@
     </div>
 </div>
 <div class="col-sm-8">
-    <div id="postContainer">
-        <div class="well">
-            <div class="container-fluid">
-                <p class="text-danger" id="errorPost">Please add something to your post.</p>
-                <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
-                <hr />
-                <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
-                <input type="button" id="postBtnProfile" value="Post" class="btn btn-primary pull-right" />
-            </div>
+    
+    <div class="well">
+        <div class="container-fluid">
+            <p class="text-danger" id="errorPost">Please add something to your post.</p>
+            <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
+            <hr />
+            <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
+            <input type="button" id="postBtnProfile" value="Post" class="btn btn-primary pull-right" />
         </div>
+    </div>
+    <div id="postContainer">
         @{Html.RenderAction("GetPostOnHome", "Home");}
     </div>
 </div>

@@ -19,6 +19,7 @@ namespace DataAccess.AccessLayer
                 using (var context = new PASTEBOOKEntities())
                 {
                     listOfPost = context.POSTs
+                                        .Include("USER1")
                                         .Include("USER")
                                         .Include("COMMENTs")
                                         .Include("LIKEs")
@@ -105,9 +106,10 @@ namespace DataAccess.AccessLayer
                 using (var context = new PASTEBOOKEntities())
                 {
                     notifications = context.NOTIFICATIONs
-                                                .Include("USER")
-                                                .Where(x => x.RECEIVER_ID == userID && x.SEEN == "N")
-                                                .ToList();
+                                           .Include("USER")
+                                           .Where(x => x.RECEIVER_ID == userID && x.NOTIF_TYPE!="F")
+                                           .OrderByDescending(x=>x.CREATED_DATE)
+                                           .ToList();
                 }
             }
             catch (Exception)
@@ -116,6 +118,48 @@ namespace DataAccess.AccessLayer
                 throw;
             }
             return notifications;
+        }
+
+        public List<NOTIFICATION> RetrieveRequests(int userID)
+        {
+            var requests = new List<NOTIFICATION>();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    requests = context.NOTIFICATIONs
+                                           .Include("USER")
+                                           .Where(x => x.RECEIVER_ID == userID && x.NOTIF_TYPE == "F" && x.SEEN=="N")
+                                           .OrderByDescending(x => x.CREATED_DATE)
+                                           .ToList();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return requests;
+        }
+
+        public List<USER> RetrieveSearch(string keyWord)
+        {
+            var results = new List<USER>();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    results = context.USERs.Where(x => x.FIRST_NAME.Contains(keyWord) || x.LAST_NAME.Contains(keyWord) || ((x.FIRST_NAME+x.LAST_NAME).Contains(keyWord)) || (x.FIRST_NAME+" "+x.LAST_NAME)==keyWord ).ToList();
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return results;
+
         }
 
         public List<USER> RetrieveListOfFriends(int userID)
@@ -173,6 +217,42 @@ namespace DataAccess.AccessLayer
             return likers;
         }
 
+        public NOTIFICATION RetrieveNotification(int notifID)
+        {
+            var notification = new NOTIFICATION();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    notification = context.NOTIFICATIONs.Where(x => x.ID == notifID).Single();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return notification;
+        }
+
+        public NOTIFICATION RetrieveNotificationRequest(int userID, int senderID)
+        {
+            var notification = new NOTIFICATION();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    notification = context.NOTIFICATIONs.Where(x => x.SENDER_ID == senderID && x.RECEIVER_ID == userID && x.NOTIF_TYPE == "F").Single();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return notification;
+        }
+
         public POST RetrienvePost(int postID)
         {
             var post = new POST();
@@ -182,6 +262,9 @@ namespace DataAccess.AccessLayer
                 {
                     post = context.POSTs
                                   .Include("COMMENTs")
+                                  .Include("LIKEs")
+                                  .Include("USER")
+                                  .Include("USER1")                                  
                                   .Where(x => x.ID == postID).Single();
                 }
             }
@@ -238,7 +321,7 @@ namespace DataAccess.AccessLayer
                 {
                     if (context.USERs.Any(x=>x.USER_NAME == username))
                     {
-                        user = context.USERs.Where(x => x.USER_NAME == username).Single();
+                        user = context.USERs.Include("REF_COUNTRY").Where(x => x.USER_NAME == username).Single();
                     }
                 }
             }

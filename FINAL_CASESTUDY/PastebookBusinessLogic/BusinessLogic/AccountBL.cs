@@ -7,6 +7,8 @@ using PasteBookEntity;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using DataAccess.AccessLayer;
+using System.Web;
+using System.IO;
 
 namespace PastebookBusinessLogic.BusinessLogic
 {    
@@ -20,7 +22,7 @@ namespace PastebookBusinessLogic.BusinessLogic
         public bool CheckUserName(USER newUser)
         {
             var user = pasteBookAL.RetrieveUser(newUser.USER_NAME);
-            if (user != null)
+            if (user.ID != 0)
             {
                 return false;
             }
@@ -72,6 +74,24 @@ namespace PastebookBusinessLogic.BusinessLogic
             var user = pasteBookAL.RetrieveUser(username);
 
             return user;
+        }
+
+        public bool UploadProfilePic(HttpPostedFileBase image, USER user)
+        {
+            byte[] profilePic = null;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.InputStream.CopyTo(ms);
+                profilePic = ms.GetBuffer();
+            }
+            user.PROFILE_PIC = profilePic;
+            return accessUser.Edit(user);
+        }
+
+        public bool UpdateAboutMe(string aboutMe, USER user)
+        {            
+            user.ABOUT_ME = aboutMe;
+            return accessUser.Edit(user);
         }
 
         public List<REF_COUNTRY> GetCountryList()

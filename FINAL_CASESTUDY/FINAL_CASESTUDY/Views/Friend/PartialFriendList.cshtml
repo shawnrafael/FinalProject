@@ -4,18 +4,39 @@
     @foreach (var item in Model)
     {
         <div class="container-fluid" id="friend">
-            <div class="col-sm-8">
-                @Html.ActionLink(item.FIRST_NAME + " " + item.LAST_NAME, "UserProfile", "Profile", new { username = item.USER_NAME }, "")
+            <div class="col-sm-2">
+                @{if (item.PROFILE_PIC == null)
+                    {
+                        <div id="imageContainer">
+                            <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+                        </div>
+                    }
+                    else
+                    {
+                        //source: http://stackoverflow.com/questions/17952514/mvc-how-to-display-a-byte-array-image-from-model
+                        var base64 = Convert.ToBase64String(item.PROFILE_PIC);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                        <div id="imageContainer">
+                            <img src="@imgSrc" class="img-responsive" id="homeProfilePic" />
+                        </div>
+                    }
+                }
+            </div>
+            <div class="col-sm-6">
+
+                @Html.Label(item.FIRST_NAME + " " + item.LAST_NAME, new { id = "userName" })
+                @*"UserProfile", "Profile", new { username = item.USER_NAME }*@
             </div>
             <div class="col-sm-4">
                 <div class="dropdown">
                     <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="friendOption" data-toggle="dropdown"><span class="glyphicon glyphicon-ok"></span>&nbsp; Friends&nbsp;<span class="caret"></span></button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="notificationList">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">block</a></li>
+                    <ul class="dropdown-menu friend-menu" role="menu" aria-labelledby="notificationList">
+                        <li role="presentation">@Html.ActionLink("View Profile","UserProfile","Profile", new { username = item.USER_NAME },"")</li>
                     </ul>
                 </div>
             </div>
         </div>
+        <hr />
     }
 </div>
 
