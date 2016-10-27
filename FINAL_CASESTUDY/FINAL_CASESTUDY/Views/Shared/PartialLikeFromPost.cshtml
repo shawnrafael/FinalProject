@@ -2,8 +2,7 @@
 
 @foreach (var item in Model)
 {
-    <ul>
-        <li>@Html.ActionLink(item.FIRST_NAME + " " + item.LAST_NAME, "UserProfile", new { username = item.USER_NAME })</li>
-    </ul>
-    
+    <div>
+        @Html.ActionLink(item.FIRST_NAME + " " + item.LAST_NAME, "UserProfile","Profile", new { username = item.USER_NAME },"")
+    </div> 
 }

@@ -1,85 +1,117 @@
-﻿@model PasteBookEntity.POST
-
+﻿@model PasteBookEntity.USER
 <div class="col-sm-2">
     <div class="container">
-        <div id="imageContainer">
-            <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
-        </div>
 
-        <div>
-            @Html.ActionLink(Model.USER.FIRST_NAME + " " + Model.USER.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER.USER_NAME })<br />
-            @Html.ActionLink("Friend List", "Friends", "Friend")
+        @{if (Model.PROFILE_PIC == null)
+            {
+                <div id="imageContainer">
+                    <img src="~/Content/samplePicture/pastebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+                </div>
+            }
+            else
+            {
+                //source: http://stackoverflow.com/questions/17952514/mvc-how-to-display-a-byte-array-image-from-model
+                var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                <div id="imageContainer">
+                    <img src="@imgSrc" class="img-responsive" id="homeProfilePic" />
+                </div>
+            }
+        }
+
+
+
+        <div class="container-fluid">
+            <div id="nameContainer">
+                @Html.ActionLink(Model.FIRST_NAME + " " + Model.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER_NAME }, "")
+            </div>
+            <div>
+                @Html.ActionLink("Friend List", "Friends", "Profile")
+            </div>
         </div>
     </div>
 </div>
 <div class="col-sm-10">
+    @{Html.RenderAction("GetPost", "Post");}
+</div>
 
-    <div class="well">
-        @{
-            var userID = Model.ID;
-            var likeModalID = Model.ID + "LikeModal";
-            var poster = Model.USER.ID;
-            var postProfileOwner = Model.USER1.ID;
-            string userProfile = "none";
+@section scripts{
+    <script>
+        var addCommentUrl = '@Url.Action("CommentPost", "Post")';
+        var likePostUrl = '@Url.Action("LikePost", "Post")';
+        var unlikePostUrl = '@Url.Action("UnlikePost", "Post")';
 
-            if (poster != postProfileOwner)
-            {
-                userProfile = Model.USER1.FIRST_NAME + " " + Model.USER1.LAST_NAME;
+        $(document).ready(function () {
+            $('#addComment').on('click', function () {
+               AddComment();
+            });
+
+            $('#unlikePost').on('click', function () {
+                UnlikePost();
+            });
+
+            $('#likePost').on('click', function () {
+                LikePost();
+            });
+        });
+
+        function AddComment(){
+            var data = {
+                currentPost: $('#postID').val(),
+                commentContent: $('#commentContent').val()
             }
+            if (data.commentContent == "") {
 
+            } else {
+                $.ajax({
+                    url: addCommentUrl,
+                    data: data,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function () {
+                        alert("Something went wrong");
+                    }
+                });
+            }
         }
 
-        @Html.Hidden("itemID", userID, new { id = "itemID" })
-        <div class="container-fluid">
-            <h4>@ViewData["postMessage"]</h4>
-            <hr />
-            @Html.ActionLink(Model.USER.FIRST_NAME + " " + Model.USER.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER.USER_NAME }, "") <span class="glyphicon glyphicon-play" id="userDivider"></span>
-            @Html.ActionLink(userProfile, "UserProfile", "Profile", new { username = Model.USER1.USER_NAME }, new { id = "profileOwner" })
-            <p id="postDate">@Model.CREATED_DATE</p>
-            <p id="postContent">@Model.CONTENT</p>
-            <hr />
-            <button class="btn btnLike" id="@userID">Like</button>
-            <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@Model.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>
+        function LikePost() {
+            var data = {
+                currentPost: $('#postID').val()
+            }
+            $.ajax({
+                url: likePostUrl,
+                data: data,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        }
 
-            <hr />
-            @*CommentList*@
-            <div id="commentContainer">
-                @{ Html.RenderAction("CommentList", "Post", new { postID = Model.ID });}
-            </div>
+        function UnlikePost() {
+            var data = {
+                currentPost: $('#postID').val()
+            }
+            $.ajax({
+                url: unlikePostUrl,
+                data: data,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        }
 
-            <textarea class="form-control" id="addComment_@Model.ID" rows="2" placeholder="Write a comment..."></textarea>
-            <hr />
+    </script>
+}
 
-            <input type="hidden" value="submit" id="sampleHide" />
-            <button id="@userID" class="btn btn-primary pull-right btnComment">Add comment</button>
 
-            @*Like Modal*@
-            <div class="modal fade" id="@likeModalID" role="dialog">
-                <div class="modal-dialog">
-
-                    <div class="modal-content">
-
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">People who liked this post.</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div id="modalLikeContainer">
-                                @{Html.RenderAction("GetLikers", "Post", new { currentPost = userID });}
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
 
 
 

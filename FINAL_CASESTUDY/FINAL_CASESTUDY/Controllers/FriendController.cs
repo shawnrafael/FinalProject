@@ -14,18 +14,6 @@ namespace FINAL_CASESTUDY.Controllers
         AccountBL accountBL = new AccountBL();
         NotificationBL notifyBL = new NotificationBL();
 
-        // GET: Friend
-        public ActionResult Friends()
-        {
-            if (Session["currentUser"] == null)
-            {
-                return RedirectToAction("Register", "Account");
-            }
-            int userID = (int)Session["currentUser"];
-            USER user = accountBL.GetUserByID(userID);
-            return View(user);
-        }
-
         public ActionResult GetFriendList(string username)
         {
             int userID = (int)Session["currentUser"];
@@ -44,6 +32,7 @@ namespace FINAL_CASESTUDY.Controllers
         public ActionResult AddAsFriend(int currentProfileID)
         {
             int userID = (int)Session["currentUser"];
+            //var getRequest = friendBL.GetFriendRequest(userID, currentProfileID);
             bool sent = friendBL.AddFriend(userID, currentProfileID);
             bool notify = false;
             if (sent)
@@ -58,6 +47,7 @@ namespace FINAL_CASESTUDY.Controllers
         {
             int userID = (int)Session["currentUser"];
             bool confirm = friendBL.ConfirmFriend(userID, currentProfileID);
+
             var requestNotif = notifyBL.RetrieveFriendRequest(userID, currentProfileID);
             bool notify = false;
             if (confirm)
@@ -67,6 +57,20 @@ namespace FINAL_CASESTUDY.Controllers
             return Json(new { request = confirm }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult DeleteRequest(int currentProfileID)
+        {
+            int userID = (int)Session["currentUser"];
+            var requestNotif = notifyBL.RetrieveFriendRequest(userID, currentProfileID);
+
+            bool delete = friendBL.DeleteFriendRequest(userID, currentProfileID);            
+            bool notify = false;
+            if (delete)
+            {
+                notify = notifyBL.DeleteNotification(requestNotif);
+            }
+            return Json(new { request = delete }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetRequestList()
         {
             var user = (int)Session["currentUser"];
@@ -74,10 +78,11 @@ namespace FINAL_CASESTUDY.Controllers
 
             return PartialView("PartialFriendRequest", requests);
         }
+
         public ActionResult SearchResult(string searchFriend)
         {
             var searchResult = friendBL.SearchFriend(searchFriend);
-            ViewData["keyWord"] = searchFriend;
+            ViewData["keyWord"] = (searchFriend == null) ? "" : searchFriend;
             return View(searchResult);
         }
         

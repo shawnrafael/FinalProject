@@ -19,16 +19,6 @@ namespace PastebookBusinessLogic.BusinessLogic
         GenericDataAccess<REF_COUNTRY> accessCountry = new GenericDataAccess<REF_COUNTRY>();
         PasswordBL passwordBL = new PasswordBL();
 
-        public bool CheckUserName(USER newUser)
-        {
-            var user = pasteBookAL.RetrieveUser(newUser.USER_NAME);
-            if (user.ID != 0)
-            {
-                return false;
-            }
-            return true;
-        }
-
         public bool Register(USER newUser)
         {            
             if (newUser.GENDER == null)
@@ -92,6 +82,63 @@ namespace PastebookBusinessLogic.BusinessLogic
         {            
             user.ABOUT_ME = aboutMe;
             return accessUser.Edit(user);
+        }
+
+        public bool UpdateProfileInfo(USER user)
+        {
+            return accessUser.Edit(user);
+        }
+
+        public bool CheckPassword(string oldPassWord, int userID)
+        {
+            var user = pasteBookAL.RetrieveUser(userID);
+            bool match = passwordBL.IsPasswordMatch(oldPassWord, user.SALT, user.PASSWORD);
+            if (match == true)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool CheckEmail(string email)
+        {
+            var user = pasteBookAL.RetrieveLoginUser(email);            
+            if (user.ID != 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool CheckUsername(string username)
+        {
+            var user = pasteBookAL.RetrieveUser(username);
+            if (user.ID != 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool UpdatePassword(string newPassword, int userID)
+        {
+            var user = pasteBookAL.RetrieveUser(userID);
+            string salt = null;
+            string hash = passwordBL.GeneratePasswordHash(newPassword, out salt);
+
+            user.SALT = salt;
+            user.PASSWORD = hash;
+
+            bool successUpdate = accessUser.Edit(user);
+            return successUpdate;
+        }
+
+        public bool UpdateEmail(string newEmail, int userID)
+        {
+            var user = pasteBookAL.RetrieveUser(userID);
+            user.EMAIL_ADDRESS = newEmail;
+            bool successUpdate = accessUser.Edit(user);
+            return successUpdate;
         }
 
         public List<REF_COUNTRY> GetCountryList()

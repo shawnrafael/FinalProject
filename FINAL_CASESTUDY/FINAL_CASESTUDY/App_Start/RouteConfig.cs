@@ -11,7 +11,7 @@ namespace FINAL_CASESTUDY
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            
+            routes.MapMvcAttributeRoutes();
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             //routes.MapRoute(

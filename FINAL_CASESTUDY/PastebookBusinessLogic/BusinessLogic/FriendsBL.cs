@@ -68,6 +68,16 @@ namespace PastebookBusinessLogic.BusinessLogic
             return added;
         }
 
+        public FRIEND GetFriendRequest(int userID, int currentUserProfile)
+        {
+            var friend = pasteBookAL.RetrieveFriend(userID, currentUserProfile);
+            if (friend.ID != 0)
+            {
+                return friend; 
+            }
+            return friend;
+        }
+
         public bool ConfirmFriend(int userID, int currentUserProfile)
         {
             bool confirm = false;
@@ -86,6 +96,26 @@ namespace PastebookBusinessLogic.BusinessLogic
             confirm = accessFriend.Edit(updateRequest);
 
             return confirm;
+        }
+
+        public bool DeleteFriendRequest(int userID, int currentUserProfile)
+        {
+            bool delete = false;
+            var requests = pasteBookAL.RetrieveFriends(userID);
+            var id = requests.Where(x => x.USER_ID == currentUserProfile && x.FRIEND_ID == userID).Select(x => x.ID).Single();
+
+            var updateRequest = new FRIEND()
+            {
+                ID = id,
+                USER_ID = currentUserProfile,
+                FRIEND_ID = userID,
+                CREATED_DATE = DateTime.Now,
+                REQUEST = "N",
+                BLOCKED = "N"
+            };
+            delete = accessFriend.Delete(updateRequest);
+
+            return delete;
         }
 
         public List<USER> SearchFriend(string keyWord)

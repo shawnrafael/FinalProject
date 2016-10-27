@@ -9,6 +9,7 @@ namespace DataAccess.AccessLayer
 {
     public class PasteBookAccessLayer
     {
+        List<Exception> errorList = new List<Exception>();
 
         public List<POST> RetrieveListOfPost()
         {
@@ -27,9 +28,9 @@ namespace DataAccess.AccessLayer
                                         .ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
 
             return listOfPost;
@@ -50,9 +51,9 @@ namespace DataAccess.AccessLayer
                                         .ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
 
             return listOfComments;
@@ -72,9 +73,9 @@ namespace DataAccess.AccessLayer
                                         .ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
 
             return listOfLikes;
@@ -90,10 +91,10 @@ namespace DataAccess.AccessLayer
                     friends = context.FRIENDs.Where(x => x.USER_ID == userID || x.FRIEND_ID == userID).ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return friends;
         }
@@ -112,10 +113,10 @@ namespace DataAccess.AccessLayer
                                            .ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return notifications;
         }
@@ -134,10 +135,10 @@ namespace DataAccess.AccessLayer
                                            .ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return requests;
         }
@@ -153,9 +154,9 @@ namespace DataAccess.AccessLayer
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
 
             return results;
@@ -185,9 +186,9 @@ namespace DataAccess.AccessLayer
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
 
             return friends;
@@ -209,12 +210,30 @@ namespace DataAccess.AccessLayer
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return likers;
+        }
+
+        public FRIEND RetrieveFriend(int userID, int currentProfileID)
+        {
+            var friend = new FRIEND();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    friend = context.FRIENDs.Where(x => (x.USER_ID == userID && x.FRIEND_ID == currentProfileID) || (x.USER_ID == currentProfileID && x.FRIEND_ID == userID)).Single();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                errorList.Add(ex);
+            }
+            return friend;
         }
 
         public NOTIFICATION RetrieveNotification(int notifID)
@@ -227,10 +246,10 @@ namespace DataAccess.AccessLayer
                     notification = context.NOTIFICATIONs.Where(x => x.ID == notifID).Single();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return notification;
         }
@@ -245,10 +264,10 @@ namespace DataAccess.AccessLayer
                     notification = context.NOTIFICATIONs.Where(x => x.SENDER_ID == senderID && x.RECEIVER_ID == userID && x.NOTIF_TYPE == "F").Single();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return notification;
         }
@@ -268,10 +287,10 @@ namespace DataAccess.AccessLayer
                                   .Where(x => x.ID == postID).Single();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return post;
         }
@@ -286,10 +305,10 @@ namespace DataAccess.AccessLayer
                     result = context.COMMENTs.Where(x => x.POSTER_ID == comment.POSTER_ID && x.POST_ID == comment.POST_ID && x.DATE_CREATED == comment.DATE_CREATED).Single();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return result;
         }
@@ -304,10 +323,10 @@ namespace DataAccess.AccessLayer
                     result = context.LIKEs.Where(x => x.LIKED_BY == like.LIKED_BY && x.POST_ID == like.POST_ID).Single();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return result;
         }
@@ -321,14 +340,14 @@ namespace DataAccess.AccessLayer
                 {
                     if (context.USERs.Any(x=>x.USER_NAME == username))
                     {
-                        user = context.USERs.Include("REF_COUNTRY").Where(x => x.USER_NAME == username).Single();
+                        user = context.USERs.Include("FRIENDs").Include("REF_COUNTRY").Where(x => x.USER_NAME == username).Single();
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return user;
         }
@@ -342,14 +361,14 @@ namespace DataAccess.AccessLayer
                 {
                     if (context.USERs.Any(x => x.ID == userID))
                     {
-                        user = context.USERs.Where(x => x.ID == userID).Single();
+                        user = context.USERs.Include("FRIENDs").Include("FRIENDs1").Where(x => x.ID == userID).Single();
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return user;
         }
@@ -367,10 +386,10 @@ namespace DataAccess.AccessLayer
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                errorList.Add(ex);
             }
             return user;
         }       

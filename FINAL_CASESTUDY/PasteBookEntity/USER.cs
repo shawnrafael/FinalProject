@@ -11,7 +11,8 @@ namespace PasteBookEntity
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class USER
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -28,19 +29,51 @@ namespace PasteBookEntity
         }
     
         public int ID { get; set; }
+
+        [Required(ErrorMessage ="Username field is required.")]
+        [RegularExpression("^((([_.]?)[a-zA-Z0-9]+)+([_.]?)*)$", ErrorMessage = "Username can only contain letters, numbers ,underscores(_), and periods(.), but cannot have two or more consecutive underscores and periods. e.g. '_user.name_', '.user_name' ")]
+        [StringLength(50, ErrorMessage = "Max Length for this field is 50 characters only.")]
         public string USER_NAME { get; set; }
-        public string PASSWORD { get; set; }
-        public string SALT { get; set; }
-        public string FIRST_NAME { get; set; }
-        public string LAST_NAME { get; set; }
-        public System.DateTime BIRTHDAY { get; set; }
-        public Nullable<int> COUNTRY_ID { get; set; }
-        public string MOBILE_NO { get; set; }
-        public string GENDER { get; set; }
-        public byte[] PROFILE_PIC { get; set; }
-        public System.DateTime DATE_CREATED { get; set; }
-        public string ABOUT_ME { get; set; }
+
+        [Required(ErrorMessage = "Email field is required.")]        
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
+        [StringLength(50, ErrorMessage = "Max Length for this field is 50 characters only.")]
         public string EMAIL_ADDRESS { get; set; }
+
+        [Required(ErrorMessage = "Password field is required.")]
+        [StringLength(50, ErrorMessage = "Max Length for this field is 50 characters only.")]
+        public string PASSWORD { get; set; }
+
+        public string SALT { get; set; }
+
+        [Required(ErrorMessage = "First name field is required.")]
+        [RegularExpression("^(([ '.-]?[a-zA-Z0-9]+)+[ '.-]?)$", ErrorMessage = "First name can only contain letters, numbers, apostrophes('), hyphens(-) and periods(.), but cannot have two or more consecutive apostrophes, hyphens and periods. e.g. 'juan', 'jay-r' ")]
+        [StringLength(50, ErrorMessage = "Max Length for this field is 50 characters only.")]
+        public string FIRST_NAME { get; set; }
+
+        [Required(ErrorMessage = "Last name field is required.")]
+        [RegularExpression("^(([ '.-]?[a-zA-Z0-9]+)+[ '.-]?)$", ErrorMessage = "Last name can only contain letters, numbers, apostrophes('), hyphens(-) and periods(.), but cannot have two or more consecutive apostrophes, hyphens and periods. e.g. 'dela cruz jr.' 'dela-cruz'")]
+        [StringLength(50, ErrorMessage = "Max Length for this field is 50 characters only.")]
+        public string LAST_NAME { get; set; }
+
+        [Required(ErrorMessage = "Birthday field is required.")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public System.DateTime BIRTHDAY { get; set; }
+
+        public Nullable<int> COUNTRY_ID { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        [Phone(ErrorMessage = "Please enter a valid mobile number.")]
+        public string MOBILE_NO { get; set; }
+
+        public string GENDER { get; set; }
+
+        public byte[] PROFILE_PIC { get; set; }
+
+        public System.DateTime DATE_CREATED { get; set; }
+
+        public string ABOUT_ME { get; set; }
+        
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<COMMENT> COMMENTs { get; set; }

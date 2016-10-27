@@ -6,7 +6,7 @@
         @{if (Model.PROFILE_PIC == null)
             {
                 <div id="imageContainer">
-                    <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+                    <img src="~/Content/samplePicture/pastebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
                 </div>
             }
             else
@@ -22,9 +22,13 @@
 
         
 
-        <div>
-            @Html.ActionLink(Model.FIRST_NAME + " " + Model.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER_NAME })<br />
-            @Html.ActionLink("Friend List","Friends","Friend")
+        <div class="container-fluid">
+            <div id="nameContainer">
+                @Html.ActionLink(Model.FIRST_NAME + " " + Model.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER_NAME }, "")
+            </div>
+            <div>
+                @Html.ActionLink("Friend List", "Friends", "Profile")
+            </div>            
         </div>
     </div>
 </div>
@@ -32,11 +36,16 @@
     
     <div class="well">
         <div class="container-fluid">
-            <p class="text-danger" id="errorPost">Please add something to your post.</p>
+            <p class="text-danger" id="errorPost"></p>
             <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
             <hr />
-            <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
-            <input type="button" id="postBtnProfile" value="Post" class="btn btn-primary pull-right" />
+            @{
+                string page = ViewData["page"].ToString();
+                if (page == "home")
+                {
+                    <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
+                }
+            } 
         </div>
     </div>
     <div id="postContainer">
@@ -50,6 +59,9 @@
         var addPostUrl = '@Url.Action("AddPost", "Post")';
         var getPostUrl = '@Url.Action("GetPostOnHome", "Home")';
         var addCommentUrl = '@Url.Action("CommentPost", "Post")';
+
+        var likePostUrl = '@Url.Action("LikePost", "Post")';
+        var unlikePostUrl = '@Url.Action("UnlikePost", "Post")';
     </script>
     <script src="~/Scripts/PasteBookJS/Home.js"></script>
 }

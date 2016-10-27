@@ -1,61 +1,28 @@
-﻿var likePostUrl = '/Post/LikePost';
+﻿
+
 
 $(document).ready(function () {
 
-    $('#postBtnProfile').css('display', 'inline');
-    CheckRequest();
-
-    var currentProfile = $('#currentProfile').val();
-    var user = $('#userID').val();
-    
-    $(document).on('click', '#confirmRequest', function () {
-        ConfirmRequest();        
+    $('#confirmRequest').on('click', function () {
+        ConfirmRequest();
     });
 
-    $(document).on('click', '#addAsFriend', function () {
+    $('#addAsFriend').on('click', function () {
         AddAsFriend();
-    });    
+    });
 
-    function CheckRequest() {
-        $.ajax({
-            url: checkFriendRequestUrl,
-            type: 'GET',
-            success: function (data) {
-                ProfileFriendStatus(data);
-               
-            },
-            error: function () {
-                alert("Oops");
-            }
+    $('#deleteRequest').on('click', function () {
+        RejectRequest();
+    });
 
-        })
-    }
 
-    function ProfileFriendStatus(data) {
-        switch (data.friend) {
-            case "profile owner":                
-                break;
-            case "friends":
-                $('#friendsTrue').css('display', 'inline');
-                break;
-            case "no request":
-                $('#addAsFriend').css('display', 'inline');
-                break;
-            case "user request":
-                $('#requestAdd').css('display', 'inline');
-                break;
-            case "friend confirm":
-                $('#dropdownRequest').css('display', 'inline');
-                break;
-            default:
-                break;
-        }
-    }
+    var currentProfile = $('#currentProfile').val();
+
+    var user = $('#itemID').val();
 
     function AddAsFriend() {
         $.ajax({
             url: addAsFriendUrl,
-            type: 'POST',
             success: function (data) {
                 location.reload();
             },
@@ -73,7 +40,23 @@ $(document).ready(function () {
         $.ajax({
             url: confirmRequestUrl,
             data: data,
-            type: 'POST',
+            success: function (data) {
+                location.reload();
+            },
+            error: function () {
+                alert("Oops");
+            }
+
+        })
+    }
+
+    function RejectRequest() {
+        var data = {
+            currentProfileID: $('#currentProfile').val()
+        }
+        $.ajax({
+            url: deleteRequestUrl,
+            data: data,
             success: function (data) {
                 location.reload();
             },
@@ -89,10 +72,38 @@ $(document).ready(function () {
             currentPost: this.id,
             commentContent: $('#addComment_'.concat(this.id)).val()
         }
+        if (data.commentContent == "") {
+            $('#invalidComment_'.concat(user)).text('Please add sometthing to your comment.');
+        } else if (data.commentContent.length > 1000) {
+            $('#addComment_'.concat(user)).val('')
+            $('#invalidComment_'.concat(user)).text('Comment can only have 1000 characters.');
+        } else {
+            $.ajax({
+                url: addCommentUrl,
+                data: data,
+                type: 'POST',
+                success: function (data) {
+                    if (data.postAdded == true) {
+                        $("#postContainer").load(getPostUrl);                        
+                    } 
+                    
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        }
+        
+    });
+
+    $(document).on('click', '.btnLike', function () {
+        var data = {
+            currentPost: this.id
+        }
         $.ajax({
-            url: addCommentUrl,
+            url: likePostUrl,
             data: data,
-            type: 'POST',
+            type: 'GET',
             success: function (data) {
                 $("#postContainer").load(getPostUrl);
             },
@@ -102,15 +113,13 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.btnLike', function () {
+    $(document).on('click', '.btnUnLike', function () {
         var data = {
             currentPost: this.id
         }
-        alert(data.currentPost);
         $.ajax({
-            url: likePostUrl,
+            url: unlikePostUrl,
             data: data,
-            type: 'GET',
             success: function (data) {
                 $("#postContainer").load(getPostUrl);
             },
@@ -127,23 +136,22 @@ $(document).ready(function () {
             currentProfile: $('#currentProfile').val()
         }
         if (data.content == "") {
-            $('#errorPost').css('display', 'block');
-        } else {
+            $('#errorPost').text('Please add something to your post.');
+        } else if (data.content.length > 1000) {
+            $('#errorPost').text('Post can only have 1000 characters.');
+        }else {
             $.ajax({
                 url: addPostUrl,
                 data: data,
                 type: 'GET',
                 success: function (data) {
-                    if (data.post == false) {
-                        $('#errorPost').css('display', 'block');
-                    } else {
-                        $('#postContent').val("");
+                    if (data.post == true) {
+                        $('#postContent').val('');
                         $('#postContainer').load(getPostUrl);
-                    }
-
+                    } 
                 },
                 error: function () {
-                    alert();
+                    alert("Oops");
                 }
             });
         }
@@ -151,13 +159,31 @@ $(document).ready(function () {
 
     $('#submitAboutMe').on('click', function () {
         var data = {
-            txtAboutMe: $('#txtAboutMe').val()
+            aboutMe: $('#txtAboutMe').val()
         }
-        if (data.txtAboutMe == "") {
-            $('#errorAboutMe').css('display', 'block');
+        $.ajax({
+            url: addAboutMeUrl,
+            data: data,
+            type: 'POST',
+            success: function (data) {
+                location.reload();
+            },
+            error: function () {
+                alert("Something went wrong");
+            }
+        });
+    });
+
+    //source: http://stackoverflow.com/questions/651700/how-to-have-jquery-restrict-file-types-on-upload
+    $('#uploadImage').on('click', function () {
+        var ext = $('#imageFile').val().split('.').pop().toLowerCase();
+        if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {
+            alert('invalid extension!');
         } else {
-            $('#aboutMeForm').submit();
+            $('#uploadImageForm').submit();
         }
     });
+
+    
 
 });

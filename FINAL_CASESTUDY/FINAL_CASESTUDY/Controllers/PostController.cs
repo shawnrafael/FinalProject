@@ -25,8 +25,12 @@ namespace FINAL_CASESTUDY.Controllers
             }
             int userID = (int)Session["currentUser"];
             currentProfile = (currentProfile == 0) ? userID : currentProfile;
-
-            bool postSuccess = postBL.AddPost(content, userID, currentProfile);
+            bool postSuccess = false;
+            bool validPostCount = content.Length <= 1000;
+            if (validPostCount)
+            {
+                postSuccess  = postBL.AddPost(content, userID, currentProfile);
+            }            
             return Json(new { post = postSuccess }, JsonRequestBehavior.AllowGet);
         }
 
@@ -50,10 +54,24 @@ namespace FINAL_CASESTUDY.Controllers
             return Json(new { likePost = like!=null }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult UnlikePost(int currentPost)
+        {
+            int userID = (int)Session["currentUser"];
+            var unlike = likeBL.UnlikePost(userID, currentPost);
+            
+            return Json(new { likePost = unlike }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult CommentPost(int currentPost, string commentContent)
         {
             int userID = (int)Session["currentUser"];
-            var comment = commentBL.AddComment(commentContent, userID, currentPost);
+            bool validContent = commentContent.Length <= 1000;
+            var comment = new COMMENT();
+
+            if (validContent)
+            {
+                comment = commentBL.AddComment(commentContent, userID, currentPost);
+            }
 
             bool addNotification = false;
             if (comment.ID != 0)
@@ -82,15 +100,24 @@ namespace FINAL_CASESTUDY.Controllers
             var notif = pasteBookAL.RetrieveNotification(notifID);
             bool updateNotif = notifyBL.UpdateSeen(notif);
             int postID = (int)notif.POST_ID;
-            return RedirectToAction("Post", new { postID = postID, message = notifMessage });
+            TempData["notifMessage"] = notifMessage;
+            return RedirectToAction("Post", new { postID = postID });
 
         }
 
-        public ActionResult Post(int postID, string message)
+        [Route("posts/{postID}")]
+        public ActionResult Post(int postID)
         {
-            var post = pasteBookAL.RetrienvePost(postID);
-            ViewData["postMessage"] = message;
-            return View(post);
+            var user = pasteBookAL.RetrieveUser((int)Session["currentUser"]);
+            TempData["postID"] = postID;
+            return View(user);
+        }
+
+        public ActionResult GetPost()
+        {
+            var post = pasteBookAL.RetrienvePost((int)TempData["postID"]);
+            ViewData["postMessage"] = (TempData["notifMessage"] != null) ? TempData["notifMessage"].ToString() : "";
+            return PartialView("PartialViewPost",post);
         }
     }
 }

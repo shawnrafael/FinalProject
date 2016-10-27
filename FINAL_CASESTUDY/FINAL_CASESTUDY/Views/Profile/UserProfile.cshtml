@@ -1,7 +1,10 @@
 ﻿@model PasteBookEntity.USER
 
 @{
+    var profileOwnerID = Model.ID;
     var user = Model.USER_NAME;
+
+    string status = ViewData["status"].ToString();
 }
 @Html.Hidden("currentProfile", Model.ID, new { id = "currentProfile" })
 @Html.Hidden("user", (int)Session["currentUser"], new { id="userID" })
@@ -12,7 +15,7 @@
             @{if (Model.PROFILE_PIC == null)
                 {
                     <div id="imageProfileContainer">
-                        <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="profilePic" />
+                        <img src="~/Content/samplePicture/pastebook-avatar.jpg" class="img-responsive" id="profilePic" />
                     </div>
                 }
                 else
@@ -23,26 +26,45 @@
                     <div id="imageProfileContainer">
                         <img src="@imgSrc" class="img-responsive" id="profilePic" />
                     </div>
-
-
                 }
             }
         @*</div>*@
-        <div>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#addProfilepic">Edit profile pic<span class="glyphicon glyphicon-pencil"></span></button>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#addAboutMe">Update about me<span class="glyphicon glyphicon-pencil"></span></button>
-        </div><br />
+        @if (Model.ID == (int)Session["currentUser"])
+        {
+            <div>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addProfilepic">Edit profile pic<span class="glyphicon glyphicon-pencil"></span></button>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addAboutMe">Update about me<span class="glyphicon glyphicon-pencil"></span></button>
+            </div><br />
+        }        
     </div>
+    @if (Model.ABOUT_ME != null)
+    {
+            <div class="well">
+                <div class="container-fluid">
+                    <h4>About me</h4>
+                    <p id="aboutMeContainer">@Model.ABOUT_ME</p>
+                </div>
+            </div>
+        
+    }
+
+    
+
     <div id="infoContainer">
         <div class="well">
             <div class="container-fluid">
                 <h4>Profile Information</h4>
                 <input type="hidden" name="username" id="userName" value="@Model.ID" />
-                <p>Email: @Model.EMAIL_ADDRESS</p>
-                <p>Birthday: @Html.DisplayFor(x => x.BIRTHDAY)</p>
-                <p>Country: @Model.REF_COUNTRY.COUNTRY</p>
-                <p>Mobile: @Model.MOBILE_NO</p>
-                <p>About me: @Model.ABOUT_ME</p>
+                <p class="about-me-container">Email: @Model.EMAIL_ADDRESS</p>
+                <p class="about-me-container">Birthday: @Html.DisplayFor(x => x.BIRTHDAY)</p>
+                @if (Model.COUNTRY_ID != null)
+                {
+                    <p class="about-me-container">Country: @Model.REF_COUNTRY.COUNTRY</p>
+                } 
+                @if (Model.MOBILE_NO != null)
+                {
+                    <p class="about-me-container">Mobile: @Model.MOBILE_NO</p>
+                }                        
             </div>
         </div>
     </div>
@@ -58,24 +80,22 @@
                     <h4 class="modal-title">Upload your profile picture.</h4>
                 </div>
                 <div class="modal-body">
-                    @*source http://stackoverflow.com/questions/16255882/uploading-displaying-images-in-mvc-4*@
-                    @using (Html.BeginForm("UploadProfilePic", "Account", FormMethod.Post,
-                    new { enctype = "multipart/form-data" }))
-                    {
-                        <label>Upload Image:</label>
-                        <input type="file" name="file" id="file" />
-                        <input type="submit" value="Upload" class="submit" />
-                    }
+                    <div class="container-fluid">
+                        @*source http://stackoverflow.com/questions/16255882/uploading-displaying-images-in-mvc-4*@
+                        @using (Html.BeginForm("UploadProfilePic", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id="uploadImageForm" }))
+                        {
+                            <label>Upload Image:</label>
+                            <input type="file" name="file" id="imageFile" accept="image/jpg, image/jpeg, image/png" /><br />
+                            <input type="button" class="btn btn-primary pull-right" id="uploadImage" value="Upload" />
+                        }
+                    </div>
+                    
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-
             </div>
         </div>
     </div>
-
+    @*modal for about me*@
     <div class="modal fade" id="addAboutMe" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -84,15 +104,19 @@
                     <h4 class="modal-title">About me <span class="glyphicon glyphicon-pencil"></span></h4>
                 </div>
                 <div class="modal-body">
-                    @using (Html.BeginForm("UpdateAboutMe", "Account", FormMethod.Post,new { id="aboutMeForm"}))
-                    {
-                        <textarea class="form-control" id="txtAboutMe" name="aboutMe"></textarea>
-                        <input type="button" id="submitAboutMe"/>
-                    }
+                    <div class="container-fluid">
+                        @if (Model.ABOUT_ME == null)
+                        {
+                                <textarea class="form-control about-me" rows="5" id="txtAboutMe" name="aboutMe" placeholder="Something about me..."></textarea><br />
+                        }
+                        else
+                        {
+                                @Html.TextAreaFor(model => model.ABOUT_ME, new { rows = "5", id = "txtAboutMe", name = "aboutMe", @class = "form-control about-me" })<br />                                    
+                        }
+                        <input type="button" value="Update" class="btn btn-primary pull-right" id="submitAboutMe" />
+                    </div>
                     
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    
                 </div>
             </div>
         </div>
@@ -102,44 +126,71 @@
 
 </div>
 <div class="col-sm-8">
-    
-   
-
     <div class="container-fluid">
         <div class="row">
             <div id="headerContainer">
                 <div class="well">
 
                     <div class="container-fluid">
-                        <p id="profileName">@Model.FIRST_NAME @Model.LAST_NAME</p>
-                        @Html.ActionLink("Fiends", "Friends", "Friend", new { id = "userFriend" })
-                        <button type="button" id="addAsFriend" class="btn btn-default pull-right friendbutton">Add as friend</button>
-                        <button type="button" id="requestAdd" class="btn btn-default pull-right friendbutton" disabled>Friend request sent</button>
-                        <span class="btn pull-right" id="friendsTrue">Friends <span class="glyphicon glyphicon-ok"></span></span>
-                        <div class="dropdown pull-right">
-                            <button class="btn dropdown-toggle" type="button" id="dropdownRequest" data-toggle="dropdown">Confirm friend request</button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="confirmRequest">
-                                <li role="presentation"><a id="confirmRequest">Confirm</a></li>
-                                <li role="presentation"><a id="deleteRequest">Delete Request</a></li>
-                            </ul>
-                        </div>
+                        
+                            @if (Model.FIRST_NAME.Length > 30 || Model.LAST_NAME.Length > 30)
+                            {
+                                <div id="profileLongNameContainer">
+                                    <p id="profileLongName">@Model.FIRST_NAME @Model.LAST_NAME</p>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="profileNameContainer">
+                                    <p id="profileName">@Model.FIRST_NAME @Model.LAST_NAME</p>
+                                </div>
+                            }
+
+                        @{
+                            switch (status)
+                            {
+                                case "profile owner":
+                                    break;
+                                case "friends":
+                                    <span class="btn pull-right" id="friendsTrue">Friends <span class="glyphicon glyphicon-ok"></span></span>
+                                    break;
+                                case "no request":
+                                    <button type="button" id="addAsFriend" class="btn btn-primary pull-right friendbutton">Add as friend</button>
+                                    break;
+                                case "user request":
+                                    <button type="button" id="requestAdd" class="btn btn-default pull-right friendbutton" disabled>Friend request sent</button>
+                                    break;
+                                case "friend confirm":
+                                    <div class="dropdown pull-right">
+                                        <button class="btn dropdown-toggle" type="button" id="dropdownRequest" data-toggle="dropdown">Confirm friend request</button>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="confirmRequest">
+                                            <li role="presentation"><a id="confirmRequest">Confirm</a></li>
+                                            <li role="presentation"><a id="deleteRequest">Reject Request</a></li>
+                                        </ul>
+                                    </div>
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
                     </div>
                 </div>
             </div>
         </div>
         <div class="row"> 
-            <div class="container-fluid">
+            @{  
+                if (status == "friends" || status == "profile owner")
+                {
                 <div class="well">
                     <div class="container-fluid">
-                        <p class="text-danger" id="errorPost">Please add something to your post.</p>
+                        <p class="text-danger" id="errorPost"></p>
                         <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
                         <hr />
-                        <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
-                        <input type="button" id="postBtnProfile" value="Post" class="btn btn-primary pull-right" />
+                        <input type="button" id="postBtnProfile" value="Post" class="btn btn-primary pull-right" />                                
                     </div>
                 </div>
-            </div>
-                
+                }
+            }  
             <div id="postContainer">
                 @{Html.RenderAction("GetPostOnProfile", "Profile", new { username = user });}
             </div>
@@ -153,10 +204,14 @@
         var addPostUrl = '@Url.Action("AddPost", "Post")';
         var getPostUrl = '@Url.Action("GetPostOnProfile", "Profile", new { username = user })';
         var addCommentUrl = '@Url.Action("CommentPost", "Post")';
+        var likePostUrl = '@Url.Action("LikePost", "Post")';
+        var unlikePostUrl = '@Url.Action("UnlikePost", "Post")';
 
+        var addAboutMeUrl = '@Url.Action("UpdateAboutMe", "Account")';
         var checkFriendRequestUrl = '@Url.Action("CheckFriendRequest", "Friend", new { currentProfileID = Model.ID })';
         var addAsFriendUrl = '@Url.Action("AddAsFriend", "Friend", new { currentProfileID = Model.ID })';
         var confirmRequestUrl = '@Url.Action("ConfirmRequest", "Friend")';
+        var deleteRequestUrl = '@Url.Action("DeleteRequest", "Friend")';
         var profileHeaderContainerUrl = '@Url.Action("ReloadProfileHeader", "Profile", new { username = user })'
     </script>
     <script src="~/Scripts/PasteBookJS/Profile.js"></script>

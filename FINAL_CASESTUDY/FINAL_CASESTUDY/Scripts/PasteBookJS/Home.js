@@ -1,25 +1,45 @@
-﻿var likePostUrl = '/Post/LikePost';
-
+﻿
 $(document).ready(function () {
 
-    $('#postBtnHome').css('display', 'inline');
-
-    var profileOwner = $('#profileOwner').text();
-    if (profileOwner != "none") {
-        $('#userDivider').css('display', 'inline');
-        $('#profileOwner').css('display', 'inline');
-    }
+    setInterval(function () {
+        $("#postContainer").load(getPostUrl);
+    }, 60000);
 
     $(document).on('click', '.btnComment', function () {
-
         var data = {
             currentPost: this.id,
             commentContent: $('#addComment_'.concat(this.id)).val()
         }
+        if (data.commentContent == "") {
+            $('#invalidComment_'.concat(user)).text('Please add sometthing to your comment.');
+        } else if (data.commentContent.length > 1000) {
+            $('#addComment_'.concat(user)).val('')
+            $('#invalidComment_'.concat(user)).text('Comment can only have 1000 characters.');
+        } else {
+            $.ajax({
+                url: addCommentUrl,
+                data: data,
+                type: 'POST',
+                success: function (data) {
+                    if (data.postAdded == true) {
+                        $("#postContainer").load(getPostUrl);
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.btnLike', function () {
+        var data = {
+            currentPost: this.id
+        }
         $.ajax({
-            url: addCommentUrl,
+            url: likePostUrl,
             data: data,
-            type: 'POST',
+            type: 'GET',
             success: function (data) {
                 $("#postContainer").load(getPostUrl);
             },
@@ -29,15 +49,13 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.btnLike', function () {
+    $(document).on('click', '.btnUnLike', function () {       
         var data = {
             currentPost: this.id
         }
-        alert(data.currentPost);
         $.ajax({
-            url: likePostUrl,
+            url: unlikePostUrl,
             data: data,
-            type: 'GET',
             success: function (data) {
                 $("#postContainer").load(getPostUrl);
             },
@@ -54,17 +72,17 @@ $(document).ready(function () {
             currentProfile: 0
         }
         if (data.content == "") {
-            $('#errorPost').css('display', 'block');
+            $('#errorPost').text('Please add something to your post.');
+        } else if (data.content.length > 1000) {
+            $('#errorPost').text('Post can only have 1000 characters.');
         } else {
             $.ajax({
                 url: addPostUrl,
                 data: data,
                 type: 'GET',
                 success: function (data) {
-                    if (data.post == false) {
-                        $('#errorPost').css('display', 'block');
-                    } else {
-                        $('#postContent').val("");
+                    if (data.post == true) {
+                        $('#postContent').val('');
                         $('#postContainer').load(getPostUrl);
                     }
 

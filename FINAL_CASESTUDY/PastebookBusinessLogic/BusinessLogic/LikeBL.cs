@@ -33,6 +33,25 @@ namespace PastebookBusinessLogic.BusinessLogic
             return like;
         }
 
+        public bool UnlikePost(int userID, int currentPost)
+        {
+            LIKE like = new LIKE()
+            {
+                LIKED_BY = userID,
+                POST_ID = currentPost
+            };
+            var unlike = pasteBookAL.RetrieveLike(like);            
+
+            bool status = false;
+
+            if (unlike.ID != 0)
+            {
+                status = accessLike.Delete(unlike);
+            }
+
+            return status;
+        }
+
         public List<USER> DisplayLikers(int postID)
         {
             var listOfLikers = pasteBookAL.RetrieveListOfLikers(postID);

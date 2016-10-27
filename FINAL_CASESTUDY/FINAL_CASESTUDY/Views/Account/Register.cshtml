@@ -3,59 +3,143 @@
 <div class="col-sm-7"></div>
 <div class="col-sm-5">
     <h2>Sign Up</h2>
-    <h6>It's free and always will be.</h6>
-    @using (Html.BeginForm("ValidateRegister", "Account", FormMethod.Post))
+    <h6>* Required fields.</h6>
+    @using (Html.BeginForm("ValidateRegister", "Account", FormMethod.Post, new { id = "registrationForm"}))
     {
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.EditorFor(model => model.USER_NAME, new { htmlAttributes = new { @class = "form-control", placeholder = "Username" } })
-            @Html.ValidationMessageFor(model => model.USER_NAME, "", new { @class = "text-danger" }, "validateUser")
+            @Html.EditorFor(model => model.USER_NAME, new { htmlAttributes = new { @class = "form-control", placeholder = "Username*", id= "registerUsername" } })
+            @Html.ValidationMessageFor(model => model.USER_NAME, "", new { @class = "text-danger", id = "errorUsername" }, "validateUser")
         </div>
         <div class="form-group">
-            @Html.EditorFor(model => model.EMAIL_ADDRESS, new { htmlAttributes = new { @class = "form-control", placeholder = "Email address" } })
-            @Html.ValidationMessageFor(model => model.EMAIL_ADDRESS, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.EMAIL_ADDRESS, new { htmlAttributes = new { @class = "form-control", placeholder = "Email address*", id= "registerEmail" } })
+            @Html.ValidationMessageFor(model => model.EMAIL_ADDRESS, "", new { @class = "text-danger", id = "errorEmail" }, "validateEmail")
         </div>
 
         <div class="form-group">
-            @Html.EditorFor(model => model.FIRST_NAME, new { htmlAttributes = new { @class = "form-control", placeholder = "First name" } })
+            @Html.EditorFor(model => model.FIRST_NAME, new { htmlAttributes = new { @class = "form-control", placeholder = "First name*" } })
             @Html.ValidationMessageFor(model => model.FIRST_NAME, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
-            @Html.EditorFor(model => model.LAST_NAME, new { htmlAttributes = new { @class = "form-control", placeholder = "Last name" } })
+            @Html.EditorFor(model => model.LAST_NAME, new { htmlAttributes = new { @class = "form-control", placeholder = "Last name*" } })
             @Html.ValidationMessageFor(model => model.LAST_NAME, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group">
-            @Html.EditorFor(model => model.PASSWORD, new { htmlAttributes = new { type = "password", @class = "form-control", placeholder = "Password" } })
+            @Html.EditorFor(model => model.PASSWORD, new { htmlAttributes = new { type = "password", @class = "form-control", id = "userPassword",  placeholder = "Password*"  } })
             @Html.ValidationMessageFor(model => model.PASSWORD, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
-            @Html.TextBox("Confirm Password", "", new { type = "password", @class = "form-control", placeholder = "Confirm password" })
-            <p class="text-danger">Password does not match</p>
+            @Html.TextBox("Confirm Password", "", new { type = "password", @class = "form-control", placeholder = "Confirm password*", id="confirmPassword" })
+            <span class="text-danger" id="errorPassword"></span>
         </div>
         <div class="form-group">
-            @Html.Label("Birthday", new { @class = "control-label" })
-            @Html.EditorFor(model => model.BIRTHDAY, new { htmlAttributes = new { type = "date", @class = "form-control" } })
+            @Html.Label("Birthday *", new { @class = "control-label" })
+            @Html.EditorFor(model => model.BIRTHDAY, "{0:yyyy-MM-dd}", new { htmlAttributes = new { type = "date", @class = "form-control", max=DateTime.Now.ToString("yyyy-MM-dd") } })
             @Html.ValidationMessageFor(model => model.BIRTHDAY, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             @Html.Label("Country", new { @class = "control-label" })
-            @Html.DropDownListFor(x => x.COUNTRY_ID, (SelectList)@ViewData["countryList"] as SelectList, new { @class = "form-control" })
+            @Html.DropDownListFor(x => x.COUNTRY_ID, (SelectList)@ViewData["countryList"] as SelectList,"Select Country", new { @class = "form-control" })
         </div>
         <div class="form-group">
             @Html.Label("Mobile number", new { @class = "control-label" })
-            @Html.EditorFor(x => x.MOBILE_NO, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.EditorFor(model => model.MOBILE_NO, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.MOBILE_NO, "", new { @class = "text-danger" })
         </div>
         <div class="form-group">
             <label class="radio-inline">@Html.RadioButton("Gender", "F") Female </label>
             <label class="radio-inline">@Html.RadioButton("Gender", "M") Male</label>
         </div>
-        <input type="submit" value="Create Account" class="btn btn-success input-lg" />
+        <input type="button" id="registerUser" value="Create Account" class="btn btn-success input-lg" />
     }
 </div>
 
 @section scripts{
-    <script>
+    @Scripts.Render("~/bundles/jqueryval")
 
+    <script>
+        var checkUsernameUrl = '@Url.Action("CheckUsername","Account")';
+        var checkEmailUrl = '@Url.Action("CheckEmail", "Account")';
+
+        jQuery.extend(jQuery.validator.messages, {
+            max: jQuery.validator.format("Please enter a valid date")
+        });
+
+        $(document).ready(function () {
+
+            $('#registerUsername').on('blur', function () {
+                CheckUsernameAvailability();
+            });
+
+            $('#registerEmail').on('blur', function () {
+                CheckEmailAvailability();
+            });
+
+            $('#confirmPassword').on('blur', function () {
+                PasswordNotMatch();
+            });
+            $('#userPassword').on('blur', function () {
+                PasswordNotMatch();
+            });
+
+            $('#registerUser').on('click', function () {
+
+                if ($('#confirmPassword').val() == $('#userPassword').val()) {
+
+                    CheckUsernameAvailability();
+                    CheckEmailAvailability();
+                    if ($('#confirmPassword').val() == '') {
+                        $('#errorPassword').text('Confirm password field is required.');
+                    }
+
+                    $('#registrationForm').submit();
+                }
+            });
+        });
+
+        function CheckUsernameAvailability() {
+            var data = {
+                username: $('#registerUsername').val()
+            }
+            $.ajax({
+                url: checkUsernameUrl,
+                data: data,
+                success: function (data) {
+                    if (data.userExist == true) {
+                        $('#errorUsername').text('Username already exist.');
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        }
+
+        function CheckEmailAvailability() {
+            var data = {
+                email: $('#registerEmail').val()
+            }
+            $.ajax({
+                url: checkEmailUrl,
+                data: data,
+                success: function (data) {
+                    if (data.emailExist == true) {
+                        $('#errorEmail').text('Email already exist.');
+                    }
+                },
+                error: function () {
+                    alert("Something went wrong");
+                }
+            });
+        }
+
+        function PasswordNotMatch() {
+            if ($('#confirmPassword').val() != $('#userPassword').val()) {
+                $('#errorPassword').text('Password does not match.');
+            } else {
+                $('#errorPassword').text('');
+            }
+        }
     </script>
 }

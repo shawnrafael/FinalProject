@@ -1,4 +1,53 @@
-﻿#userName{
+﻿#postContent{
+    font-size: 18px;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+.about-me-container{
+    word-wrap: break-word;
+    overflow: hidden;
+}
+#errorLogin{
+    color: #fff;
+}
+#aboutMeContainer{
+    word-wrap: break-word;
+}
+.poster-container{
+    font-size:20px;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    overflow:hidden;
+    height:30px;
+    max-width: 250px;
+}
+.comment-content-container{
+    word-wrap: break-word;
+    overflow: hidden;
+    border: solid 2px #fff;
+    background-color: #fff;
+    border-radius: 5px 5px;
+    padding: 5px 5px 5px 5px;
+}
+#invalidEmail,#invalidPasswordChangeEmail{
+    display:none;
+}
+#profileLongNameContainer{
+    word-wrap: break-word;
+    overflow: hidden;
+    width: 700px;
+}
+#profileNameContainer{
+    word-wrap: break-word;
+    overflow: hidden;
+    width: 700px;
+}
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    color: #ffffff;
+    background-color: #04519b;
+}
+
+#userName{
     font-size:20px;
     font-weight:700;
 }
@@ -6,6 +55,13 @@
 .badge{
     background-color: #dc1426 !important;
     color: #fff !important;
+}
+#nameContainer{
+    text-overflow:ellipsis;
+    overflow-x:hidden;
+    overflow-y:hidden;
+    height:20px;
+    width: 150px;
 }
 .scrollable-menu {
     height: auto;
@@ -49,9 +105,6 @@
     height: 25px;
     padding: 0px 0px 0px 10px;
 }
-#errorLogin{
-    display:none;
-}
  /*for the search bar - start*/
 #searchFriend{
      color: #000;
@@ -68,19 +121,12 @@
 }
 /*for the search bar - end*/
 
-/*for the post part - start */
-#postBtnHome, #postBtnProfile{
-    display:none;
-}
 #userDivider, #profileOwner{
     display: none;
     
 }
 #userDivider{
     margin: 0px 10px 0px 10px;
-}
-#errorPost{
-    display:none;
 }
 
 textarea.form-control{
@@ -117,9 +163,7 @@ textarea.form-control{
     font-size: 11px;
     color: #90949c;
 }
-#postContent{
-    font-size: 14px;
-}
+
 
 #settingsMenu, #notificationList, #friendRequest{
     background-color: #04519b;
@@ -149,6 +193,9 @@ textarea.form-control{
 .btnLike{
     background-color: #f5f5f5 !important;
 }
+.btnUnLike{
+    background-color: #f5f5f5 !important;
+}
 #profilePic{
     position: absolute;
     margin: auto;
@@ -170,13 +217,17 @@ textarea.form-control{
     font-size: 30px;
     font-weight:600;
 }
+#profileLongName{
+    font-size: 22px;
+    font-weight:600;
+}
 #infoContainer{
     width:350px;
 }
 /*for the friend part - start */
-#addAsFriend,#requestAdd,#dropdownRequest,#friendsTrue{
+/*#addAsFriend,#requestAdd,#dropdownRequest,#friendsTrue{
     display:none;
-}
+}*/
 #userFriend{
     display:none;
 }

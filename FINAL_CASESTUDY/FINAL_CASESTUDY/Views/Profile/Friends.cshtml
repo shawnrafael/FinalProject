@@ -1,0 +1,51 @@
+﻿@model PasteBookEntity.USER
+
+<div class="row">
+    <div class="col-sm-2">
+        <div class="container-fluid">
+            @{if (Model.PROFILE_PIC == null)
+                {
+                    <div id="imageContainer">
+                        <img src="~/Content/samplePicture/pastebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+                    </div>
+                }
+                else
+                {
+                    //source: http://stackoverflow.com/questions/17952514/mvc-how-to-display-a-byte-array-image-from-model
+                    var base64 = Convert.ToBase64String(Model.PROFILE_PIC);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <div id="imageContainer">
+                        <img src="@imgSrc" class="img-responsive" id="homeProfilePic" />
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-sm-10">
+        <div class="well">
+            <p id="profileName">@Model.FIRST_NAME @Model.LAST_NAME</p>
+            @{ int friendsSum = Model.FRIENDs.Count + Model.FRIENDs1.Count; }
+            <p>Friends: @friendsSum</p>
+            <p><span class="glyphicon glyphicon-plus"></span> 
+                @Html.ActionLink("Find Friends", "SearchResult", "Friend")
+            </p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well">
+            <div class="container-fluid">
+                <h4>Friends</h4>
+                <hr />
+
+                <div id="friendContainer">
+                    @{ Html.RenderAction("GetFriendList","Friend", new { username = Model.USER_NAME });}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

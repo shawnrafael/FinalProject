@@ -6,9 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccess.AccessLayer
-{
+{   
+
     public class GenericDataAccess<T> where T : class
     {
+        List<Exception> errorList = new List<Exception>();
+
         public bool Create(T newEntity)
         {
             int status = 0;
@@ -20,9 +23,9 @@ namespace DataAccess.AccessLayer
                     status = context.SaveChanges();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
             return status != 0;
         }
@@ -37,9 +40,9 @@ namespace DataAccess.AccessLayer
                     entityList = context.Set<T>().ToList();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
             return entityList;
         }
@@ -55,9 +58,9 @@ namespace DataAccess.AccessLayer
                     status = context.SaveChanges();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
             return status != 0;
         }
@@ -73,9 +76,9 @@ namespace DataAccess.AccessLayer
                     status = context.SaveChanges();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                errorList.Add(ex);
             }
             return status != 0;
         }             

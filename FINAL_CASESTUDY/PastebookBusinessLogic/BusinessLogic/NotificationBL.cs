@@ -50,7 +50,7 @@ namespace PastebookBusinessLogic.BusinessLogic
                 SEEN = "N"
             };
             
-            if (comment.POSTER_ID != post.PROFILE_OWNER_ID)
+            if (comment.POSTER_ID != post.POSTER_ID)
             {
                 notify = accessNotify.Create(newNotification);
             }
@@ -99,6 +99,12 @@ namespace PastebookBusinessLogic.BusinessLogic
             seen = accessNotify.Edit(notif);
             return seen;
 
+        }
+
+        public bool DeleteNotification(NOTIFICATION notif)
+        {
+            bool delete = accessNotify.Delete(notif);
+            return delete;
         }
     }
 }

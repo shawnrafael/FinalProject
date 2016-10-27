@@ -2,46 +2,62 @@
 
     @foreach (var item in Model)
     {
-        
+
         <div class="well">
             @{
+                int user = (int)Session["currentUser"];
                 var userID = item.ID;
-                var likeModalID = item.ID+"LikeModal";
-                var poster = item.USER.ID;
-                var postProfileOwner = item.USER1.ID;
-                string userProfile = "none";
-
-                if (poster != postProfileOwner)
-                {
-                    userProfile = item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME;
-                }
-                
+                var likeModalID = item.ID + "LikeModal";
+                var poster = item.POSTER_ID;
+                var postProfileOwner = item.PROFILE_OWNER_ID;
             }
 
-            @Html.Hidden("itemID", userID, new { id = "itemID" })
+            @Html.Hidden("itemID", item.ID, new { id = "itemID" })
 
             <div class="container-fluid">
+                <div class="row">
+                    <p class="poster-container col-sm-3">              
+                        @Html.ActionLink(item.USER.FIRST_NAME + " " + item.USER.LAST_NAME, "UserProfile", "Profile", new { username = item.USER.USER_NAME }, new { htmlAttributes = new { id = "userPostDisplayName" } })
+                    </p>
+                        @{if (poster != postProfileOwner)
+                            {
+                                <span class="glyphicon glyphicon-chevron-right col-sm-1" ></span>
+                                <p class="poster-container col-sm-4">
+                                    @Html.ActionLink(item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME, "UserProfile", "Profile", new { username = item.USER1.USER_NAME }, "")
+                                </p>
+                            }
+                        }                    
+                    <div class="col-sm-4"></div>
+                </div>
                 
-                @Html.ActionLink(item.USER.FIRST_NAME + " " + item.USER.LAST_NAME, "UserProfile", "Profile", new { username = item.USER.USER_NAME }, "") <span class="glyphicon glyphicon-play" id="userDivider"></span>
-                @Html.ActionLink(userProfile, "UserProfile", "Profile", new { username = item.USER1.USER_NAME }, new { id = "profileOwner" })
-                <p id="postDate">@item.CREATED_DATE</p>
+               
+                @Html.ActionLink(item.CREATED_DATE.ToString("MMMM dd yyy 'at' h:mm:ss tt"), "Post", "Post", new { postID = item.ID }, new { id = "postDate" })
                 <p id="postContent">@item.CONTENT</p>
 
                 
                 <hr />
-                <button class="btn btnLike" id="@userID">Like</button>
-                <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@item.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>     
-                       
-                <hr />
+                <div class="container-fluid">
+                    @if ((item.LIKEs.Any(x => x.LIKED_BY == user)))
+                    {
+                        <button class="btn btnUnLike" id="@userID">Unlike</button>
+
+                    }
+                    else
+                    {
+                        <button class="btn btnLike" id="@userID">Like</button>
+                    }
+                    <button class="btn btnLikeCount" id="@userID" data-toggle="modal" data-target="#@likeModalID">@item.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>
+                </div><br />
+                
                 @*CommentList*@
                 <div id="commentContainer">
                     @{ Html.RenderAction("CommentList", "Post", new { postID = item.ID });}
                 </div>
-
+                
                 <textarea class="form-control" id="addComment_@item.ID" rows="2" placeholder="Write a comment..."></textarea>
                 <hr />
 
-                <input type="hidden" value="submit" id="sampleHide" />
+                <p class="text-danger" id="invalidComment_@item.ID"></p>
                 <button id="@userID" class="btn btn-primary pull-right btnComment" >Add comment</button>
 
                 @*Like Modal*@
@@ -62,14 +78,9 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
-                            
                         </div>
-
                     </div>
-                </div>
-               
-            </div>
-            @*source w3schools*@
-            
+                </div>               
+            </div>            
         </div>
     }

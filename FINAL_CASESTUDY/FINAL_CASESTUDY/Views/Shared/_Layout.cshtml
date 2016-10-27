@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@*@ViewBag.Title*@ PasteBook</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -39,57 +39,45 @@
     var validateLoginUrl = '@Url.Action("ValidateLogin", "Account")';
     var confirmRequestUrl = '@Url.Action("ConfirmRequest", "Friend")';
     var reloadRequestUrl = '@Url.Action("GetRequestList", "Friend")';
-    var searchResultUrl = '@Url.Action("SearchResult", "Friend")'
-    var searchUrl = '@Url.Action("Search", "Friend")'
+    var searchResultUrl = '@Url.Action("SearchResult", "Friend")';
+    var deleteRequestUrl = '@Url.Action("DeleteRequest", "Friend")';
+    var searchUrl = '@Url.Action("Search", "Friend")';
+    var homeUrl = '@Url.Action("Home","Home")';
 
     $(document).ready(function () {
-        //var id = $('#requestID').val();
-        //$('#searchFriend').on('click', function () {
-        //    SearchFor();
-        //});
-
-        //function SearchFor() {
-        //    var data = {
-        //        search: $('#txtSearch').val()
-        //    }
-        //    alert(data.search);
-        //    $.ajax({
-        //        url: searchResultUrl,
-        //        data: data,
-        //        type: 'GET',
-        //        success: function (data) {
-        //            SearchResult(data);
-        //        },
-        //        error: function () {
-        //            alert("Oops");
-        //        }
-        //    });
-        //}
-
-        //function SearchResult(data) {
-        //    $('#renderedPart').load(searchUrl, { result: data.result });
-        //}
 
         $('#btnLogin').on('click', function () {
             var data = {
-                email: $('#username').val(),
+                email: $('#userEmail').val(),
                 password: $('#password').val()
             }
-            $.ajax({
-                url: validateLoginUrl,
-                data: data,
-                type: 'GET',
-                success: function (data) {
-                    if (data.login == false) {
-                        $('#errorLogin').css('display', 'block');
-                    } else {
-                        location.reload();
+            if ($('#userEmail').val() == '' || $('#password').val() == '') {
+                $('#errorLogin').text('Email and password field are required.');
+            } else {
+                $.ajax({
+                    url: validateLoginUrl,
+                    data: data,
+                    success: function (data) {
+                        if (data.login == false) {
+                            $('#errorLogin').text('Invalid email or password.');
+                        } else {
+                            window.location.href = homeUrl;
+                        }
+                    },
+                    error: function () {
+                        alert();
                     }
-                },
-                error: function () {
-                    alert();
-                }
-            });
+                });
+            }
+
+        });
+        
+        $(document).on('click', '.btn-delete', function () {
+            alert("delete");
+            var data = {
+                currentProfileID: this.id
+            }
+            RejectRequest(data);
         });
 
         $(document).on('click', '.btn-confirm', function () {
@@ -97,17 +85,28 @@
                 currentProfileID: this.id
             }
             ConfirmRequest(data);
-
-
         });
 
         function ConfirmRequest(data) {
             $.ajax({
                 url: confirmRequestUrl,
                 data: data,
-                type: 'POST',
                 success: function (data) {
                     $('#requestContainer').load(reloadRequestUrl);
+                },
+                error: function () {
+                    alert("Oops");
+                }
+
+            })
+        }
+
+        function RejectRequest(data) {
+            $.ajax({
+                url: deleteRequestUrl,
+                data: data,
+                success: function (data) {
+                    location.reload();
                 },
                 error: function () {
                     alert("Oops");

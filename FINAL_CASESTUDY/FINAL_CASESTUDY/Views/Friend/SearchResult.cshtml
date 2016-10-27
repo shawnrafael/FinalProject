@@ -1,46 +1,61 @@
 ﻿@model IEnumerable<PasteBookEntity.USER>
 
+@{ 
+    string searchKeyWord = ViewData["keyWord"].ToString();
+}
 
-<h3>Search result for "@ViewData["keyWord"]"</h3>
-@{
-    if (Model.Count() == 0)
+@{if (searchKeyWord == "")
+{
+    <h3>Search for more users.</h3>
+}
+else
+{
+
+
+
+    <h3>Search result for "@searchKeyWord"</h3>
     {
-        <h5>No results found.</h5>
-    }
-    else
-    {
-        <div class="well">
+        if (Model.Count() == 0)
+        {
+            <h5>No results found.</h5>
+        }
+        else
+        {
+            <div class="well">
             
                 
-                @foreach (var item in Model)
-                {
-                    <div class="container-fluid" id="friend">
-                        <div class="col-sm-3">
-                            @if (item.PROFILE_PIC == null)
-                            {
-                                <div id="imageContainer">
-                                    <img src="~/Content/samplePicture/facebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
-                                </div>
-                            }
-                            else
-                            {
-                                //source: http://stackoverflow.com/questions/17952514/mvc-how-to-display-a-byte-array-image-from-model
-                                var base64 = Convert.ToBase64String(item.PROFILE_PIC);
-                                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                                <div id="imageContainer">
-                                    <img src="@imgSrc" class="img-responsive" id="homeProfilePic" />
-                                </div>
-                            }
+                    @foreach (var item in Model)
+                    {
+                        <div class="container-fluid" id="friend">
+                            <div class="col-sm-3">
+                                @if (item.PROFILE_PIC == null)
+                                {
+                                    <div id="imageContainer">
+                                        <img src="~/Content/samplePicture/pastebook-avatar.jpg" class="img-responsive" id="homeProfilePic" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    //source: http://stackoverflow.com/questions/17952514/mvc-how-to-display-a-byte-array-image-from-model
+                                    var base64 = Convert.ToBase64String(item.PROFILE_PIC);
+                                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                    <div id="imageContainer">
+                                        <img src="@imgSrc" class="img-responsive" id="homeProfilePic" />
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-sm-9">
+                                @Html.ActionLink(item.FIRST_NAME + " " + item.LAST_NAME, "UserProfile", "Profile", new { username = item.USER_NAME }, "")
+                            </div>
                         </div>
-                        <div class="col-sm-9">
-                            @Html.ActionLink(item.FIRST_NAME + " " + item.LAST_NAME, "UserProfile", "Profile", new { username = item.USER_NAME }, "")
-                        </div>
-                    </div>
-                    <hr />
+                        <hr />
 
 
-                }
+                    }
                     
-        </div>
+            </div>
+            }
+        }
+
     }
 }

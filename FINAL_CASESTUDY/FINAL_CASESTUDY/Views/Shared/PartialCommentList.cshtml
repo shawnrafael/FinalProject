@@ -1,12 +1,15 @@
 ﻿@model IEnumerable<PasteBookEntity.COMMENT>
 
 
-<ul class="list-group">
-    @foreach (var item in Model)
-    {
-        <li class="list-group-item">
-            @Html.ActionLink(item.USER.FIRST_NAME + " " + item.USER.LAST_NAME, "UserProfile", new { username = item.USER.USER_NAME })<br />
-            <p>@item.CONTENT</p>
-        </li>
-    }
-</ul>
+
+@foreach (var item in Model)
+{
+    <div class="comment-content-container">
+            <div class="container-fluid">
+                @Html.ActionLink(item.USER.FIRST_NAME + " " + item.USER.LAST_NAME, "UserProfile", "Profile", new { username = item.USER.USER_NAME }, "")
+                <span class="pull-right" id="postDate">@item.DATE_CREATED.ToString("MMMM dd yyy 'at' h:mm tt")</span>
+                <p>@item.CONTENT</p>
+            </div>            
+    </div><br />
+}
+
