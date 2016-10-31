@@ -10,7 +10,7 @@
 @Html.Hidden("user", (int)Session["currentUser"], new { id="userID" })
 
 <div class="col-sm-4">
-    <div class="container-fluid">
+    <div class="container-fluid"></div>
         @*<div id="imageProfileContainer">*@
             @{if (Model.PROFILE_PIC == null)
                 {
@@ -36,16 +36,15 @@
                 <button class="btn btn-primary" data-toggle="modal" data-target="#addAboutMe">Update about me<span class="glyphicon glyphicon-pencil"></span></button>
             </div><br />
         }        
-    </div>
-    @if (Model.ABOUT_ME != null)
+    
+    @if (Model.ABOUT_ME != null && Model.ABOUT_ME != "")
     {
-            <div class="well">
-                <div class="container-fluid">
-                    <p>About me</p>
-                    <p id="aboutMeContainer">@Model.ABOUT_ME</p>
-                </div>
+        <div class="well">
+            <div class="container-fluid">
+                <p>About me</p>
+                <p id="aboutMeContainer">@Model.ABOUT_ME</p>
             </div>
-        
+        </div>        
     }
 
     
@@ -87,7 +86,7 @@
                             <p id="errorPic" class="text-danger"></p>
 
                             <label>Upload Image:</label>
-                            <input type="file" name="file" id="imageFile" accept="image/jpg, image/jpeg, image/png" /><br />
+                            <input type="file" name="file" id="imageFile" accept="image/*" /><br />
                             <input type="button" class="btn btn-primary pull-right" id="uploadImage" value="Upload" />
                         }
                     </div>

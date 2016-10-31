@@ -127,17 +127,17 @@ namespace FINAL_CASESTUDY.Controllers
            
             var user = accountBL.GetUserByID((int)Session["currentUser"]);
 
-            UserInfo userInfoModel = Mapper.MapUSER(user);
+            EditProfileViewModel userInfoModel = Mapper.MapUSER(user);
             ViewData["countryList"] = new SelectList(accountBL.GetCountryList(), "ID", "COUNTRY");
             return View("EditProfile", userInfoModel);
         }
 
         [HttpPost]
-        public ActionResult UpdateProfileInfo(UserInfo userInfoModel)
+        public ActionResult UpdateProfileInfo(EditProfileViewModel userInfoModel)
         {
             var currentUser = accountBL.GetUserByID((int)Session["currentUser"]);            
 
-            if (accountBL.CheckUsername(userInfoModel.USER_NAME)==true && userInfoModel.USER_NAME != Session["currentUserName"].ToString())
+            if (accountBL.CheckUsername(userInfoModel.USER_NAME)==true && userInfoModel.USER_NAME.ToLower() != currentUser.USER_NAME.ToLower())
             {
                 ModelState.AddModelError("USER_NAME", "Username already exist.");
             }

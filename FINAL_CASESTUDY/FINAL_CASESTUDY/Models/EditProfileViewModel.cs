@@ -7,7 +7,7 @@ using System.Web;
 
 namespace FINAL_CASESTUDY.Models
 {
-    public class UserInfo
+    public class EditProfileViewModel
     {
         [Required(ErrorMessage = "Username field is required.")]
         [RegularExpression("^(([a-zA-Z0-9]+([_.]?))+[a-zA-Z0-9]+)$", ErrorMessage = "Username can only contain letters, numbers ,underscores(_), and periods(.), but cannot have two or more consecutive underscores and periods.")]

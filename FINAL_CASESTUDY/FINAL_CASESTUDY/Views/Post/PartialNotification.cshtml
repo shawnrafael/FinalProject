@@ -1,5 +1,9 @@
 ﻿@model IEnumerable<PasteBookEntity.NOTIFICATION>
-<li class="dropdown-header">Notifications</li>
+<li class="dropdown-header">
+    <div id="seeNotifContainer">
+        @Html.ActionLink("See all notifications", "SeeAllNotification","Post")
+    </div>
+</li>
 @{
     if (Model.Count() == 0)
     {
@@ -13,25 +17,24 @@
     {
         string message = "";
         <li>
-            @if (item.NOTIF_TYPE == "C")
-            {
-                message = item.USER.FIRST_NAME + " has commented on one of your post.";
-                <a class="notif-link" href="@Url.Action("CheckNotification","Post",new { notifID = item.ID, notifMessage = message })"><span class="glyphicon glyphicon-comment"></span> @message</a>
-            }
-            else if (item.NOTIF_TYPE == "L")
-            {
-                message = item.USER.FIRST_NAME + " has liked one of your post.";
-                <a class="notif-link" href="@Url.Action("CheckNotification","Post",new { notifID = item.ID, notifMessage = message })"><span class="glyphicon glyphicon-thumbs-up"></span> @message</a>
-            }
-            else
-            {
-                <a class="notif-link" href="@Url.Action("UserProfile", "Profile", new { username = item.USER.USER_NAME })"><span class="glyphicon glyphicon-user"></span> @item.USER.FIRST_NAME has sent you a friend request.</a>
-            }
+            <div class="dropdown-notification-container">
+                @if (item.NOTIF_TYPE == "C")
+                {
+                    message = item.USER.FIRST_NAME + " has commented on one of your post.";
+                    <a class="notif-link" href="@Url.Action("CheckNotification","Post",new { notifID = item.ID, notifMessage = message })"><span class="glyphicon glyphicon-comment"></span> @message</a>
+                }
+                else if (item.NOTIF_TYPE == "L")
+                {
+                    message = item.USER.FIRST_NAME + " has liked one of your post.";
+                    <a class="notif-link" href="@Url.Action("CheckNotification","Post",new { notifID = item.ID, notifMessage = message })"><span class="glyphicon glyphicon-thumbs-up"></span> @message</a>
+                }
+                else
+                {
+                    <a class="notif-link" href="@Url.Action("UserProfile", "Profile", new { username = item.USER.USER_NAME })"><span class="glyphicon glyphicon-user"></span> @item.USER.FIRST_NAME has sent you a friend request.</a>
+                }
+            </div>           
         </li>
 
     }
-    <li class="divider"></li>
-    <li class="dropdown-header">
-        See all notification
-    </li>
+
 }

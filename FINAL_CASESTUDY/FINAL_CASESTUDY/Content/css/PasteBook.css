@@ -1,4 +1,20 @@
-﻿.alert{
+﻿.dropdown-notification-container{
+    max-height: 25px;
+    white-space: nowrap;
+    /*ord-wrap: break-word;*/
+    overflow: hidden;
+    padding: 5px 5px 5px 15px;
+    text-overflow:ellipsis;
+}
+.list-notification-container{
+    padding: 15px 10px 15px 10px !important;
+    border-bottom: solid 1px #eee !important;
+}
+#seeNotifContainer{
+    text-align:center!important;
+}
+
+.alert{
     text-align:center;
 }
 
@@ -101,7 +117,7 @@
     overflow-x: hidden;
 }
 #notificationDropdown{
-    width: 350px !important;
+    width: 400px !important;
 }
 
 #menuRequest {

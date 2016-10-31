@@ -21,6 +21,8 @@ $(document).ready(function () {
     $(document).on('click', '.btnComment', function () {
         var postID = this.id;
         var content = $('#addComment_'.concat(this.id)).val();
+        content = content.replace(/</g, "&lt");
+        content = content.replace(/>/g, "&gt");
         content = content.replace(/\s+/g, " ");
         content = $.trim(content);
 
@@ -84,6 +86,8 @@ $(document).ready(function () {
 
     $('#postBtnProfile').on('click', function () {        
         var postContent = $('#postContent').val();
+        postContent = postContent.replace(/</g, "&lt");
+        postContent = postContent.replace(/>/g, "&gt");
         postContent = postContent.replace(/\s+/g, " ");
         postContent = $.trim(postContent);
         
@@ -117,6 +121,8 @@ $(document).ready(function () {
 
     $('#submitAboutMe').on('click', function () {
         var aboutMeContent = $('#txtAboutMe').val();
+        aboutMeContent = aboutMeContent.replace(/</g, "&lt");
+        aboutMeContent = aboutMeContent.replace(/>/g, "&gt");
         aboutMeContent = aboutMeContent.replace(/\s+/g, " ");
         aboutMeContent = $.trim(aboutMeContent);
 
@@ -211,3 +217,4 @@ function RejectRequest() {
 
     })
 }
+

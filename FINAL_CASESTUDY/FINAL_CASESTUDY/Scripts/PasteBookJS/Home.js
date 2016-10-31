@@ -10,6 +10,8 @@ $(document).ready(function () {
     $(document).on('click', '.btnComment', function () {
         var postID = this.id;
         var content = $('#addComment_'.concat(this.id)).val();
+        content = content.replace(/</g, "&lt");
+        content = content.replace(/>/g, "&gt");
         content = content.replace(/\s+/g, " ");
         content = $.trim(content);
 
@@ -74,6 +76,8 @@ $(document).ready(function () {
 
     $('#postBtnHome').on('click', function () {
         var postContent = $('#postContent').val();
+        postContent = postContent.replace(/</g, "&lt");
+        postContent = postContent.replace(/>/g, "&gt");
         postContent = postContent.replace(/\s+/g, " ");
         postContent = $.trim(postContent);
 

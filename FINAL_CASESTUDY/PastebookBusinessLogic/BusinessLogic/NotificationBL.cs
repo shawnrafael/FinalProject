@@ -86,12 +86,6 @@ namespace PastebookBusinessLogic.BusinessLogic
             return count;
         }
 
-        //public List<NOTIFICATION> RetrieveRequests(int userID)
-        //{
-        //    var notifications = pasteBookAL.RetrieveRequests(userID);
-        //    return notifications;
-        //}
-
         public NOTIFICATION RetrieveFriendRequest(int userID, int senderID)
         {
             var notifications = pasteBookAL.RetrieveNotificationRequest(userID, senderID);

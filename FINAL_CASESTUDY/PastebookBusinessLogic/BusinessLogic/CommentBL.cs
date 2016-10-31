@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PastebookBusinessLogic.BusinessLogic
@@ -15,6 +16,8 @@ namespace PastebookBusinessLogic.BusinessLogic
 
         public COMMENT AddComment(string commentContent,int userID,int currentPost)
         {
+            commentContent = Regex.Replace(commentContent, @"&lt", "<");
+            commentContent = Regex.Replace(commentContent, @"&gt", ">");
             var newComment = new COMMENT()
             {
                 CONTENT = commentContent,

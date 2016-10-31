@@ -17,19 +17,14 @@
             <div class="container-fluid">
                 
                 <div class="row">
-                    <div class="container-fluid">
+                    <div class="container-fluid ">
                         <span class="poster-container">
-                            @Html.ActionLink(item.USER.FIRST_NAME + " " + item.USER.LAST_NAME, "UserProfile", "Profile", new { username = item.USER.USER_NAME }, new { htmlAttributes = new { id = "userPostDisplayName" } })
+                            @Html.ActionLink(item.USER.FIRST_NAME + " " + item.USER.LAST_NAME, "UserProfile", "Profile", new { username = item.USER.USER_NAME }, new { htmlAttributes = new { id = "userPostDisplayName" } })                            @if (poster != postProfileOwner)
+                            {
+                                <span>has posted on </span>@Html.ActionLink(item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME, "UserProfile", "Profile", new { username = item.USER1.USER_NAME }, "")<span>'s timeline.</span>
+                            }
+                            
                         </span>
-
-                        @if (poster != postProfileOwner)
-                        {
-                            <span class="poster-container">
-                                has posted on
-                                @Html.ActionLink(item.USER1.FIRST_NAME + " " + item.USER1.LAST_NAME, "UserProfile", "Profile", new { username = item.USER1.USER_NAME }, "")'s timeline.
-                                
-                            </span>
-                        }
                     </div>                    
                 </div>
                 

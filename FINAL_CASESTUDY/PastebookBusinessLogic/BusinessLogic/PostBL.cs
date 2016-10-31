@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PastebookBusinessLogic.BusinessLogic
@@ -27,6 +28,8 @@ namespace PastebookBusinessLogic.BusinessLogic
 
         public bool AddPost(string content, int userID, int postID)
         {
+            content = Regex.Replace(content, @"&lt", "<");
+            content = Regex.Replace(content, @"&gt", ">");
             POST newPost = new POST()
             {
                 CONTENT = content,

@@ -1,10 +1,13 @@
-﻿@model FINAL_CASESTUDY.Models.UserInfo
+﻿@model FINAL_CASESTUDY.Models.EditProfileViewModel
 
 <div class="col-md-2"></div>
 <div class="col-md-8">
     <div class="well">
         <div class="container-fluid">
-            <p class="form-title">Edit Profile <span class="glyphicon glyphicon-pencil"></span></p>
+            <div class="title-container">
+                <p class="form-title">Edit Profile <span class="glyphicon glyphicon-pencil"></span></p>
+            </div>
+            
             @Html.Hidden("userName",Model.USER_NAME, new { id = "userName"})
             @{
                 bool success = (bool)ViewData["success"];
@@ -37,7 +40,7 @@
                         <div class="form-group">
                             @Html.Label("First name", htmlAttributes: new { @class = "control-label col-md-4" })
                             <div class="col-md-8">
-                                @Html.EditorFor(model => model.FIRST_NAME, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.FIRST_NAME, new { htmlAttributes = new { @class = "form-control", id="editFirstName" } })
                                 @Html.ValidationMessageFor(model => model.FIRST_NAME, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -45,7 +48,7 @@
                         <div class="form-group">
                             @Html.Label("Last name", htmlAttributes: new { @class = "control-label col-md-4" })
                             <div class="col-md-8">
-                                @Html.EditorFor(model => model.LAST_NAME, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.LAST_NAME, new { htmlAttributes = new { @class = "form-control", id = "editLastName" } })
                                 @Html.ValidationMessageFor(model => model.LAST_NAME, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -99,7 +102,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-8">
-                                <input type="submit" id="submitInfo" value="Save" class="btn btn-primary" />
+                                <input type="submit" id="submitInfo" value="Save" class="btn btn-primary" onclick="TrimName()" />
                             </div>
                         </div>
                     </div>
@@ -152,6 +155,19 @@
                     }
                 });
             }            
+        }
+
+        function TrimName() {
+            var firstName = $('#editFirstName').val();
+            var lastName = $('#editLastName').val();
+
+            firstName = firstName.replace(/\s+/g, " ");
+            firstName = $.trim(firstName);
+            lastName = lastName.replace(/\s+/g, " ");
+            lastName = $.trim(lastName);
+
+            $('#editFirstName').val(firstName);
+            $('#editLastName').val(lastName);
         }
     </script>
     } 

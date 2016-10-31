@@ -11,6 +11,7 @@ namespace FINAL_CASESTUDY
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             var user = httpContext.Session["currentUser"];
+
             if (user == null)
             {
                 return false;

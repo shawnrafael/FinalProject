@@ -135,6 +135,12 @@ namespace FINAL_CASESTUDY.Controllers
             return View(user);
         }
 
+        public ActionResult SeeAllNotification()
+        {
+            List<NOTIFICATION> notifications = notifyBL.RetrieveNotifications((int)Session["currentUser"]);
+            return View(notifications);
+        }
+
         public ActionResult GetPost()
         {
             var post = pasteBookAL.RetrienvePost((int)TempData["postID"]);

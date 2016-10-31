@@ -91,7 +91,9 @@ namespace PastebookBusinessLogic.BusinessLogic
         }
 
         public bool UpdateAboutMe(string aboutMe, USER user)
-        {            
+        {
+            aboutMe = Regex.Replace(aboutMe, @"&lt", "<");
+            aboutMe = Regex.Replace(aboutMe, @"&gt", ">");
             user.ABOUT_ME = aboutMe;
             return accessUser.Edit(user);
         }

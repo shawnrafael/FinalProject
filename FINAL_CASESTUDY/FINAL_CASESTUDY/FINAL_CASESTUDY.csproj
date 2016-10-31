@@ -134,12 +134,12 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
-    <Compile Include="CustomAuthorize.cs" />
+    <Compile Include="Managers\CustomAuthorize.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Managers\Mapper.cs" />
-    <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="Models\EditProfileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +165,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\PasteBookJS\ChangeEmail.js" />
     <Content Include="Scripts\PasteBookJS\ChangePassword.js" />
-    <Content Include="Scripts\PasteBookJS\CustomValidate.js" />
     <Content Include="Scripts\PasteBookJS\Home.js" />
     <Content Include="Scripts\PasteBookJS\MainLayout.js" />
     <Content Include="Scripts\PasteBookJS\Profile.js" />
@@ -207,6 +206,7 @@
     <Content Include="Views\Shared\Error404.cshtml" />
     <Content Include="Views\Post\PartialViewPost.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Post\SeeAllNotification.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

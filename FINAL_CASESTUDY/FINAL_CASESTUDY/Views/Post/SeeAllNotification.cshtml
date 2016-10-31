@@ -1,0 +1,43 @@
+﻿@model IEnumerable<PasteBookEntity.NOTIFICATION>
+<div class="col-sm-2"></div>
+<div class="col-sm-8">
+    <div class="well">
+        <div class="container-fluid">
+            <div class="title-container">
+                <span class="form-title">Notifications</span>
+            </div>
+
+            @if (Model.Count() == 0)
+            {
+                <div class="col-sm-offset-4 col-sm-8">
+                    <p>No notification</p>
+                </div>
+            }
+
+            @{ string message = "";
+                foreach (var notification in Model)
+                {
+                    <div class="list-notification-container">
+                        @if (notification.NOTIF_TYPE == "C")
+                        {
+                        message = notification.USER.FIRST_NAME + " has commented on one of your post.";
+                        <a class="notif-link" href="@Url.Action("CheckNotification","Post",new { notifID = notification.ID, notifMessage = message })"><span class="glyphicon glyphicon-comment"></span> @message</a>
+                        }
+                        else if (notification.NOTIF_TYPE == "L")
+                        {
+                        message = notification.USER.FIRST_NAME + " has liked one of your post.";
+                        <a class="notif-link" href="@Url.Action("CheckNotification","Post",new { notifID = notification.ID, notifMessage = message })"><span class="glyphicon glyphicon-thumbs-up"></span> @message</a>
+                        }
+                        else
+                        {
+                        <a class="notif-link" href="@Url.Action("UserProfile", "Profile", new { username = notification.USER.USER_NAME })"><span class="glyphicon glyphicon-user"></span> @notification.USER.FIRST_NAME has sent you a friend request.</a>
+                        }
+                    </div>
+                   
+                }
+            } 
+            
+        </div>
+    </div>
+</div>
+<div class="col-sm-2"></div>

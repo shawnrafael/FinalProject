@@ -9,9 +9,9 @@ namespace FINAL_CASESTUDY.Managers
 {
     public static class Mapper
     {
-        public static UserInfo MapUSER(USER user)
+        public static EditProfileViewModel MapUSER(USER user)
         {
-            return new UserInfo()
+            return new EditProfileViewModel()
             {
                 USER_NAME = user.USER_NAME,
                 FIRST_NAME = user.FIRST_NAME,
