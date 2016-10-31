@@ -4,6 +4,7 @@ using PasteBookEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -19,6 +20,8 @@ namespace FINAL_CASESTUDY.Controllers
         // GET: Post
         public ActionResult AddPost(string content, int currentProfile)
         {
+            content = Regex.Replace(content, @"\s+", " ");
+            content = content.Trim();
             if (Session["currentUser"] == null)
             {
                 return RedirectToAction("Register");
@@ -57,13 +60,21 @@ namespace FINAL_CASESTUDY.Controllers
         public ActionResult UnlikePost(int currentPost)
         {
             int userID = (int)Session["currentUser"];
+            var likeNotif = notifyBL.RetrieveLikeNotif(userID, currentPost);
             var unlike = likeBL.UnlikePost(userID, currentPost);
-            
+            bool notify = false;
+            if (unlike)
+            {
+                notify = notifyBL.DeleteNotification(likeNotif);
+            }
+
             return Json(new { likePost = unlike }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CommentPost(int currentPost, string commentContent)
         {
+            commentContent = Regex.Replace(commentContent, @"\s+", " ");
+            commentContent = commentContent.Trim();
             int userID = (int)Session["currentUser"];
             bool validContent = commentContent.Length <= 1000;
             var comment = new COMMENT();
@@ -89,16 +100,27 @@ namespace FINAL_CASESTUDY.Controllers
 
         public ActionResult GetNotification()
         {
-            var user = (int)Session["currentUser"];
+            int user = (int)Session["currentUser"];
             var notifications = notifyBL.RetrieveNotifications(user);
 
             return PartialView("PartialNotification", notifications);
         }
 
+        public ActionResult GetNotificationCount(int userID)
+        {
+            int notificationCount = notifyBL.RetrieveNotificationCount(userID);
+            return Json(new { notifCount = notificationCount }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult UpdateNotificatioin(int userID)
+        {
+            bool updated = notifyBL.UpdateSeen(userID);
+            return Json(new { notifUpdated = updated }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult CheckNotification(int notifID, string notifMessage)
         {
             var notif = pasteBookAL.RetrieveNotification(notifID);
-            bool updateNotif = notifyBL.UpdateSeen(notif);
             int postID = (int)notif.POST_ID;
             TempData["notifMessage"] = notifMessage;
             return RedirectToAction("Post", new { postID = postID });

@@ -1,10 +1,14 @@
-﻿using PastebookBusinessLogic.BusinessLogic;
+﻿using FINAL_CASESTUDY.Managers;
+using FINAL_CASESTUDY.Models;
+using PastebookBusinessLogic.BusinessLogic;
 using PasteBookEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace FINAL_CASESTUDY.Controllers
 {
@@ -12,17 +16,34 @@ namespace FINAL_CASESTUDY.Controllers
     {
         AccountBL accountBL = new AccountBL();
         // GET: Account
-        public ActionResult Register()
+        public ActionResult Login()
         {
-            if (Session["currentUser"] == null)
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(USER user)
+        {
+
+            USER loginUser = accountBL.LoginUser(user.EMAIL_ADDRESS, user.PASSWORD);
+            if (loginUser != null)
             {
-                ViewData["countryList"] = new SelectList(accountBL.GetCountryList(), "ID", "COUNTRY");
-                return View();
+                Session["currentUser"] = loginUser.ID;
+                Session["currentUserName"] = loginUser.USER_NAME;                  
+                return RedirectToAction("Home", "Home");
             }
             else
             {
-                return RedirectToAction("Home", "Home");
+                ModelState.AddModelError("errorMessageLogin", "Invalid email or password.");
             }
+
+            return View("Login", user);
+        }
+
+        public ActionResult Register()
+        {
+            ViewData["countryList"] = new SelectList(accountBL.GetCountryList(), "ID", "COUNTRY");
+            return View();
         }
 
         public ActionResult CheckUsername(string username)
@@ -32,17 +53,35 @@ namespace FINAL_CASESTUDY.Controllers
             return Json(new { userExist = existing }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ValidateRegister(USER user)
+        public ActionResult CheckEmail(string email)
         {
+            bool exist = accountBL.CheckEmail(email);
+            return Json(new { emailExist = exist }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult ValidateRegister(USER user, string confirmPassword)
+        { 
             if (accountBL.CheckUsername(user.USER_NAME) == true)
             {
-                ModelState.AddModelError("validateUser", "Username already exist");
+                ModelState.AddModelError("USER_NAME", "Username already exist.");
             }
 
             if (accountBL.CheckEmail(user.EMAIL_ADDRESS) == true)
             {
-                ModelState.AddModelError("validateEmail", "Email already exist");
+                ModelState.AddModelError("EMAIL_ADDRESS", "Email already exist.");
             }
+
+            if (confirmPassword == "")
+            {
+                ModelState.AddModelError("errorConfirm", "Confirm password field is required.");
+            }
+
+            if (confirmPassword != user.PASSWORD)
+            {
+                ModelState.AddModelError("errorConfirm", "Confirm password does not match.");
+            }
+
             if (ModelState.IsValid)
             {
                 accountBL.Register(user);
@@ -51,23 +90,8 @@ namespace FINAL_CASESTUDY.Controllers
                 return RedirectToAction("UserProfile","Profile",new { username = user.USER_NAME });
             }
             ViewData["countryList"] = new SelectList(accountBL.GetCountryList(), "ID", "COUNTRY");
-            return View("Register", user);
-        }
-
-        public ActionResult ValidateLogin(string email, string password)
-        {
-            USER user = accountBL.LoginUser(email, password);
-            bool loginSuccess = user != null;
-            if (loginSuccess == true)
-            {
-                Session["currentUser"] = user.ID;
-                Session["currentUserName"] = user.USER_NAME;
-                
-            }
-
-            return Json(new { login = loginSuccess }, JsonRequestBehavior.AllowGet);
-
-        }
+            return View("Register",user);
+        }        
 
         public ActionResult UploadProfilePic(HttpPostedFileBase file)
         {
@@ -81,6 +105,8 @@ namespace FINAL_CASESTUDY.Controllers
 
         public ActionResult UpdateAboutMe(string aboutMe)
         {
+            aboutMe = Regex.Replace(aboutMe, @"\s+", " ");
+            aboutMe = aboutMe.Trim();
             var user = accountBL.GetUserByID((int)Session["currentUser"]);
             bool valid = aboutMe.Length <= 2000 ;
             if (valid)
@@ -91,53 +117,53 @@ namespace FINAL_CASESTUDY.Controllers
             return RedirectToAction("UserProfile", "Profile", new { username = user.USER_NAME });
         }
 
-        public ActionResult Setting()
-        {
-            if (Session["currentUser"] == null)
-            {
-                return RedirectToAction("Register");
-            }
-            return View();
-        }
-
         public ActionResult EditProfile()
         {
             if (Session["currentUser"] == null)
             {
                 return RedirectToAction("Register");
             }
-            ViewData["countryList"] = new SelectList(accountBL.GetCountryList(), "ID", "COUNTRY");
+            ViewData["success"] = (TempData["success"] != null) ? (bool)TempData["success"] : false;
+           
             var user = accountBL.GetUserByID((int)Session["currentUser"]);
-            return View("EditProfile", user);
+
+            UserInfo userInfoModel = Mapper.MapUSER(user);
+            ViewData["countryList"] = new SelectList(accountBL.GetCountryList(), "ID", "COUNTRY");
+            return View("EditProfile", userInfoModel);
         }
 
-        public ActionResult UpdateProfileInfo(USER user)
+        [HttpPost]
+        public ActionResult UpdateProfileInfo(UserInfo userInfoModel)
         {
-            if (user.GENDER == null)
+            var currentUser = accountBL.GetUserByID((int)Session["currentUser"]);            
+
+            if (accountBL.CheckUsername(userInfoModel.USER_NAME)==true && userInfoModel.USER_NAME != Session["currentUserName"].ToString())
             {
-                user.GENDER = "U";
+                ModelState.AddModelError("USER_NAME", "Username already exist.");
             }
-            if (ModelState.IsValidField("MOBILE_NO"))
-            {
-                var currentUser = accountBL.GetUserByID((int)Session["currentUser"]);
-                currentUser.BIRTHDAY = user.BIRTHDAY;
-                currentUser.COUNTRY_ID = user.COUNTRY_ID;
-                currentUser.USER_NAME = user.USER_NAME;
-                currentUser.MOBILE_NO = user.MOBILE_NO;
-                currentUser.LAST_NAME = user.LAST_NAME;
-                currentUser.GENDER = user.GENDER;
-                currentUser.FIRST_NAME = user.FIRST_NAME;
+
+            if (ModelState.IsValid)
+            {                
+                currentUser.USER_NAME = userInfoModel.USER_NAME;
+                currentUser.FIRST_NAME = userInfoModel.FIRST_NAME;
+                currentUser.LAST_NAME = userInfoModel.LAST_NAME;
+                currentUser.BIRTHDAY = userInfoModel.BIRTHDAY;
+                currentUser.COUNTRY_ID = userInfoModel.COUNTRY_ID;                
+                currentUser.MOBILE_NO = userInfoModel.MOBILE_NO;                
+                currentUser.GENDER = userInfoModel.GENDER;                
 
                 bool success = accountBL.UpdateProfileInfo(currentUser);
                 if (success)
                 {
-                    Session["currentUserName"] = user.USER_NAME;
+                    Session["currentUserName"] = currentUser.USER_NAME;
                 }
-                return RedirectToAction("EditProfile", user);
+                TempData["success"] = success;
+                return RedirectToAction("EditProfile", Mapper.MapUSER(currentUser));
             }
 
             ViewData["countryList"] = new SelectList(accountBL.GetCountryList(), "ID", "COUNTRY");
-            return View("EditProfile", user);
+            ViewData["success"] = false;
+            return View("EditProfile", userInfoModel);
         }
 
         public ActionResult ChangePassword()
@@ -191,13 +217,7 @@ namespace FINAL_CASESTUDY.Controllers
 
             var user = accountBL.GetUserByID((int)Session["currentUser"]);
             return View("ChangeEmail", user);
-        }
-
-        public ActionResult CheckEmail(string email)
-        {
-            bool exist = accountBL.CheckEmail(email);
-            return Json(new { emailExist = exist }, JsonRequestBehavior.AllowGet);
-        }
+        }        
 
         public ActionResult UpdateNewEmail(USER user)
         {

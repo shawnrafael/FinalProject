@@ -1,21 +1,28 @@
 ﻿
 $(document).ready(function () {
 
+    var user = $('#itemID').val();
+
     setInterval(function () {
         $("#postContainer").load(getPostUrl);
     }, 60000);
 
     $(document).on('click', '.btnComment', function () {
-        var data = {
-            currentPost: this.id,
-            commentContent: $('#addComment_'.concat(this.id)).val()
-        }
-        if (data.commentContent == "") {
-            $('#invalidComment_'.concat(user)).text('Please add sometthing to your comment.');
-        } else if (data.commentContent.length > 1000) {
-            $('#addComment_'.concat(user)).val('')
-            $('#invalidComment_'.concat(user)).text('Comment can only have 1000 characters.');
+        var postID = this.id;
+        var content = $('#addComment_'.concat(this.id)).val();
+        content = content.replace(/\s+/g, " ");
+        content = $.trim(content);
+
+        
+        if ($.trim(content) == "") {
+            $('#invalidComment_'.concat(postID)).text('Please add something to your comment.');
+        } else if (content.length > 1000) {
+            $('#invalidComment_'.concat(postID)).text('Comment can only have 1000 characters.');
         } else {
+            var data = {
+                currentPost: postID,
+                commentContent: content
+            }
             $.ajax({
                 url: addCommentUrl,
                 data: data,
@@ -26,7 +33,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function () {
-                    alert("Something went wrong");
+                    window.location.href(errorPageUrl);
                 }
             });
         }
@@ -44,7 +51,7 @@ $(document).ready(function () {
                 $("#postContainer").load(getPostUrl);
             },
             error: function () {
-                alert("Something went wrong");
+                window.location.href(errorPageUrl);
             }
         });
     });
@@ -60,35 +67,39 @@ $(document).ready(function () {
                 $("#postContainer").load(getPostUrl);
             },
             error: function () {
-                alert("Something went wrong");
+                window.location.href(errorPageUrl);
             }
         });
     });
 
     $('#postBtnHome').on('click', function () {
+        var postContent = $('#postContent').val();
+        postContent = postContent.replace(/\s+/g, " ");
+        postContent = $.trim(postContent);
 
-        var data = {
-            content: $('#postContent').val(),
-            currentProfile: 0
-        }
-        if (data.content == "") {
+        if (postContent == "") {
             $('#errorPost').text('Please add something to your post.');
-        } else if (data.content.length > 1000) {
+        } else if (postContent.length > 1000) {
             $('#errorPost').text('Post can only have 1000 characters.');
         } else {
+            var data = {
+                content: postContent,
+                currentProfile: 0
+            }
             $.ajax({
                 url: addPostUrl,
                 data: data,
                 type: 'GET',
                 success: function (data) {
                     if (data.post == true) {
+                        $('#errorPost').text('');
                         $('#postContent').val('');
                         $('#postContainer').load(getPostUrl);
                     }
 
                 },
                 error: function () {
-                    alert();
+                    window.location.href(errorPageUrl);
                 }
             });
         }

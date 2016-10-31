@@ -49,11 +49,11 @@ namespace FINAL_CASESTUDY.Controllers
             bool confirm = friendBL.ConfirmFriend(userID, currentProfileID);
 
             var requestNotif = notifyBL.RetrieveFriendRequest(userID, currentProfileID);
-            bool notify = false;
-            if (confirm)
-            {
-                notify = notifyBL.UpdateSeen(requestNotif);
-            }
+            //bool notify = false;
+            //if (confirm)
+            //{
+            //    notify = notifyBL.UpdateSeen(requestNotif);
+            //}
             return Json(new { request = confirm }, JsonRequestBehavior.AllowGet);
         }
 
@@ -71,13 +71,13 @@ namespace FINAL_CASESTUDY.Controllers
             return Json(new { request = delete }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetRequestList()
-        {
-            var user = (int)Session["currentUser"];
-            var requests = notifyBL.RetrieveRequests(user);
+        //public ActionResult GetRequestList()
+        //{
+        //    var user = (int)Session["currentUser"];
+        //    var requests = notifyBL.RetrieveRequests(user);
 
-            return PartialView("PartialFriendRequest", requests);
-        }
+        //    return PartialView("PartialFriendRequest", requests);
+        //}
 
         public ActionResult SearchResult(string searchFriend)
         {

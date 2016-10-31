@@ -19,6 +19,13 @@ namespace PastebookBusinessLogic.BusinessLogic
             return friendList;
         }
 
+        public List<int> RetrieveFriendsID(int userID)
+        {
+            var idList = pasteBookAL.RetrieveListOfFriends(userID).Select(x=>x.ID).ToList();
+            return idList;
+        }
+
+
         public string CheckFriendRequest(int userID, int currentUserProfile)
         {
             var friends = pasteBookAL.RetrieveFriends(userID);

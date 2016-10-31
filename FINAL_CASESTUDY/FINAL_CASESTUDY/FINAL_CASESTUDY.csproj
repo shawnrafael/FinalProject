@@ -134,9 +134,12 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="CustomAuthorize.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Managers\Mapper.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -160,12 +163,19 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\PasteBookJS\ChangeEmail.js" />
+    <Content Include="Scripts\PasteBookJS\ChangePassword.js" />
+    <Content Include="Scripts\PasteBookJS\CustomValidate.js" />
     <Content Include="Scripts\PasteBookJS\Home.js" />
+    <Content Include="Scripts\PasteBookJS\MainLayout.js" />
     <Content Include="Scripts\PasteBookJS\Profile.js" />
+    <Content Include="Scripts\PasteBookJS\Register.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -186,7 +196,6 @@
     <Content Include="Views\Profile\UserProfile.cshtml" />
     <Content Include="Views\Friend\PartialFriendList.cshtml" />
     <Content Include="Views\Shared\PartialCommentList.cshtml" />
-    <Content Include="Views\Profile\PartialNothingToPost.cshtml" />
     <Content Include="Views\Post\PartialNotification.cshtml" />
     <Content Include="Views\Post\Post.cshtml" />
     <Content Include="Views\Friend\PartialFriendRequest.cshtml" />
@@ -197,10 +206,10 @@
     <Content Include="Views\Shared\Error500.cshtml" />
     <Content Include="Views\Shared\Error404.cshtml" />
     <Content Include="Views\Post\PartialViewPost.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
     <Folder Include="Views\Error\" />
   </ItemGroup>
   <ItemGroup>

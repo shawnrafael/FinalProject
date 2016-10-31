@@ -26,19 +26,22 @@
 
             </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-            
+        <ul class="nav navbar-nav navbar-right">            
+            <li>@Html.ActionLink("Welcome "+ (string)Session["currentUserName"]+"!", "UserProfile", "Profile", new { username = (string)Session["currentUserName"] }, null)</li>
             <li>@Html.ActionLink("Home", "Home", "Home")</li>
-            <li>@Html.ActionLink("Profile", "UserProfile", "Profile", new { username = (string)Session["currentUserName"] }, null)</li>
             <li>
-                <div id="notificationContainer">
-                    @{Html.RenderAction("GetNotification", "Post");}
-                </div>                
-            </li>
-            <li>
-                <div id="requestContainer">
-                    @{Html.RenderAction("GetRequestList", "Friend");}
-                </div>    
+                <div class="dropdown">
+                    <button class="icon-bar dropdown-toggle" type="button" id="notificationList" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-globe"></span>
+                    </button>
+                    <span class="badge" id="notificationBadge"></span>
+
+                    <ul class="dropdown-menu scrollable-menu notification-dropdown" id="notificationDropdown" role="menu" aria-labelledby="notificationList">
+                        
+                        @{Html.RenderAction("GetNotification", "Post");}
+                    </ul>
+                </div>
+
             </li>
             <li>
                 <div class="dropdown">

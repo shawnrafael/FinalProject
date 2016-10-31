@@ -7,31 +7,20 @@
         </button>
         @Html.ActionLink("PasteBook", "Home", "Home", new { area = "" }, new { @class = "navbar-brand" })
     </div>
-    <div class="navbar-collapse collapse">
+    @*<div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <br />
                 <div class="col-sm-11" id="errorLogin"></div><div class="col-sm-1"></div>
             </li>
             <li>
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label class="label label-login">Email</label><br />
-                        <input type="text" id="userEmail" name="email" class="form-control input-login" />
-                    </div>
-                    <div class="form-group">
-                        <label class="label label-login">Password</label><br />
-                        <input type="password" id="password" name="password" class="form-control input-login" />
-                    </div>
-                    <div class="form-group">
-                        <br />
-                        <input type="button" id="btnLogin" value="Login" class="btn btn-primary btn-sm" />
-                    </div>
+                <div>
+
                 </div>
-                
+                @{Html.RenderAction("Login", "Account");}                
             </li>
         </ul>
-    </div>
+    </div>*@
 </div>
 
 

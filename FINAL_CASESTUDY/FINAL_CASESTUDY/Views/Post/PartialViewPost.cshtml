@@ -7,39 +7,47 @@
         <div class="container-fluid">
             @if (ViewData["postMessage"].ToString() != "")
             {
-                <h4>@ViewData["postMessage"]</h4>
+                <p>@ViewData["postMessage"]</p>
                 <hr />
             }
+            
 
             <div class="row">
-                <p class="poster-container col-sm-3">
-                    @Html.ActionLink(Model.USER.FIRST_NAME + " " + Model.USER.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER.USER_NAME }, new { htmlAttributes = new { id = "userPostDisplayName" } })
-                </p>
-                @{if (Model.POSTER_ID != Model.PROFILE_OWNER_ID)
+                <div class="container-fluid">
+                    <span class="poster-container">
+                        @Html.ActionLink(Model.USER.FIRST_NAME + " " + Model.USER.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER.USER_NAME }, new { htmlAttributes = new { id = "userPostDisplayName" } })
+                    </span>
+
+                    @if (Model.POSTER_ID != Model.PROFILE_OWNER_ID)
                     {
-                        <span class="glyphicon glyphicon-chevron-right col-sm-1"></span>
-                        <p class="poster-container col-sm-4">
+                        <span class="poster-container">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
                             @Html.ActionLink(Model.USER1.FIRST_NAME + " " + Model.USER1.LAST_NAME, "UserProfile", "Profile", new { username = Model.USER1.USER_NAME }, "")
-                        </p>
+                        </span>
                     }
-                }
-                <div class="col-sm-4"></div>
+                </div>
             </div>
 
 
             <p id="postDate">@Model.CREATED_DATE.ToString("MMMM dd yyy 'at' h:mm:ss tt")</p>
             <p id="postContent">@Model.CONTENT</p>
-            <hr />
-            @if (Model.LIKEs.Any(x => x.LIKED_BY == (int)Session["currentUser"]))
-            {
-                <button class="btn btnUnLike" id="unlikePost">Unlike</button>
-            }
-            else
-            {
-                <button class="btn btnLike" id="likePost">Like</button>
-            }
-            <button class="btn btnLikeCount" id="btnLikeCount" data-toggle="modal" data-target="#openLikeModal">@Model.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>
-            <hr />
+            <div class="like-container">
+                @if (Model.LIKEs.Any(x => x.LIKED_BY == (int)Session["currentUser"]))
+                            {
+                    <button class="btn btnUnLike" id="unlikePost">Unlike</button>
+                }
+                else
+                {
+                    <button class="btn btnLike" id="likePost">Like</button>
+                }
+                @if (Model.LIKEs.Count > 0)
+                {
+                    <button class="btn btnLikeCount" id="btnLikeCount" data-toggle="modal" data-target="#openLikeModal">@Model.LIKEs.Count <span class="glyphicon glyphicon-thumbs-up"></span></button>
+                }
+                
+            </div>
+            
+
 
             @*CommentList*@
             <div id="commentContainer">
@@ -47,9 +55,7 @@
             </div>
 
             <textarea class="form-control" id="commentContent" rows="2" placeholder="Write a comment..."></textarea>
-            <hr />
-
-            <input type="hidden" value="submit" id="sampleHide" />
+            <span class="text-danger" id="errorComment"></span>
             <button id="addComment" class="btn btn-primary pull-right btnComment">Add comment</button>
 
             @*Like Modal*@
@@ -60,17 +66,13 @@
 
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">People who liked this post.</h4>
+                            <p class="modal-title">People who liked this post.</p>
                         </div>
                         <div class="modal-body">
                             <div id="modalLikeContainer">
                                 @{Html.RenderAction("GetLikers", "Post", new { currentPost = Model.ID });}
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-
                     </div>
 
                 </div>

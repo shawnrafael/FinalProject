@@ -79,11 +79,18 @@ namespace PastebookBusinessLogic.BusinessLogic
             return notifications;
         }
 
-        public List<NOTIFICATION> RetrieveRequests(int userID)
+        public int RetrieveNotificationCount(int userID)
         {
-            var notifications = pasteBookAL.RetrieveRequests(userID);
-            return notifications;
+            var notif = RetrieveNotifications(userID).Where(x=>x.SEEN == "N").ToList();
+            int count = notif.Count;
+            return count;
         }
+
+        //public List<NOTIFICATION> RetrieveRequests(int userID)
+        //{
+        //    var notifications = pasteBookAL.RetrieveRequests(userID);
+        //    return notifications;
+        //}
 
         public NOTIFICATION RetrieveFriendRequest(int userID, int senderID)
         {
@@ -91,12 +98,25 @@ namespace PastebookBusinessLogic.BusinessLogic
             return notifications;
         }
 
-        public bool UpdateSeen(NOTIFICATION notif)
+        public NOTIFICATION RetrieveLikeNotif(int userID, int postID)
+        {
+            var notifications = pasteBookAL.RetrieveLikeNotification(userID, postID);
+            return notifications;
+        }
+
+        public bool UpdateSeen(int userID)
         {
             bool seen = false;
-            notif.SEEN = "Y";
-
-            seen = accessNotify.Edit(notif);
+            var notifications = pasteBookAL.RetrieveNotifications(userID);
+            foreach (var item in notifications)
+            {
+                item.SEEN = "Y";
+                seen = accessNotify.Edit(item);
+                if (seen == false)
+                {
+                    return seen;
+                }
+            }                        
             return seen;
 
         }

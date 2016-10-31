@@ -1,8 +1,28 @@
-﻿#postContent{
+﻿.alert{
+    text-align:center;
+}
+
+.title-container{
+    border-bottom: 1px solid #eee;
+    padding-bottom:15px;
+    margin-bottom:15px; 
+}
+
+.form-title{
+    font-size:25px;
+    color:#2faced;    
+}
+#postContent{
     font-size: 18px;
     word-wrap: break-word;
     overflow: hidden;
+    margin-bottom:10px;
 }
+
+.comment-item, #commentContent{
+    margin-bottom:10px;
+}
+
 .about-me-container{
     word-wrap: break-word;
     overflow: hidden;
@@ -13,13 +33,31 @@
 #aboutMeContainer{
     word-wrap: break-word;
 }
-.poster-container{
-    font-size:20px;
+#userPostDisplayName{
     text-overflow:ellipsis;
     white-space: nowrap;
-    overflow:hidden;
-    height:30px;
+    overflow: hidden;
     max-width: 250px;
+}
+.like-container{
+    padding: 5px 0px 10px 0px;
+}
+
+.glyphicon-chevron-right{
+    font-size:small;
+    margin-bottom: 10px;
+}
+
+.well{
+    padding: 10px 0px 10px 0px !important;
+}
+
+.poster-container{
+    font-size:20px;
+    word-wrap:break-word;
+    overflow-wrap:break-word;
+    max-width:inherit;
+    display:inline-block;
 }
 .comment-content-container{
     word-wrap: break-word;
@@ -28,9 +66,6 @@
     background-color: #fff;
     border-radius: 5px 5px;
     padding: 5px 5px 5px 5px;
-}
-#invalidEmail,#invalidPasswordChangeEmail{
-    display:none;
 }
 #profileLongNameContainer{
     word-wrap: break-word;
@@ -42,10 +77,7 @@
     overflow: hidden;
     width: 700px;
 }
-.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
-    color: #ffffff;
-    background-color: #04519b;
-}
+
 
 #userName{
     font-size:20px;
@@ -69,7 +101,7 @@
     overflow-x: hidden;
 }
 #notificationDropdown{
-    width: 400px !important;
+    width: 350px !important;
 }
 
 #menuRequest {
@@ -79,9 +111,10 @@
     word-wrap: break-word;
     overflow: hidden;
     max-height: 40px;
+    height:40px;
 }
 .dropdown-menu {
-    width: 150px !important;
+    width: 150px;
 }
 #renderedPart{
     margin-top: 30px;
@@ -94,6 +127,11 @@
 .label-login{
     font-size: 13px;
     font-weight: 100;
+    color:#fff!important;
+}
+.login-text-danger{
+    color:#dc1426;
+    font-weight: 600!important;
 }
 #btnLogin{
     font-size: 15px;
@@ -164,16 +202,18 @@ textarea.form-control{
     color: #90949c;
 }
 
-
+.notif-link{
+    padding: 10px 0px 10px 0px;
+}
 #settingsMenu, #notificationList, #friendRequest{
     background-color: #04519b;
     border:none;
     padding-top:10px;
 }
-.caret, .glyphicon-globe, .glyphicon-user{
+.caret, .glyphicon-globe{
     color:#000000;
 }
-.glyphicon-globe, .glyphicon-user{  
+.glyphicon-globe{  
     padding-left:20px;
     padding-top: 3px; 
     padding-bottom: 15px; 
@@ -190,12 +230,11 @@ textarea.form-control{
 /*for the post part - end*/
 
 /*for the profile part - start */
-.btnLike{
+.btnLike,.btnUnLike{
+    color:#5ca4e8;
     background-color: #f5f5f5 !important;
 }
-.btnUnLike{
-    background-color: #f5f5f5 !important;
-}
+
 #profilePic{
     position: absolute;
     margin: auto;
@@ -244,7 +283,7 @@ textarea.form-control{
     position: relative;
 }
 .container-fluid{
-    padding-left: 0px;
+    /*padding-left: 0px;*/
 }
 #friendContainer{
     border: 1px solid #dae0ea;
@@ -261,8 +300,21 @@ textarea.form-control{
     margin-top: 10px;
 }
 
+.navbar-collapse.collapse {
+  display: block!important;
+}
 
+.navbar-nav>li, .navbar-nav {
+  float: left !important;
+}
 
+.navbar-nav.navbar-right:last-child {
+  margin-right: -15px !important;
+}
+
+.navbar-right {
+  float: right!important;
+}
 
 
 

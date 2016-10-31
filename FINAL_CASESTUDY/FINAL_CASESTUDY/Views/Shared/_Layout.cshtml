@@ -9,12 +9,14 @@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
+       
         @if (Session["currentUser"]==null)
         {
             @Html.Partial("_LogoutPartial")
         }
         else
-        { 
+        {
+            @Html.Hidden("currentUserID", (int)Session["currentUser"], new { id = "currentUserID" })
             @Html.Partial("_LoginPartial")
         }
     </div>
@@ -37,84 +39,14 @@
  
 <script>
     var validateLoginUrl = '@Url.Action("ValidateLogin", "Account")';
-    var confirmRequestUrl = '@Url.Action("ConfirmRequest", "Friend")';
-    var reloadRequestUrl = '@Url.Action("GetRequestList", "Friend")';
+    @*var reloadRequestUrl = '@Url.Action("GetRequestList", "Friend")';*@
+    var reloadNotificationUrl = '@Url.Action("GetNotification", "Post")';
     var searchResultUrl = '@Url.Action("SearchResult", "Friend")';
-    var deleteRequestUrl = '@Url.Action("DeleteRequest", "Friend")';
     var searchUrl = '@Url.Action("Search", "Friend")';
     var homeUrl = '@Url.Action("Home","Home")';
 
-    $(document).ready(function () {
-
-        $('#btnLogin').on('click', function () {
-            var data = {
-                email: $('#userEmail').val(),
-                password: $('#password').val()
-            }
-            if ($('#userEmail').val() == '' || $('#password').val() == '') {
-                $('#errorLogin').text('Email and password field are required.');
-            } else {
-                $.ajax({
-                    url: validateLoginUrl,
-                    data: data,
-                    success: function (data) {
-                        if (data.login == false) {
-                            $('#errorLogin').text('Invalid email or password.');
-                        } else {
-                            window.location.href = homeUrl;
-                        }
-                    },
-                    error: function () {
-                        alert();
-                    }
-                });
-            }
-
-        });
-        
-        $(document).on('click', '.btn-delete', function () {
-            alert("delete");
-            var data = {
-                currentProfileID: this.id
-            }
-            RejectRequest(data);
-        });
-
-        $(document).on('click', '.btn-confirm', function () {
-            var data = {
-                currentProfileID: this.id
-            }
-            ConfirmRequest(data);
-        });
-
-        function ConfirmRequest(data) {
-            $.ajax({
-                url: confirmRequestUrl,
-                data: data,
-                success: function (data) {
-                    $('#requestContainer').load(reloadRequestUrl);
-                },
-                error: function () {
-                    alert("Oops");
-                }
-
-            })
-        }
-
-        function RejectRequest(data) {
-            $.ajax({
-                url: deleteRequestUrl,
-                data: data,
-                success: function (data) {
-                    location.reload();
-                },
-                error: function () {
-                    alert("Oops");
-                }
-
-            })
-        }
-
-
-    });
+    var getBadgeCountUrl = '@Url.Action("GetNotificationCount", "Post")'
+    var updateNotificationsUrl = '@Url.Action("UpdateNotificatioin","Post")'
+    var errorPageUrl = '@Url.Action("GlobalError", "Error")';
 </script>
+<script src="~/Scripts/PasteBookJS/MainLayout.js"></script>

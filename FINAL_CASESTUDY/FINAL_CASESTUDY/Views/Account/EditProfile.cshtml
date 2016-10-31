@@ -1,101 +1,157 @@
-﻿@model PasteBookEntity.USER
+﻿@model FINAL_CASESTUDY.Models.UserInfo
 
-@using (Html.BeginForm("UpdateProfileInfo","Account",FormMethod.Post))
-{    
-    <div class="form-horizontal">
+<div class="col-md-2"></div>
+<div class="col-md-8">
+    <div class="well">
         <div class="container-fluid">
-            <h4>Edit Profile <span class="glyphicon glyphicon-pencil"></span></h4>
-            <hr />
+            <p class="form-title">Edit Profile <span class="glyphicon glyphicon-pencil"></span></p>
+            @Html.Hidden("userName",Model.USER_NAME, new { id = "userName"})
+            @{
+                bool success = (bool)ViewData["success"];
+                if (success == true)
+                {
+                    <div class="col-md-2"></div>
+                    <div class="alert alert-success col-md-8" id="successChangePass">
+                        <strong>Success!</strong> Your profile info has been updated.
+                    </div>
+                    <div class="col-md-2"></div>
+                }
+            }
+        </div>
+        <div class="container-fluid">
 
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.ID)
+            @using (Html.BeginForm("UpdateProfileInfo", "Account", FormMethod.Post))
+            {
+                <div class="form-horizontal">
+                    <div class="container-fluid">
+                        
 
-            <div class="form-group">
-                @Html.Label("Username", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(model => model.USER_NAME, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.USER_NAME, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.Label("Username", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.USER_NAME, new { htmlAttributes = new { @class = "form-control", id= "editUsername" } })
+                                @Html.ValidationMessageFor(model => model.USER_NAME, "", new { @class = "text-danger", id="errorUsername" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("First name", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.FIRST_NAME, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FIRST_NAME, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Last name", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.LAST_NAME, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.LAST_NAME, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Birthday ", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.BIRTHDAY, "{0:yyyy-MM-dd}", new { htmlAttributes = new { type = "date", @class = "form-control", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                @Html.ValidationMessageFor(model => model.BIRTHDAY, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Country", new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(x => x.COUNTRY_ID, (SelectList)@ViewData["countryList"] as SelectList, "Select Country", new { @class = "form-control" })
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Mobile no", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.MOBILE_NO, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.MOBILE_NO, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Gender ", htmlAttributes: new { @class = "control-label col-sm-4" })
+                            <div class="col-sm-8">
+                                @if (Model.GENDER == "F")
+                                {
+                                    <label class="radio-inline">@Html.RadioButtonFor(x => x.GENDER, "F", new { @checked = "checked" }) Female</label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">@Html.RadioButtonFor(x => x.GENDER, "F") Female</label>
+                                }
+                                @if (Model.GENDER == "M")
+                                {
+                                    <label class="radio-inline">@Html.RadioButtonFor(x => x.GENDER, "M", new { @checked = "checked" }) Male</label>
+                                }
+                                else
+                                {
+                                    <label class="radio-inline">@Html.RadioButtonFor(x => x.GENDER, "M") Male</label>
+                                }
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-4 col-sm-8">
+                                <input type="submit" id="submitInfo" value="Save" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("First name", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(model => model.FIRST_NAME, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FIRST_NAME, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Last name", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(model => model.LAST_NAME, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.LAST_NAME, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Birthday ", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(model => model.BIRTHDAY, "{0:yyyy-MM-dd}", new { htmlAttributes = new { type = "date", @class = "form-control", max = DateTime.Now.ToString("yyyy-MM-dd")  } })
-                    @Html.ValidationMessageFor(model => model.BIRTHDAY, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Country", new { @class = "control-label col-sm-4" })
-                <div class="col-sm-4">
-                    @Html.DropDownListFor(x => x.COUNTRY_ID, (SelectList)@ViewData["countryList"] as SelectList, "Select Country", new { @class = "form-control" })
-                </div>
-                
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Mobile no", htmlAttributes: new { @class = "control-label col-md-4" })
-                <div class="col-md-8">
-                    @Html.EditorFor(model => model.MOBILE_NO, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MOBILE_NO, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Gender ", htmlAttributes: new { @class = "control-label col-sm-4" })
-                <div class="col-sm-8">
-                    @if (Model.GENDER == "F")
-                    {
-                        <label class="radio-inline">@Html.RadioButtonFor(x => x.GENDER, "F", new { @checked = "checked" }) Female</label>
-                    }
-                    else
-                    {
-                        <label class="radio-inline">@Html.RadioButtonFor(x => x.GENDER, "F") Female</label>
-                    }
-                    @if (Model.GENDER == "M")
-                    {
-                        <label class="radio-inline">@Html.RadioButtonFor(x => x.GENDER, "M", new { @checked = "checked" }) Male</label>
-                    }
-                    else
-                    {
-                        <label class="radio-inline">@Html.RadioButtonFor(x => x.GENDER, "M") Male</label>
-                    }
-                   
-                </div>                
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-offset-4 col-sm-8">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-            </div>
-        </div>        
+            }
+        </div>
     </div>
-}
+</div>
+<div class="col-md-2"></div>
+
+
 
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
+        var checkUsernameUrl = '@Url.Action("CheckUsername","Account")';
         jQuery.extend(jQuery.validator.messages, {
-            max: jQuery.validator.format("Please enter a valid date")
+            max: jQuery.validator.format("Birthday must not be a date later than today.")
         });
+
+        $(document).ready(function () {
+
+            $('#editUsername').on('blur', function () {
+                CheckUsernameAvailability($('#userName').val());
+            });
+
+            $('#submitInfo').on('click', function () {
+                $('#successChangePass').hide();
+            });
+        });
+
+        function CheckUsernameAvailability(currentUserName) {
+            var data = {
+                username: $('#editUsername').val()
+            }
+            if (currentUserName == username) {
+
+            } else {
+                $.ajax({
+                    url: checkUsernameUrl,
+                    data: data,
+                    success: function (data) {
+                        if (data.userExist == true) {
+                            $('#errorUsername').text('Username already exist.');
+                        }
+                    },
+                    error: function () {
+                        window.location.href(errorPageUrl);
+                    }
+                });
+            }            
+        }
     </script>
     } 

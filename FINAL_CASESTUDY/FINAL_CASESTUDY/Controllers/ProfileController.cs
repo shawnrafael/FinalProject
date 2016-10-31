@@ -37,13 +37,13 @@ namespace FINAL_CASESTUDY.Controllers
 
             var status = friendBL.CheckFriendRequest(userID, profileOwner.ID);
 
-            if (status == "friends" || status == "profile owner")
-            {
-                listOfPost = postBL.RetrieveListOfPostOnProfile(profileOwner.ID);
-                return PartialView("PartialPost", listOfPost);
-            }            
-            ViewData["currentProfile"] = profileOwner.FIRST_NAME;
-            return PartialView("PartialNothingToPost");
+            //if (status == "friends" || status == "profile owner")
+            //{
+            listOfPost = postBL.RetrieveListOfPostOnProfile(profileOwner.ID);
+            return PartialView("PartialPost", listOfPost);
+            //}            
+            //ViewData["currentProfile"] = profileOwner.FIRST_NAME;
+            //return PartialView("PartialNothingToPost");
  
         }
 

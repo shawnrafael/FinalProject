@@ -37,8 +37,6 @@
         <div class="well">
             <div class="container-fluid">
                 <h4>Friends</h4>
-                <hr />
-
                 <div id="friendContainer">
                     @{ Html.RenderAction("GetFriendList","Friend", new { username = Model.USER_NAME });}
                 </div>

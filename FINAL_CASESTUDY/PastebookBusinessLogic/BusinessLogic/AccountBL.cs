@@ -9,6 +9,7 @@ using System.Diagnostics;
 using DataAccess.AccessLayer;
 using System.Web;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace PastebookBusinessLogic.BusinessLogic
 {    
@@ -20,7 +21,16 @@ namespace PastebookBusinessLogic.BusinessLogic
         PasswordBL passwordBL = new PasswordBL();
 
         public bool Register(USER newUser)
-        {            
+        {
+            newUser.PASSWORD = Regex.Replace(newUser.PASSWORD, @"&lt", "<");
+            newUser.PASSWORD = Regex.Replace(newUser.PASSWORD, @"&gt", ">");
+
+            newUser.FIRST_NAME = Regex.Replace(newUser.FIRST_NAME, @"\s+", " ");
+            newUser.FIRST_NAME = newUser.FIRST_NAME.Trim();
+
+            newUser.LAST_NAME = Regex.Replace(newUser.LAST_NAME, @"\s+", " ");
+            newUser.LAST_NAME = newUser.LAST_NAME.Trim();
+
             if (newUser.GENDER == null)
             {
                 newUser.GENDER = "U";
@@ -42,6 +52,8 @@ namespace PastebookBusinessLogic.BusinessLogic
         public USER LoginUser(string email, string password)
         {
             var user = pasteBookAL.RetrieveLoginUser(email);
+            password = Regex.Replace(password, @"&lt", "<");
+            password = Regex.Replace(password, @"&gt", ">");
 
             bool match = passwordBL.IsPasswordMatch(password, user.SALT, user.PASSWORD);
             if (match == true)
@@ -86,6 +98,17 @@ namespace PastebookBusinessLogic.BusinessLogic
 
         public bool UpdateProfileInfo(USER user)
         {
+            user.FIRST_NAME = Regex.Replace(user.FIRST_NAME, @"\s+", " ");
+            user.FIRST_NAME = user.FIRST_NAME.Trim();
+
+            user.LAST_NAME = Regex.Replace(user.LAST_NAME, @"\s+", " ");
+            user.LAST_NAME = user.LAST_NAME.Trim();
+
+            if (user.GENDER == null)
+            {
+                user.GENDER = "U";
+            }
+
             return accessUser.Edit(user);
         }
 

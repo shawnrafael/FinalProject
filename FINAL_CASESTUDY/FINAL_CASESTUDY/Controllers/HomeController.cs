@@ -16,13 +16,9 @@ namespace FINAL_CASESTUDY.Controllers
         PostBL postBL = new PostBL();
         // GET: Home
         [Route("")]
+        [CustomAuthorize]
         public ActionResult Home()
         {
-            if (Session["currentUser"] == null)
-            {
-                return RedirectToAction("Register","Account");
-            }
-            ViewData["page"] = "home";
             int userID = (int)Session["currentUser"];
             USER user = accountBL.GetUserByID(userID);
             return View(user);
@@ -35,8 +31,9 @@ namespace FINAL_CASESTUDY.Controllers
                 return RedirectToAction("Register", "Account");
             }
             int userID = (int)Session["currentUser"];            
-            List<USER> listOfUsers = friendBL.RetrieveFriends(userID);
-            List<POST> listOfPost = postBL.RetrieveListOfPost(listOfUsers, userID);
+            List<int> listOfUserID = friendBL.RetrieveFriendsID(userID);
+
+            List<POST> listOfPost = postBL.RetrieveListOfPost(listOfUserID, userID);
 
             return PartialView("PartialPost", listOfPost);
         }

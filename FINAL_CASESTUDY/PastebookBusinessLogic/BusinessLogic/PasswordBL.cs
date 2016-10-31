@@ -26,7 +26,7 @@ namespace PastebookBusinessLogic.BusinessLogic
             return hash == GetPasswordHashAndSalt(finalString);
         }
 
-        public string GetPasswordHashAndSalt(string message)
+        private string GetPasswordHashAndSalt(string message)
         {
             // Let us use SHA256 algorithm to 
             // generate the hash from this salted password
@@ -38,7 +38,7 @@ namespace PastebookBusinessLogic.BusinessLogic
             return GetString(resultBytes);
         }        
 
-        public string GetSaltString()
+        private string GetSaltString()
         {
             //Utility util = new Utility();
             // Lets create a byte array to store the salt bytes
@@ -51,13 +51,13 @@ namespace PastebookBusinessLogic.BusinessLogic
             return saltString;
         }
 
-        public byte[] GetBytes(string message)
+        private byte[] GetBytes(string message)
         {
             byte[] toBytes = Encoding.ASCII.GetBytes(message);
             return toBytes;
         }
 
-        public string GetString(byte[] byteParam)
+        private string GetString(byte[] byteParam)
         {
             string toString = Encoding.ASCII.GetString(byteParam);
             return toString;

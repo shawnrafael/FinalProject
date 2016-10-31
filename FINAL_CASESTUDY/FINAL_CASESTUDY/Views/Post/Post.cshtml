@@ -31,8 +31,10 @@
         </div>
     </div>
 </div>
-<div class="col-sm-10">
+<div class="col-sm-8">
     @{Html.RenderAction("GetPost", "Post");}
+</div>
+<div class="col-sm-2">
 </div>
 
 @section scripts{
@@ -60,8 +62,11 @@
                 currentPost: $('#postID').val(),
                 commentContent: $('#commentContent').val()
             }
-            if (data.commentContent == "") {
-
+            if ($.trim(data.commentContent) == "") {
+                $('#errorComment').text('Please add something to your comment');
+            } else if ($.trim(data.commentContent).length > 1000) {
+                $('#addComment_'.concat(user)).val('')
+                $('#errorComment').text('Comment can only have 1000 characters.');
             } else {
                 $.ajax({
                     url: addCommentUrl,

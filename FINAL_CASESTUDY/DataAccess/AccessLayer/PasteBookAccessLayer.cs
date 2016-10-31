@@ -11,7 +11,7 @@ namespace DataAccess.AccessLayer
     {
         List<Exception> errorList = new List<Exception>();
 
-        public List<POST> RetrieveListOfPost()
+        public List<POST> RetrieveListOfPost(List<int> friendsID, int userID)
         {
             var listOfPost = new List<POST>();
 
@@ -24,7 +24,35 @@ namespace DataAccess.AccessLayer
                                         .Include("USER")
                                         .Include("COMMENTs")
                                         .Include("LIKEs")
+                                        .Where(x=>(friendsID.Contains(x.POSTER_ID)) || (x.POSTER_ID == userID || x.PROFILE_OWNER_ID == userID))
                                         .OrderByDescending(x => x.CREATED_DATE)
+                                        .ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorList.Add(ex);
+            }
+
+            return listOfPost;
+        }
+
+        public List<POST> RetrieveListOfPostOnProfile(int userID)
+        {
+            var listOfPost = new List<POST>();
+
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    listOfPost = context.POSTs
+                                        .Include("USER1")
+                                        .Include("USER")
+                                        .Include("COMMENTs")
+                                        .Include("LIKEs")
+                                        .Where(x => x.PROFILE_OWNER_ID == userID)
+                                        .OrderByDescending(x => x.CREATED_DATE)
+                                        .Take(100)
                                         .ToList();
                 }
             }
@@ -108,7 +136,7 @@ namespace DataAccess.AccessLayer
                 {
                     notifications = context.NOTIFICATIONs
                                            .Include("USER")
-                                           .Where(x => x.RECEIVER_ID == userID && x.NOTIF_TYPE!="F")
+                                           .Where(x => x.RECEIVER_ID == userID)
                                            .OrderByDescending(x=>x.CREATED_DATE)
                                            .ToList();
                 }
@@ -121,27 +149,27 @@ namespace DataAccess.AccessLayer
             return notifications;
         }
 
-        public List<NOTIFICATION> RetrieveRequests(int userID)
-        {
-            var requests = new List<NOTIFICATION>();
-            try
-            {
-                using (var context = new PASTEBOOKEntities())
-                {
-                    requests = context.NOTIFICATIONs
-                                           .Include("USER")
-                                           .Where(x => x.RECEIVER_ID == userID && x.NOTIF_TYPE == "F" && x.SEEN=="N")
-                                           .OrderByDescending(x => x.CREATED_DATE)
-                                           .ToList();
-                }
-            }
-            catch (Exception ex)
-            {
+        //public List<NOTIFICATION> RetrieveRequests(int userID)
+        //{
+        //    var requests = new List<NOTIFICATION>();
+        //    try
+        //    {
+        //        using (var context = new PASTEBOOKEntities())
+        //        {
+        //            requests = context.NOTIFICATIONs
+        //                                   .Include("USER")
+        //                                   .Where(x => x.RECEIVER_ID == userID && x.NOTIF_TYPE == "F" && x.SEEN=="N")
+        //                                   .OrderByDescending(x => x.CREATED_DATE)
+        //                                   .ToList();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                errorList.Add(ex);
-            }
-            return requests;
-        }
+        //        errorList.Add(ex);
+        //    }
+        //    return requests;
+        //}
 
         public List<USER> RetrieveSearch(string keyWord)
         {
@@ -262,6 +290,24 @@ namespace DataAccess.AccessLayer
                 using (var context = new PASTEBOOKEntities())
                 {
                     notification = context.NOTIFICATIONs.Where(x => x.SENDER_ID == senderID && x.RECEIVER_ID == userID && x.NOTIF_TYPE == "F").Single();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                errorList.Add(ex);
+            }
+            return notification;
+        }
+
+        public NOTIFICATION RetrieveLikeNotification(int userID, int postID)
+        {
+            var notification = new NOTIFICATION();
+            try
+            {
+                using (var context = new PASTEBOOKEntities())
+                {
+                    notification = context.NOTIFICATIONs.Where(x => x.SENDER_ID == userID && x.POST_ID == postID && x.NOTIF_TYPE == "L").Single();
                 }
             }
             catch (Exception ex)

@@ -1,63 +1,37 @@
 ﻿@model IEnumerable<PasteBookEntity.NOTIFICATION>
-
-
-
-
-<div class="dropdown">
-    <button class="icon-bar dropdown-toggle" type="button" id="notificationList" data-toggle="dropdown"><span class="glyphicon glyphicon-globe"></span></button>
-    @{
-        if (Model.Where(x=>x.SEEN == "N").Count() != 0)
-        {
-            <span class="badge">@Model.Where(x=>x.SEEN == "N").Count()</span>
-        }
+<li class="dropdown-header">Notifications</li>
+@{
+    if (Model.Count() == 0)
+    {
+        <li>
+            <div class="col-sm-offset-4 col-sm-8">
+                <p>No notification</p>
+            </div>
+        </li>
     }
-    
-    <ul class="dropdown-menu scrollable-menu notification-dropdown" id="notificationDropdown" role="menu" aria-labelledby="notificationList">
-        <li role="presentation" class="dropdown-header">Notifications</li>
-
-            @{
-                if (Model.Count() == 0)
-                {
-                    <li>
-                        <div class="col-sm-4"></div>
-                        <div class="col-sm-8">
-                            <p>No notification</p>
-                        </div>
-                    </li>
-                }
-                foreach (var item in Model)
-                {
-                    string message = "";
-                    string glyph = "glyphicon glyphicon-unchecked";
-                    int? comment = 0;
-
-                    if (item.SEEN == "Y")
-                    {
-                        glyph = "glyphicon glyphicon-check";
-                    }
-
-                    if (item.NOTIF_TYPE == "C")
-                    {
-                        message = item.USER.FIRST_NAME + " has commented on your post.";
-                        comment = item.COMMENT_ID;
-                    }
-                    else if (item.NOTIF_TYPE == "L")
-                    {
-                        message = item.USER.FIRST_NAME + " has liked your post.";
-                    }
-
-                    <li>                        
-                        <div class="container-fluid">
-                            <div class="col-sm-10 post-link-container" style="height:40px">
-                                @Html.ActionLink(message, "CheckNotification", "Post", new { notifID = item.ID, notifMessage = message }, "")
-                            </div>
-                            <div class="col-sm-2">
-                                <span class="@glyph"></span>
-                            </div>
-                        </div>                        
-                    </li>
-                    <li class="divider"></li>
-                }
+    foreach (var item in Model)
+    {
+        string message = "";
+        <li>
+            @if (item.NOTIF_TYPE == "C")
+            {
+                message = item.USER.FIRST_NAME + " has commented on one of your post.";
+                <a class="notif-link" href="@Url.Action("CheckNotification","Post",new { notifID = item.ID, notifMessage = message })"><span class="glyphicon glyphicon-comment"></span> @message</a>
             }
-    </ul>
-</div>
+            else if (item.NOTIF_TYPE == "L")
+            {
+                message = item.USER.FIRST_NAME + " has liked one of your post.";
+                <a class="notif-link" href="@Url.Action("CheckNotification","Post",new { notifID = item.ID, notifMessage = message })"><span class="glyphicon glyphicon-thumbs-up"></span> @message</a>
+            }
+            else
+            {
+                <a class="notif-link" href="@Url.Action("UserProfile", "Profile", new { username = item.USER.USER_NAME })"><span class="glyphicon glyphicon-user"></span> @item.USER.FIRST_NAME has sent you a friend request.</a>
+            }
+        </li>
+
+    }
+    <li class="divider"></li>
+    <li class="dropdown-header">
+        See all notification
+    </li>
+}

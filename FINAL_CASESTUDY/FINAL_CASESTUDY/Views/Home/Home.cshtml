@@ -35,17 +35,10 @@
 <div class="col-sm-8">
     
     <div class="well">
-        <div class="container-fluid">
-            <p class="text-danger" id="errorPost"></p>
+        <div class="container-fluid">            
             <textarea class="form-control" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
-            <hr />
-            @{
-                string page = ViewData["page"].ToString();
-                if (page == "home")
-                {
-                    <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
-                }
-            } 
+            <span class="text-danger" id="errorPost"></span>
+            <input type="button" id="postBtnHome" value="Post" class="btn btn-primary pull-right" />
         </div>
     </div>
     <div id="postContainer">
@@ -60,6 +53,7 @@
         var getPostUrl = '@Url.Action("GetPostOnHome", "Home")';
         var addCommentUrl = '@Url.Action("CommentPost", "Post")';
 
+        var errorPageUrl = '@Url.Action("GlobalError", "Error")';
         var likePostUrl = '@Url.Action("LikePost", "Post")';
         var unlikePostUrl = '@Url.Action("UnlikePost", "Post")';
     </script>
